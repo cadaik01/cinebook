@@ -1,0 +1,93 @@
+#Users
+CREATE TABLE users (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    city VARCHAR(100),
+    role ENUM('user','admin') DEFAULT 'user',
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
+);
+
+#Movies
+CREATE TABLE movies (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    genre VARCHAR(100),
+    language VARCHAR(100),
+    duration INT,
+    trailer_url VARCHAR(255),
+    description TEXT,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
+);
+
+#theaters
+CREATE TABLE theaters (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    city VARCHAR(100),
+    address VARCHAR(255),
+    seat_capacity INT,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
+);
+
+#showtime
+CREATE TABLE showtimes (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    movie_id BIGINT UNSIGNED NOT NULL,
+    theater_id BIGINT UNSIGNED NOT NULL,
+    show_date DATE,
+    show_time TIME,
+    price_gold DECIMAL(8,2),
+    price_platinum DECIMAL(8,2),
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+
+    FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE,
+    FOREIGN KEY (theater_id) REFERENCES theaters(id) ON DELETE CASCADE
+);
+
+#Booking
+CREATE TABLE bookings (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT UNSIGNED NOT NULL,
+    showtime_id BIGINT UNSIGNED NOT NULL,
+    booking_date DATETIME,
+    total_price DECIMAL(10,2),
+    status VARCHAR(50) DEFAULT 'confirmed',
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (showtime_id) REFERENCES showtimes(id) ON DELETE CASCADE
+);
+
+#Seat
+CREATE TABLE seats (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    booking_id BIGINT UNSIGNED NOT NULL,
+    seat_number VARCHAR(10),
+    seat_type VARCHAR(50),
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+
+    FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE
+);
+
+#Review
+CREATE TABLE reviews (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT UNSIGNED NOT NULL,
+    movie_id BIGINT UNSIGNED NOT NULL,
+    rating INT,
+    comment TEXT,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE
+);
