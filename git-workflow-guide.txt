@@ -1,0 +1,303 @@
+===============================================
+    HƯỚNG DẪN GIT WORKFLOW CHO DỰ ÁN CINEBOOK
+===============================================
+
+📅 Ngày tạo: 27/12/2025
+🎯 Dự án: Cinebook - Cinema Booking Application
+🔗 Repository: https://github.com/cadaik01/cinebook
+
+===============================================
+1. QUY TRÌNH LÀM VIỆC CƠ BẢN (1 NGƯỜI)
+===============================================
+
+🔄 WORKFLOW HÀNG NGÀY:
+----------------------
+1. Mở terminal trong thư mục dự án
+2. Sửa/tạo code trong VS Code
+3. Chạy 3 lệnh sau:
+
+   git add .
+   git commit -m "Mô tả thay đổi ngắn gọn"
+   git push
+
+VÍ DỤ:
+------
+git add .
+git commit -m "Thêm model Movie và migration"
+git push
+
+===============================================
+2. QUY TRÌNH LÀM VIỆC NHÓM (NHIỀU NGƯỜI)
+===============================================
+
+🌅 MỖI BUỔI SÁNG hoặc TRƯỚC KHI CODE:
+------------------------------------
+git pull
+
+📝 SAU KHI CODE XONG:
+--------------------
+git add .
+git commit -m "Mô tả thay đổi"
+git push
+
+🚨 WORKFLOW ĐẦY ĐỦ:
+------------------
+1. git pull              # Lấy code mới từ team
+2. [Viết code]           # Phát triển tính năng
+3. git add .             # Thêm file vào staging
+4. git commit -m "..."   # Commit với message rõ ràng
+5. git push              # Đẩy code cho team
+
+===============================================
+3. XỬ LÝ CONFLICT (XUNG ĐỘT CODE)
+===============================================
+
+❗ KHI XẢY RA CONFLICT:
+----------------------
+1. git pull              # Sẽ báo có conflict
+2. Mở file conflict trong VS Code
+3. Tìm và sửa các dòng:
+   <<<<<<< HEAD
+   [code của bạn]
+   =======
+   [code của người khác]
+   >>>>>>> commit-id
+
+4. Sửa thành code đúng (xóa các ký hiệu conflict)
+5. git add .
+6. git commit -m "Fix conflict in [tên file]"
+7. git push
+
+===============================================
+4. BRANCHING STRATEGY (CHO TEAM LỚN)
+===============================================
+
+🌿 TẠO BRANCH CHO TÍNH NĂNG MỚI:
+-------------------------------
+git checkout -b feature/ten-tinh-nang
+
+VÍ DỤ:
+git checkout -b feature/user-login
+git checkout -b feature/movie-booking
+git checkout -b feature/payment
+
+📝 LÀM VIỆC TRONG BRANCH:
+------------------------
+git add .
+git commit -m "Implement user login"
+git push origin feature/user-login
+
+🔄 MERGE VỀ MAIN:
+----------------
+git checkout main
+git merge feature/user-login
+git push
+git branch -d feature/user-login  # Xóa branch local
+
+===============================================
+5. PULL REQUEST WORKFLOW
+===============================================
+
+🌐 TRÊN GITHUB.COM:
+------------------
+1. Sau khi push branch: git push origin feature/xyz
+2. Vào GitHub → tab "Pull requests"
+3. Nhấn "New pull request"
+4. Chọn branch → main
+5. Viết mô tả thay đổi
+6. Assign reviewer
+7. Tạo Pull Request
+
+👥 REVIEW PROCESS:
+-----------------
+1. Team member review code
+2. Comment và yêu cầu sửa đổi (nếu cần)
+3. Approve Pull Request
+4. Merge vào main branch
+
+===============================================
+6. GIT CONFIG CẦN THIẾT
+===============================================
+
+⚙️ THIẾT LẬP BAN ĐẦU:
+--------------------
+git config --global user.name "Tên của bạn"
+git config --global user.email "email@của-bạn.com"
+git config --global push.default current
+git branch --set-upstream-to=origin/main main
+
+📁 REMOTE REPOSITORY:
+--------------------
+git remote add origin https://github.com/username/repo.git
+git remote -v  # Kiểm tra remote
+
+===============================================
+7. CÁC LỆNH GIT HỮU ÍCH
+===============================================
+
+📊 KIỂM TRA TRẠNG THÁI:
+----------------------
+git status               # Xem file thay đổi
+git log --oneline        # Xem lịch sử commit
+git branch               # Xem các branch
+git remote -v            # Xem remote repository
+
+🔄 ĐỒNG BỘ VÀ CẬP NHẬT:
+----------------------
+git pull                 # Lấy code mới từ remote
+git fetch                # Lấy thông tin mới (không merge)
+git merge origin/main    # Merge code từ remote
+
+🌿 QUẢN LÝ BRANCH:
+-----------------
+git checkout -b new-branch    # Tạo và chuyển branch
+git checkout main             # Chuyển về branch main  
+git branch -d branch-name     # Xóa branch local
+git push origin --delete branch-name  # Xóa branch remote
+
+⏪ HOÀN TÁC THAY ĐỔI:
+-------------------
+git checkout -- file.txt     # Hoàn tác file chưa commit
+git reset HEAD~1              # Hoàn tác commit cuối
+git revert commit-id          # Tạo commit hoàn tác
+
+===============================================
+8. QUY TẮC VÀNG KHI LÀM VIỆC NHÓM
+===============================================
+
+✅ LUÔN LUÔN LÀM:
+-----------------
+• git pull trước khi bắt đầu code
+• Commit thường xuyên với message rõ ràng
+• Push code ít nhất 1 lần/ngày
+• Review code của team member
+• Test code trước khi push
+• Thông báo team khi làm tính năng lớn
+
+❌ TUYỆT ĐỐI TRÁNH:
+-------------------
+• Force push: git push -f (có thể mất code team)
+• Commit code lỗi lên main branch
+• Sửa cùng file mà không thảo luận
+• Push nhiều tính năng trong 1 commit lớn
+• Bỏ qua conflict resolution
+
+===============================================
+9. COMMIT MESSAGE BEST PRACTICES
+===============================================
+
+📝 CẤU TRÚC COMMIT MESSAGE:
+--------------------------
+[Loại]: Mô tả ngắn gọn
+
+VÍ DỤ TỐT:
+----------
+feat: Thêm tính năng đăng nhập user
+fix: Sửa lỗi validation form booking
+docs: Cập nhật README với hướng dẫn cài đặt
+style: Format code theo PSR standards
+refactor: Tối ưu hóa Movie model
+test: Thêm test cho BookingController
+
+VÍ DỤ XẤU:
+----------
+"update"
+"fix bug"
+"code mới"
+"test 123"
+
+===============================================
+10. THÊM COLLABORATORS
+===============================================
+
+👥 MỜI NGƯỜI KHÁC THAM GIA:
+--------------------------
+1. Vào https://github.com/cadaik01/cinebook
+2. Settings → Manage access
+3. Invite a collaborator
+4. Nhập GitHub username
+5. Chọn role: Write/Admin
+6. Gửi invitation
+
+📧 NGƯỜI ĐƯỢC MỜI:
+-----------------
+1. Nhận email từ GitHub
+2. Accept invitation
+3. Clone repository:
+   git clone https://github.com/cadaik01/cinebook.git
+4. Thiết lập Git config (tên, email)
+5. Bắt đầu làm việc với workflow trên
+
+===============================================
+11. TROUBLESHOOTING (GIẢI QUYẾT LỖI)
+===============================================
+
+❗ LỖI "PERMISSION DENIED":
+--------------------------
+• Kiểm tra đã được add vào repository chưa
+• Kiểm tra GitHub username/password
+• Sử dụng Personal Access Token thay vì password
+
+❗ LỖI "MERGE CONFLICT":
+----------------------
+1. Mở file có conflict
+2. Tìm <<<<<<< và >>>>>>> 
+3. Chọn code đúng, xóa ký hiệu conflict
+4. git add . && git commit -m "Fix conflict"
+
+❗ Lỗi "BRANCH DIVERGED":
+------------------------
+git pull --rebase
+# hoặc
+git pull origin main --allow-unrelated-histories
+
+===============================================
+12. ĐỀ XUẤT PHÁT TRIỂN DỰ ÁN CINEBOOK
+===============================================
+
+🎬 CẤU TRÚC DỰ ÁN:
+-----------------
+Phase 1: Setup cơ sở dữ liệu
+- Movies table (phim)
+- Cinemas table (rạp)  
+- Showtimes table (suất chiếu)
+- Users table (người dùng)
+- Bookings table (đặt vé)
+
+Phase 2: Authentication & Authorization
+- User registration/login
+- Admin panel
+- Role-based access
+
+Phase 3: Core Features
+- Xem danh sách phim
+- Chọn rạp và suất chiếu
+- Đặt vé online
+- Thanh toán
+
+Phase 4: Advanced Features
+- Email notifications
+- Booking history
+- Reviews & ratings
+- Reporting system
+
+🏗️ BRANCHING CHO DỰ ÁN:
+----------------------
+main                    # Production branch
+├── feature/database    # Database setup
+├── feature/auth        # Authentication
+├── feature/movies      # Movie management  
+├── feature/booking     # Booking system
+└── feature/payment     # Payment integration
+
+===============================================
+KẾT LUẬN
+===============================================
+
+Tài liệu này cung cấp đầy đủ workflow để làm việc với Git/GitHub
+cho dự án Cinebook. Hãy bookmark và tham khảo khi cần thiết.
+
+📞 Liên hệ support: Hỏi trực tiếp trong team chat
+🔄 Cập nhật: Tài liệu sẽ được cập nhật khi có workflow mới
+
+Happy Coding! 🚀
