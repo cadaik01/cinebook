@@ -1,0 +1,218 @@
+#Movies
+INSERT INTO movies
+(title, genre, language, duration, poster_url, trailer_url, description, created_at, updated_at)
+VALUES
+-- ================= ACTION (10) =================
+('Avengers: Endgame','Action','English',181,
+'https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg',
+'https://www.youtube.com/watch?v=TcMBFSGVi1c',
+'Final battle against Thanos.',NOW(),NOW()),
+
+('Avengers: Infinity War','Action','English',149,
+'https://image.tmdb.org/t/p/w500/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg',
+'https://www.youtube.com/watch?v=6ZfuNTqbHE8',
+'Avengers face Thanos.',NOW(),NOW()),
+
+('John Wick','Action','English',101,
+'https://image.tmdb.org/t/p/w500/fZPSd91yGE9fCcCe6OoQr6E3Bev.jpg',
+'https://www.youtube.com/watch?v=C0BMx-qxsP4',
+'Revenge of a retired assassin.',NOW(),NOW()),
+
+('John Wick: Chapter 2','Action','English',122,
+'https://image.tmdb.org/t/p/w500/kL99FVq7MTevppSx6zG6s9k3qQn.jpg',
+'https://www.youtube.com/watch?v=XGk2EfbD_Ps',
+'John Wick returns.',NOW(),NOW()),
+
+('The Dark Knight','Action','English',152,
+'https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg',
+'https://www.youtube.com/watch?v=EXeTwQWrcwY',
+'Batman vs Joker.',NOW(),NOW()),
+
+('Batman Begins','Action','English',140,
+'https://image.tmdb.org/t/p/w500/8RW2runSEc34Iw6S0g0LZKJ6p8B.jpg',
+'https://www.youtube.com/watch?v=neY2xVmOfUM',
+'Origin of Batman.',NOW(),NOW()),
+
+('Gladiator','Action','English',155,
+'https://image.tmdb.org/t/p/w500/ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg',
+'https://www.youtube.com/watch?v=owK1qxDselE',
+'Roman revenge story.',NOW(),NOW()),
+
+('Mad Max: Fury Road','Action','English',120,
+'https://image.tmdb.org/t/p/w500/8tZYtuWezp8JbcsvHYO0O46tFbo.jpg',
+'https://www.youtube.com/watch?v=hEJnMQG9ev8',
+'Post-apocalyptic chase.',NOW(),NOW()),
+
+('Mission: Impossible – Fallout','Action','English',147,
+'https://image.tmdb.org/t/p/w500/AkJQpZp9WoNdj7pLYSj1L0RcMMN.jpg',
+'https://www.youtube.com/watch?v=wb49-oV0F78',
+'Ethan Hunt mission.',NOW(),NOW()),
+
+('Die Hard','Action','English',132,
+'https://image.tmdb.org/t/p/w500/yFihWxQcmqcaBR31QM6Y8gT6aYV.jpg',
+'https://www.youtube.com/watch?v=jaJuwKCmJbY',
+'Classic action thriller.',NOW(),NOW()),
+
+-- ================= COMEDY (10) =================
+('Home Alone','Comedy','English',103,
+'https://image.tmdb.org/t/p/w500/9wSbe4CwObACCQvaUVhWQyLR5Vz.jpg',
+'https://www.youtube.com/watch?v=jEDaVHmw7r4',
+'Kid vs burglars.',NOW(),NOW()),
+
+('Home Alone 2','Comedy','English',120,
+'https://image.tmdb.org/t/p/w500/uuitWHpJwxD1wruFl2nZHIb4UGN.jpg',
+'https://www.youtube.com/watch?v=5h9VDUNtoto',
+'Lost in New York.',NOW(),NOW()),
+
+('The Mask','Comedy','English',101,
+'https://image.tmdb.org/t/p/w500/zJUv8ht7abqQm5J9yZQ5pY5rGzX.jpg',
+'https://www.youtube.com/watch?v=LZl69yk5lEY',
+'Cartoon chaos.',NOW(),NOW()),
+
+('Yes Man','Comedy','English',104,
+'https://image.tmdb.org/t/p/w500/1bXCz8rGx7Jt1zB3Z5qUe1koXSP.jpg',
+'https://www.youtube.com/watch?v=dDh1l3qVNoY',
+'Say yes to life.',NOW(),NOW()),
+
+('The Hangover','Comedy','English',100,
+'https://image.tmdb.org/t/p/w500/uluhlXubGu1VxU63X9VHCLWDAYP.jpg',
+'https://www.youtube.com/watch?v=tcdUhdOlz9M',
+'Vegas bachelor party.',NOW(),NOW()),
+
+('Mr. Bean\'s Holiday','Comedy','English',90,
+'https://image.tmdb.org/t/p/w500/wu3F9C7Q4Ue0TnG2YpC9j1X9JrN.jpg',
+'https://www.youtube.com/watch?v=hSxLUd8aly4',
+'Bean in Europe.',NOW(),NOW()),
+
+('Dumb and Dumber','Comedy','English',107,
+'https://image.tmdb.org/t/p/w500/4LdpBXiCyGKkR8FGHgjKlphrfUc.jpg',
+'https://www.youtube.com/watch?v=l13yPhimE3o',
+'Two foolish friends.',NOW(),NOW()),
+
+('The Intern','Comedy','English',121,
+'https://image.tmdb.org/t/p/w500/9UoAC9tu8P2a4cDzBzwvbT3me5b.jpg',
+'https://www.youtube.com/watch?v=ZU3Xban0Y6A',
+'Senior intern.',NOW(),NOW()),
+
+('Crazy Rich Asians','Comedy','English',121,
+'https://image.tmdb.org/t/p/w500/1XxL4LJ5WHdrcYcihEZUCgNCu5K.jpg',
+'https://www.youtube.com/watch?v=ZQ-YX-5bAs0',
+'Romantic comedy.',NOW(),NOW()),
+
+('White Chicks','Comedy','English',109,
+'https://image.tmdb.org/t/p/w500/aJZOcorpglo0b7rMqZ0mGxSxI45.jpg',
+'https://www.youtube.com/watch?v=aeVkbNka9HM',
+'Disguise comedy.',NOW(),NOW()),
+
+-- ================= DRAMA (10) =================
+('Forrest Gump','Drama','English',142,
+'https://image.tmdb.org/t/p/w500/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg',
+'https://www.youtube.com/watch?v=bLvqoHBptjg',
+'Life journey.',NOW(),NOW()),
+
+('The Shawshank Redemption','Drama','English',142,
+'https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg',
+'https://www.youtube.com/watch?v=6hB3S9bIaco',
+'Hope in prison.',NOW(),NOW()),
+
+('Parasite','Drama','Korean',132,
+'https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg',
+'https://www.youtube.com/watch?v=SEUXfv87Wpk',
+'Class divide.',NOW(),NOW()),
+
+('Titanic','Drama','English',195,
+'https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg',
+'https://www.youtube.com/watch?v=kVrqfYjkTdQ',
+'Tragic romance.',NOW(),NOW()),
+
+('Fight Club','Drama','English',139,
+'https://image.tmdb.org/t/p/w500/bptfVGEQuv6vDTIMVCHjJ9Dz8PX.jpg',
+'https://www.youtube.com/watch?v=SUXWAEX2jlg',
+'Psychological drama.',NOW(),NOW()),
+
+('The Green Mile','Drama','English',189,
+'https://image.tmdb.org/t/p/w500/o0lO84GI7qrG6XFvtsPOSV7CTNa.jpg',
+'https://www.youtube.com/watch?v=Ki4haFrqSrw',
+'Prison miracle.',NOW(),NOW()),
+
+('Joker','Drama','English',122,
+'https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg',
+'https://www.youtube.com/watch?v=zAGVQLHvwOY',
+'Origin of Joker.',NOW(),NOW()),
+
+('A Beautiful Mind','Drama','English',135,
+'https://image.tmdb.org/t/p/w500/zwzWCmH72OSC9NA0ipoqw5Zjya8.jpg',
+'https://www.youtube.com/watch?v=WFJgUm7iOKw',
+'Genius mathematician.',NOW(),NOW()),
+
+('Whiplash','Drama','English',106,
+'https://image.tmdb.org/t/p/w500/6uSPcdG9pC1W0n7B0Cv2skZsS9F.jpg',
+'https://www.youtube.com/watch?v=7d_jQycdQGo',
+'Music pressure.',NOW(),NOW()),
+
+('The Pianist','Drama','English',150,
+'https://image.tmdb.org/t/p/w500/2hFvxCCWrTmCYwfy7yum0GKRi3Y.jpg',
+'https://www.youtube.com/watch?v=BFwGqLa_oAo',
+'Survival in war.',NOW(),NOW()),
+
+-- ================= HORROR (10) =================
+('The Conjuring','Horror','English',112,
+'https://image.tmdb.org/t/p/w500/wVYREutTvI2tmxr6ujrHT704wGF.jpg',
+'https://www.youtube.com/watch?v=k10ETZ41q5o',
+'Paranormal investigators.',NOW(),NOW()),
+
+('The Conjuring 2','Horror','English',134,
+'https://image.tmdb.org/t/p/w500/3pJE6VtR3D7tn9p6Yv2j4WZp5Zp.jpg',
+'https://www.youtube.com/watch?v=VFsmuRPClr4',
+'London haunting.',NOW(),NOW()),
+
+('IT','Horror','English',135,
+'https://image.tmdb.org/t/p/w500/9E2y5Q7WlCVNEhP5GiVTjhEhx1o.jpg',
+'https://www.youtube.com/watch?v=FnCdOQsX5kc',
+'Evil clown.',NOW(),NOW()),
+
+('Annabelle','Horror','English',99,
+'https://image.tmdb.org/t/p/w500/yAgxM61Sn0dYML4C9v3M1X1nC8p.jpg',
+'https://www.youtube.com/watch?v=paFgQNPGlsg',
+'Haunted doll.',NOW(),NOW()),
+
+('Insidious','Horror','English',103,
+'https://image.tmdb.org/t/p/w500/4bYHFuWbN5RnbILoYx6H5tJghnM.jpg',
+'https://www.youtube.com/watch?v=zuZnRUcoWos',
+'Astral horror.',NOW(),NOW()),
+
+('Sinister','Horror','English',110,
+'https://image.tmdb.org/t/p/w500/8fYO4gQ7Ghd7R8xW5ZpXw8CAbZL.jpg',
+'https://www.youtube.com/watch?v=_kbQAJR9YWQ',
+'Found footage horror.',NOW(),NOW()),
+
+('The Ring','Horror','English',115,
+'https://image.tmdb.org/t/p/w500/bC1Y7sGJ2uQZ1WnQ5dXQWlA7pZ9.jpg',
+'https://www.youtube.com/watch?v=yzR2GY-ew8I',
+'Cursed videotape.',NOW(),NOW()),
+
+('The Grudge','Horror','English',91,
+'https://image.tmdb.org/t/p/w500/sMIVZy9PjX1kG7Y5qJ5AZt0pOEt.jpg',
+'https://www.youtube.com/watch?v=YkSxV9ZxS6I',
+'Japanese curse.',NOW(),NOW()),
+
+('A Quiet Place','Horror','English',90,
+'https://image.tmdb.org/t/p/w500/nAU74GmpUk7t5iklEp3bufwDq4n.jpg',
+'https://www.youtube.com/watch?v=WR7cc5t7tv8',
+'Silence survival.',NOW(),NOW()),
+
+('The Nun','Horror','English',96,
+'https://image.tmdb.org/t/p/w500/sFC1ElvoKGdHJIWRpNB3xWJ9lJA.jpg',
+'https://www.youtube.com/watch?v=pzD9zGcUNrw',
+'Demonic nun.',NOW(),NOW());
+
+#User
+INSERT INTO users 
+(name, email, password, phone, city, role, created_at, updated_at)
+VALUES
+('Nguyễn Văn An', 'an.nguyen@gmail.com', '$2y$10$anhashedpassword1', '0901234567', 'Hà Nội', 'user', NOW(), NOW()),
+('Trần Thị Bình', 'binh.tran@gmail.com', '$2y$10$anhashedpassword2', '0912345678', 'TP. Hồ Chí Minh', 'user', NOW(), NOW()),
+('Lê Minh Cường', 'cuong.le@gmail.com', '$2y$10$anhashedpassword3', '0987654321', 'Đà Nẵng', 'user', NOW(), NOW()),
+('Phạm Hoàng Dũng', 'dung.pham@gmail.com', '$2y$10$anhashedpassword4', '0978123456', 'Cần Thơ', 'admin', NOW(), NOW()),
+('Võ Thị Mai', 'mai.vo@gmail.com', '$2y$10$anhashedpassword5', '0934567890', 'Hải Phòng', 'user', NOW(), NOW());
+
