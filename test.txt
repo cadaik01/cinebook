@@ -1,0 +1,9 @@
+Đây là file test để thực hành Git workflow
+Ngày tạo: 27/12/2025
+Dự án: Cinebook - Cinema Booking App
+
+Quy trình làm việc:
+1. Sửa/tạo file
+2. git add .
+3. git commit -m "message"
+4. git push
