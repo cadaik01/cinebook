@@ -66,16 +66,46 @@ CREATE TABLE bookings (
     FOREIGN KEY (showtime_id) REFERENCES showtimes(id) ON DELETE CASCADE
 );
 
+#Room
+CREATE TABLE rooms (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    theater_id BIGINT UNSIGNED NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    seat_capacity INT NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
+);
+
+
 #Seat
 CREATE TABLE seats (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    booking_id BIGINT UNSIGNED NOT NULL,
-    seat_number VARCHAR(10),
-    seat_type VARCHAR(50),
+    room_id BIGINT UNSIGNED NOT NULL,
+    seat_row CHAR(1) NOT NULL,
+    seat_number INT NOT NULL,
+    seat_code VARCHAR(5) NOT NULL,
+    seat_type VARCHAR(20) NOT NULL DEFAULT 'standard',
     created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
+);
 
-    FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE
+#Booking Seat
+CREATE TABLE booking_seats (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    booking_id BIGINT UNSIGNED NOT NULL,
+    seat_id BIGINT UNSIGNED NOT NULL,
+
+    CONSTRAINT fk_booking_seats_booking
+        FOREIGN KEY (booking_id)
+        REFERENCES bookings(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_booking_seats_seat
+        FOREIGN KEY (seat_id)
+        REFERENCES seats(id)
+        ON DELETE CASCADE,
+
+    UNIQUE (booking_id, seat_id)
 );
 
 #Review

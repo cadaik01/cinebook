@@ -216,3 +216,121 @@ VALUES
 ('Phạm Hoàng Dũng', 'dung.pham@gmail.com', '$2y$10$anhashedpassword4', '0978123456', 'Cần Thơ', 'admin', NOW(), NOW()),
 ('Võ Thị Mai', 'mai.vo@gmail.com', '$2y$10$anhashedpassword5', '0934567890', 'Hải Phòng', 'user', NOW(), NOW());
 
+#theater
+INSERT INTO theaters
+(name, city, address, seat_capacity, created_at, updated_at)
+VALUES
+-- ===== TP. HỒ CHÍ MINH =====
+('CGV Landmark 81',
+ 'Ho Chi Minh City',
+ 'Landmark 81, Bình Thạnh, TP.HCM',
+ 450,
+ NOW(), NOW()),
+
+('Galaxy Nguyễn Du',
+ 'Ho Chi Minh City',
+ '116 Nguyễn Du, Quận 1, TP.HCM',
+ 320,
+ NOW(), NOW()),
+
+('BHD Star Vincom Thảo Điền',
+ 'Ho Chi Minh City',
+ 'Vincom Thảo Điền, TP Thủ Đức, TP.HCM',
+ 280,
+ NOW(), NOW()),
+
+-- ===== HÀ NỘI =====
+('CGV Vincom Bà Triệu',
+ 'Ha Noi',
+ 'Vincom Bà Triệu, Hai Bà Trưng, Hà Nội',
+ 400,
+ NOW(), NOW()),
+
+('Lotte Cinema Keangnam',
+ 'Ha Noi',
+ 'Keangnam Landmark, Nam Từ Liêm, Hà Nội',
+ 350,
+ NOW(), NOW()),
+
+('BHD Star Phạm Ngọc Thạch',
+ 'Ha Noi',
+ 'Phạm Ngọc Thạch, Đống Đa, Hà Nội',
+ 300,
+ NOW(), NOW()),
+
+-- ===== ĐÀ NẴNG =====
+('CGV Vincom Đà Nẵng',
+ 'Da Nang',
+ 'Vincom Plaza, Ngô Quyền, Đà Nẵng',
+ 280,
+ NOW(), NOW()),
+
+('Lotte Cinema Đà Nẵng',
+ 'Da Nang',
+ 'Lotte Mart, Hải Châu, Đà Nẵng',
+ 260,
+ NOW(), NOW()),
+
+('Galaxy Cinema Đà Nẵng',
+ 'Da Nang',
+ 'Nguyễn Văn Linh, Thanh Khê, Đà Nẵng',
+ 240,
+ NOW(), NOW());
+
+#rooms
+INSERT INTO rooms (theater_id, name, seat_capacity, created_at, updated_at)
+SELECT t.id,
+       CONCAT('Room ', r.room_no),
+       144,
+       NOW(), NOW()
+FROM theaters t
+JOIN (
+    SELECT 1 AS room_no UNION ALL
+    SELECT 2 UNION ALL
+    SELECT 3 UNION ALL
+    SELECT 4
+) r;
+
+#seats
+INSERT INTO seats (room_id, seat_row, seat_number, seat_code, seat_type, created_at, updated_at)
+SELECT
+    r.id,
+    rows.seat_row,
+    nums.seat_number,
+    CONCAT(rows.seat_row, nums.seat_number),
+    CASE 
+        WHEN rows.seat_row IN ('G','H') THEN 'vip'
+        ELSE 'standard'
+    END,
+    NOW(), NOW()
+FROM rooms r
+JOIN (
+    SELECT 'A' AS seat_row UNION ALL
+    SELECT 'B' UNION ALL
+    SELECT 'C' UNION ALL
+    SELECT 'D' UNION ALL
+    SELECT 'E' UNION ALL
+    SELECT 'F' UNION ALL
+    SELECT 'G' UNION ALL
+    SELECT 'H'
+) rows
+JOIN (
+    SELECT 1 AS seat_number UNION ALL
+    SELECT 2 UNION ALL
+    SELECT 3 UNION ALL
+    SELECT 4 UNION ALL
+    SELECT 5 UNION ALL
+    SELECT 6 UNION ALL
+    SELECT 7 UNION ALL
+    SELECT 8 UNION ALL
+    SELECT 9 UNION ALL
+    SELECT 10 UNION ALL
+    SELECT 11 UNION ALL
+    SELECT 12 UNION ALL
+    SELECT 13 UNION ALL
+    SELECT 14 UNION ALL
+    SELECT 15 UNION ALL
+    SELECT 16 UNION ALL
+    SELECT 17 UNION ALL
+    SELECT 18
+) nums;
