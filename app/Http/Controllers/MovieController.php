@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class MovieController extends Controller
 {
-    //1. ham hien thi trang movies
+    //1. movie function to fetch all movies from the database and return to index view
     public function index()
     {
         $movies = DB::table('movies')->get();
