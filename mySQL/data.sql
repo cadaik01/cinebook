@@ -6,9 +6,9 @@ INSERT INTO screen_types (id, name, price) VALUES
 
 #seat_types
 INSERT INTO seat_types (id, name, base_price, description) VALUES
-(1, 'standard', 0, 'Ghế thường'),
-(2, 'vip', 10000, 'Ghế VIP'),
-(3, 'couple', 20000, 'Ghế đôi');
+(1, 'standard', 0, 'standard seat'),
+(2, 'vip', 10000, 'VIP seat'),
+(3, 'couple', 20000, 'Couple seat');
 
 #rooms
 INSERT INTO rooms (id, name, total_rows, seats_per_row, screen_type_id) VALUES
@@ -47,46 +47,49 @@ VALUES
 ('AI Reborn', 'Sci-Fi', 'English', 'Steven AI', 128, '2024-11-20', 'T16', 'now_showing', 'Sci-fi movie 3');
 
 #seats
-DELIMITER $$
+//first 4 rooms, rows A-H, seats 1-18
+INSERT INTO seats (room_id, seat_row, seat_number, seat_code, seat_type_id)
+SELECT
+    r.id,
+    sr.row_char,
+    sn.seat_number,
+    CONCAT(sr.row_char, sn.seat_number),
+    1 -- standard
+FROM rooms r
+JOIN (
+    SELECT 'A' AS row_char UNION ALL
+    SELECT 'B' UNION ALL
+    SELECT 'C' UNION ALL
+    SELECT 'D' UNION ALL
+    SELECT 'E' UNION ALL
+    SELECT 'F' UNION ALL
+    SELECT 'G' UNION ALL
+    SELECT 'H'
+) sr
+JOIN (
+    SELECT 1 AS seat_number UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL
+    SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL
+    SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL
+    SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL
+    SELECT 17 UNION ALL SELECT 18
+) sn
+WHERE r.id BETWEEN 1 AND 4;
 
-CREATE PROCEDURE seed_seats()
-BEGIN
-    DECLARE r INT DEFAULT 1;
-    DECLARE s INT;
-    DECLARE row_char CHAR(1);
-    DECLARE seat_type INT;
+//then update some seats to vip
 
-    WHILE r <= 4 DO
-        SET row_char = 'A';
-        WHILE row_char <= 'H' DO
-            SET s = 1;
-            WHILE s <= 18 DO
+UPDATE seats
+SET seat_type_id = 2
+WHERE seat_row IN ('C','D','E')
+  AND seat_number BETWEEN 7 AND 12;
 
-                IF row_char = 'H' THEN
-                    SET seat_type = 3; -- couple
-                ELSEIF row_char IN ('C','D','E') AND s BETWEEN 7 AND 12 THEN
-                    SET seat_type = 2; -- vip
-                ELSE
-                    SET seat_type = 1; -- standard
-                END IF;
 
-                INSERT INTO seats (room_id, seat_row, seat_number, seat_code, seat_type_id)
-                VALUES (r, row_char, s, CONCAT(row_char, s), seat_type);
+//then update some seats to couple
 
-                SET s = s + 1;
-            END WHILE;
+UPDATE seats
+SET seat_type_id = 3
+WHERE seat_row = 'H';
 
-            SET row_char = CHAR(ASCII(row_char) + 1);
-        END WHILE;
 
-        SET r = r + 1;
-    END WHILE;
-END$$
-
-DELIMITER ;
-
-CALL seed_seats();
-DROP PROCEDURE seed_seats;
 
 #users
 INSERT INTO users (name, email, password, role) VALUES
