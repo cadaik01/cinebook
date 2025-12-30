@@ -3,7 +3,7 @@
         <div class="nav-container">
             <!-- Logo and Brand -->
             <div class="nav-brand">
-                <img src="{{ asset('images\tca-cine-logo.jpg') }}" alt="TCA Cine Logo" class="logo" style="size: 1px">
+                <img src="{{ asset('images\tca-cine-logo.jpg') }}" alt="TCA Cine Logo" class="logo" style="width: 40px; height: 40px; object-fit: contain;">
                 <h1 class="brand-name">TCA Cine</h1>
             </div>
 
