@@ -13,4 +13,14 @@ class MovieController extends Controller
         $movies = DB::table('movies')->get();
         return view('index', compact('movies'));
     }
+    public function show($id)
+    {
+        $movie = DB::table('movies')->where('id', $id)->first();
+        return view('movie_details', compact('movie'));
+    }
+    public function nowShowing()
+    {
+        $movies = DB::table('movies')->where('status', 'now_showing')->get();
+        return view('now_showing', compact('movies'));
+    }
 }
