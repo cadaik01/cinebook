@@ -1,421 +1,95 @@
-#Movies
-INSERT INTO movies
-(title, genre, language, duration, release_date, status, poster_url, trailer_url, description, created_at, updated_at)
-VALUES
--- ================= ACTION (7) =================
-('Avengers: Endgame','Action','English',181,'2019-04-26','ended',
-'https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg',
-'https://www.youtube.com/watch?v=TcMBFSGVi1c',
-'Final battle against Thanos.',NOW(),NOW()),
+#screen_type
+INSERT INTO screen_types (id, name, price) VALUES
+(1, '2D', 0),
+(2, '3D', 40000),
+(3, 'IMAX 4D', 60000);
 
-('Batman Begins','Action','English',140,'2005-06-15','ended',
-'https://image.tmdb.org/t/p/w500/8RW2runSEc34Iw6S0g0LZKJ6p8B.jpg',
-'https://www.youtube.com/watch?v=neY2xVmOfUM',
-'Origin of Batman.',NOW(),NOW()),
-
-('Gladiator','Action','English',155,'2000-05-05','ended',
-'https://image.tmdb.org/t/p/w500/ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg',
-'https://www.youtube.com/watch?v=owK1qxDselE',
-'Roman revenge story.',NOW(),NOW()),
-
-('Mad Max: Fury Road','Action','English',120,'2015-05-15','ended',
-'https://image.tmdb.org/t/p/w500/8tZYtuWezp8JbcsvHYO0O46tFbo.jpg',
-'https://www.youtube.com/watch?v=hEJnMQG9ev8',
-'Post-apocalyptic chase.',NOW(),NOW()),
-
-('Mission: Impossible – Fallout','Action','English',147,'2018-07-27','ended',
-'https://image.tmdb.org/t/p/w500/AkJQpZp9WoNdj7pLYSj1L0RcMMN.jpg',
-'https://www.youtube.com/watch?v=wb49-oV0F78',
-'Ethan Hunt mission.',NOW(),NOW()),
-
-('Die Hard','Action','English',132,'1988-07-20','ended',
-'https://image.tmdb.org/t/p/w500/yFihWxQcmqcaBR31QM6Y8gT6aYV.jpg',
-'https://www.youtube.com/watch?v=jaJuwKCmJbY',
-'Classic action film.',NOW(),NOW()),
-
--- ================= COMEDY (7) =================
-('Yes Man','Comedy','English',104,'2008-12-19','ended',
-'https://image.tmdb.org/t/p/w500/1bXCz8rGx7Jt1zB3Z5qUe1koXSP.jpg',
-'https://www.youtube.com/watch?v=dDh1l3qVNoY',
-'Say yes to life.',NOW(),NOW()),
-
-('The Hangover','Comedy','English',100,'2009-06-05','ended',
-'https://image.tmdb.org/t/p/w500/uluhlXubGu1VxU63X9VHCLWDAYP.jpg',
-'https://www.youtube.com/watch?v=tcdUhdOlz9M',
-'Vegas chaos.',NOW(),NOW()),
-
-('Mr. Bean’s Holiday','Comedy','English',90,'2007-03-30','ended',
-'https://image.tmdb.org/t/p/w500/wu3F9C7Q4Ue0TnG2YpC9j1X9JrN.jpg',
-'https://www.youtube.com/watch?v=hSxLUd8aly4',
-'Bean travels Europe.',NOW(),NOW()),
-
-('Dumb and Dumber','Comedy','English',107,'1994-12-16','ended',
-'https://image.tmdb.org/t/p/w500/4LdpBXiCyGKkR8FGHgjKlphrfUc.jpg',
-'https://www.youtube.com/watch?v=l13yPhimE3o',
-'Two foolish friends.',NOW(),NOW()),
-
-('The Intern','Comedy','English',121,'2015-09-25','ended',
-'https://image.tmdb.org/t/p/w500/9UoAC9tu8P2a4cDzBzwvbT3me5b.jpg',
-'https://www.youtube.com/watch?v=ZU3Xban0Y6A',
-'Senior intern.',NOW(),NOW()),
-
-('Crazy Rich Asians','Comedy','English',121,'2018-08-15','ended',
-'https://image.tmdb.org/t/p/w500/1XxL4LJ5WHdrcYcihEZUCgNCu5K.jpg',
-'https://www.youtube.com/watch?v=ZQ-YX-5bAs0',
-'Romantic comedy.',NOW(),NOW()),
-
-('White Chicks','Comedy','English',109,'2004-06-23','ended',
-'https://image.tmdb.org/t/p/w500/aJZOcorpglo0b7rMqZ0mGxSxI45.jpg',
-'https://www.youtube.com/watch?v=aeVkbNka9HM',
-'Disguise comedy.',NOW(),NOW());
-INSERT INTO movies
-(title, genre, language, duration, release_date, status, poster_url, trailer_url, description, created_at, updated_at)
-VALUES
--- ================= DRAMA (7) =================
-('Fight Club','Drama','English',139,'1999-10-15','ended',
-'https://image.tmdb.org/t/p/w500/bptfVGEQuv6vDTIMVCHjJ9Dz8PX.jpg',
-'https://www.youtube.com/watch?v=SUXWAEX2jlg',
-'Psychological drama.',NOW(),NOW()),
-
-('The Green Mile','Drama','English',189,'1999-12-10','ended',
-'https://image.tmdb.org/t/p/w500/o0lO84GI7qrG6XFvtsPOSV7CTNa.jpg',
-'https://www.youtube.com/watch?v=Ki4haFrqSrw',
-'Miracle on death row.',NOW(),NOW()),
-
-('Joker','Drama','English',122,'2019-10-04','ended',
-'https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg',
-'https://www.youtube.com/watch?v=zAGVQLHvwOY',
-'Origin of Joker.',NOW(),NOW()),
-
-('A Beautiful Mind','Drama','English',135,'2001-12-21','ended',
-'https://image.tmdb.org/t/p/w500/zwzWCmH72OSC9NA0ipoqw5Zjya8.jpg',
-'https://www.youtube.com/watch?v=WFJgUm7iOKw',
-'Genius mathematician life.',NOW(),NOW()),
-
-('Whiplash','Drama','English',106,'2014-10-10','ended',
-'https://image.tmdb.org/t/p/w500/6uSPcdG9pC1W0n7B0Cv2skZsS9F.jpg',
-'https://www.youtube.com/watch?v=7d_jQycdQGo',
-'Music and obsession.',NOW(),NOW()),
-
-('The Pianist','Drama','English',150,'2002-09-25','ended',
-'https://image.tmdb.org/t/p/w500/2hFvxCCWrTmCYwfy7yum0GKRi3Y.jpg',
-'https://www.youtube.com/watch?v=BFwGqLa_oAo',
-'Survival during war.',NOW(),NOW()),
-
-('Parasite','Drama','Korean',132,'2019-05-30','ended',
-'https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg',
-'https://www.youtube.com/watch?v=SEUXfv87Wpk',
-'Class divide thriller.',NOW(),NOW()),
-
--- ================= HORROR (7) =================
-
-('Annabelle','Horror','English',99,'2014-10-03','ended',
-'https://image.tmdb.org/t/p/w500/yAgxM61Sn0dYML4C9v3M1X1nC8p.jpg',
-'https://www.youtube.com/watch?v=paFgQNPGlsg',
-'Haunted doll.',NOW(),NOW()),
-
-('Insidious','Horror','English',103,'2011-04-01','ended',
-'https://image.tmdb.org/t/p/w500/4bYHFuWbN5RnbILoYx6H5tJghnM.jpg',
-'https://www.youtube.com/watch?v=zuZnRUcoWos',
-'Astral horror.',NOW(),NOW()),
-
-('Sinister','Horror','English',110,'2012-10-12','ended',
-'https://image.tmdb.org/t/p/w500/8fYO4gQ7Ghd7R8xW5ZpXw8CAbZL.jpg',
-'https://www.youtube.com/watch?v=_kbQAJR9YWQ',
-'Found footage terror.',NOW(),NOW()),
-
-('The Ring','Horror','English',115,'2002-10-18','ended',
-'https://image.tmdb.org/t/p/w500/bC1Y7sGJ2uQZ1WnQ5dXQWlA7pZ9.jpg',
-'https://www.youtube.com/watch?v=yzR2GY-ew8I',
-'Cursed videotape.',NOW(),NOW()),
-
-('The Grudge','Horror','English',91,'2004-10-22','ended',
-'https://image.tmdb.org/t/p/w500/sMIVZy9PjX1kG7Y5qJ5AZt0pOEt.jpg',
-'https://www.youtube.com/watch?v=YkSxV9ZxS6I',
-'Japanese curse.',NOW(),NOW()),
-
-('A Quiet Place','Horror','English',90,'2018-04-06','ended',
-'https://image.tmdb.org/t/p/w500/nAU74GmpUk7t5iklEp3bufwDq4n.jpg',
-'https://www.youtube.com/watch?v=WR7cc5t7tv8',
-'Silence is survival.',NOW(),NOW()),
-
-('The Nun','Horror','English',96,'2018-09-07','ended',
-'https://image.tmdb.org/t/p/w500/sFC1ElvoKGdHJIWRpNB3xWJ9lJA.jpg',
-'https://www.youtube.com/watch?v=pzD9zGcUNrw',
-'Demonic nun.',NOW(),NOW()),
-
--- ================= SCI-FI (7) =================
-('Inception','Sci-Fi','English',148,'2010-07-16','ended',
-'https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg',
-'https://www.youtube.com/watch?v=YoHD9XEInc0',
-'Dream within dream.',NOW(),NOW()),
-
-('Interstellar','Sci-Fi','English',169,'2014-11-07','ended',
-'https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg',
-'https://www.youtube.com/watch?v=zSWdZVtXT7E',
-'Space and time.',NOW(),NOW()),
-
-('Dune','Sci-Fi','English',155,'2021-10-22','ended',
-'https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg',
-'https://www.youtube.com/watch?v=n9xhJrPXop4',
-'Desert planet Arrakis.',NOW(),NOW()),
-
-('Arrival','Sci-Fi','English',116,'2016-11-11','ended',
-'https://image.tmdb.org/t/p/w500/x2FJsf1ElAgr63Y3PNPtJrcmpoe.jpg',
-'https://www.youtube.com/watch?v=tFMo3UJ4B4g',
-'Language and aliens.',NOW(),NOW()),
-
-('Gravity','Sci-Fi','English',91,'2013-10-04','ended',
-'https://image.tmdb.org/t/p/w500/uPxtxhB2Fy9ihVqtBtNGHmknJqV.jpg',
-'https://www.youtube.com/watch?v=OiTiKOy59o4',
-'Survival in space.',NOW(),NOW()),
-
-('Ex Machina','Sci-Fi','English',108,'2015-04-24','ended',
-'https://image.tmdb.org/t/p/w500/9goPE2IoMIX5Zy9a5tb0UT4f6WJ.jpg',
-'https://www.youtube.com/watch?v=bggUmgeMCdc',
-'Artificial intelligence.',NOW(),NOW()),
-
-('The Martian','Sci-Fi','English',144,'2015-10-02','ended',
-'https://image.tmdb.org/t/p/w500/5aGhaIHYuQbqlHWvWYqMCnj40y2.jpg',
-'https://www.youtube.com/watch?v=ej3ioOneTy8',
-'Survival on Mars.',NOW(),NOW());
-
-#NOW SHOWING
-INSERT INTO movies
-(title, genre, language, duration, release_date, status, poster_url, trailer_url, description, created_at, updated_at)
-VALUES
-('Dune: Part Two','Sci-Fi','English',166,'2024-03-01','now_showing',
-'https://image.tmdb.org/t/p/w500/gho58bYmw9juYXm3O5q2Trb6n4x.jpg',
-'https://www.youtube.com/watch?v=Way9Dexny3w',
-'Paul Atreides leads the Fremen.',
-NOW(),NOW()),
-
-('Godzilla x Kong: The New Empire','Action','English',115,'2024-03-29','now_showing',
-'https://image.tmdb.org/t/p/w500/z1p34vh7dEOnLDmyCrlUVLuoDzd.jpg',
-'https://www.youtube.com/watch?v=lV1OOlGwExM',
-'Two titans unite against a new threat.',
-NOW(),NOW()),
-
-('Kung Fu Panda 4','Animation','English',94,'2024-03-08','now_showing',
-'https://image.tmdb.org/t/p/w500/kDp1vUBnMpe8ak4rjgl3cLELqjU.jpg',
-'https://www.youtube.com/watch?v=_inKs4eeHiI',
-'Po returns for a new adventure.',
-NOW(),NOW()),
-
-('Civil War','Action','English',109,'2024-04-12','now_showing',
-'https://image.tmdb.org/t/p/w500/sh7Rg8Er3tFcN9BpKIPOMvALgZd.jpg',
-'https://www.youtube.com/watch?v=aDyQxtg0V2w',
-'America on the brink of collapse.',
-NOW(),NOW()),
-
-('Furiosa: A Mad Max Saga','Action','English',148,'2024-05-24','now_showing',
-'https://image.tmdb.org/t/p/w500/2uNW4WbgBXL25BAbXGLnLqX71Sw.jpg',
-'https://www.youtube.com/watch?v=XJMuhwVlca4',
-'Origin story of Furiosa.',
-NOW(),NOW()),
-
-('Inside Out 2','Animation','English',96,'2024-06-14','now_showing',
-'https://image.tmdb.org/t/p/w500/4Y1WNkd88JXmGfhtWR7dmDAo1T2.jpg',
-'https://www.youtube.com/watch?v=LEjhY15eCx0',
-'New emotions appear.',
-NOW(),NOW()),
-
-('A Quiet Place: Day One','Horror','English',99,'2024-06-28','now_showing',
-'https://image.tmdb.org/t/p/w500/yrpPYKijwdMHyTGIOd1iK1h0Xno.jpg',
-'https://www.youtube.com/watch?v=YPY7J-flzE8',
-'The beginning of the invasion.',
-NOW(),NOW()),
-
-('Bad Boys: Ride or Die','Action','English',115,'2024-06-07','now_showing',
-'https://image.tmdb.org/t/p/w500/oGythE98MYleE6mZlGs5oBGkux1.jpg',
-'https://www.youtube.com/watch?v=hRFY_Fesa9Q',
-'Mike and Marcus return.',
-NOW(),NOW()),
-
-('Deadpool & Wolverine','Action','English',127,'2024-07-26','now_showing',
-'https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
-'https://www.youtube.com/watch?v=73_1biulkYk',
-'Two anti-heroes collide.',
-NOW(),NOW()),
-
-('Twisters','Action','English',122,'2024-07-19','now_showing',
-'https://image.tmdb.org/t/p/w500/pjnD08FlMAIXsfOLKQbvmO0f0MD.jpg',
-'https://www.youtube.com/watch?v=wdok0rZdmx4',
-'Storm chasers face disaster.',
-NOW(),NOW());
-
-#COMING SOON MOVIES
-INSERT INTO movies
-(title, genre, language, duration, release_date, status, poster_url, trailer_url, description, created_at, updated_at)
-VALUES
-('Avatar 3','Sci-Fi','English',180,'2025-12-19','coming_soon',
-'https://image.tmdb.org/t/p/w500/8S6iJXw1yTj6kRXKuX3sI5Yucs5.jpg',
-'https://www.youtube.com/watch?v=d9MyW72ELq0',
-'Next chapter in the world of Pandora.',
-NOW(),NOW()),
-
-('Mission: Impossible – Dead Reckoning Part Two','Action','English',170,'2025-05-23','coming_soon',
-'https://image.tmdb.org/t/p/w500/5eY0s8R5G7V9X0lP1r9r8pF0WcA.jpg',
-'https://www.youtube.com/watch?v=fsQgc9pCyDU',
-'Ethan Hunt faces his final mission.',
-NOW(),NOW()),
-
-('Kung Fu Panda 5','Animation','English',110,'2025-06-01','coming_soon',
-'https://image.tmdb.org/t/p/w500/kuf6dutpsT0vSVehic3EZIhhu9P.jpg',
-'https://www.youtube.com/watch?v=_inKs4eeHiI',
-'Po begins a new journey.',
-NOW(),NOW()),
-
-('Frozen III','Animation','English',115,'2025-11-27','coming_soon',
-'https://image.tmdb.org/t/p/w500/6k8Y6n9P4zEw2r1jK0oJ7KqkN8Q.jpg',
-'https://www.youtube.com/watch?v=TbQm5doF_Uc',
-'Elsa and Anna return.',
-NOW(),NOW()),
-
-('The Batman: Part II','Action','English',155,'2025-10-03','coming_soon',
-'https://image.tmdb.org/t/p/w500/4zQp9Q2Z0nX0Z2k0n2j1Z7r7k7P.jpg',
-'https://www.youtube.com/watch?v=mqqft2x_Aa4',
-'Batman faces a darker threat.',
-NOW(),NOW());
-
-
-#User
-INSERT INTO users 
-(name, email, password, phone, city, role, created_at, updated_at)
-VALUES
-('Nguyễn Văn An', 'an.nguyen@gmail.com', '$2y$10$anhashedpassword1', '0901234567', 'Hà Nội', 'user', NOW(), NOW()),
-('Trần Thị Bình', 'binh.tran@gmail.com', '$2y$10$anhashedpassword2', '0912345678', 'TP. Hồ Chí Minh', 'user', NOW(), NOW()),
-('Lê Minh Cường', 'cuong.le@gmail.com', '$2y$10$anhashedpassword3', '0987654321', 'Đà Nẵng', 'user', NOW(), NOW()),
-('Phạm Hoàng Dũng', 'dung.pham@gmail.com', '$2y$10$anhashedpassword4', '0978123456', 'Cần Thơ', 'admin', NOW(), NOW()),
-('Võ Thị Mai', 'mai.vo@gmail.com', '$2y$10$anhashedpassword5', '0934567890', 'Hải Phòng', 'user', NOW(), NOW());
-
-#theater
-INSERT INTO theaters
-(name, city, address, seat_capacity, created_at, updated_at)
-VALUES
--- ===== TP. HCM =====
-('CGV Landmark 81',
- 'Ho Chi Minh City',
- 'Landmark 81, Bình Thạnh, TP.HCM',
- 450,
- NOW(), NOW()),
-
-('Galaxy Nguyễn Du',
- 'Ho Chi Minh City',
- '116 Nguyễn Du, Quận 1, TP.HCM',
- 320,
- NOW(), NOW()),
-
-('BHD Star Vincom Thảo Điền',
- 'Ho Chi Minh City',
- 'Vincom Thảo Điền, TP Thủ Đức, TP.HCM',
- 280,
- NOW(), NOW()),
-
--- ===== HN =====
-('CGV Vincom Bà Triệu',
- 'Ha Noi',
- 'Vincom Bà Triệu, Hai Bà Trưng, Hà Nội',
- 400,
- NOW(), NOW()),
-
-('Lotte Cinema Keangnam',
- 'Ha Noi',
- 'Keangnam Landmark, Nam Từ Liêm, Hà Nội',
- 350,
- NOW(), NOW()),
-
-('BHD Star Phạm Ngọc Thạch',
- 'Ha Noi',
- 'Phạm Ngọc Thạch, Đống Đa, Hà Nội',
- 300,
- NOW(), NOW()),
-
--- ===== DN =====
-('CGV Vincom Đà Nẵng',
- 'Da Nang',
- 'Vincom Plaza, Ngô Quyền, Đà Nẵng',
- 280,
- NOW(), NOW()),
-
-('Lotte Cinema Đà Nẵng',
- 'Da Nang',
- 'Lotte Mart, Hải Châu, Đà Nẵng',
- 260,
- NOW(), NOW()),
-
-('Galaxy Cinema Đà Nẵng',
- 'Da Nang',
- 'Nguyễn Văn Linh, Thanh Khê, Đà Nẵng',
- 240,
- NOW(), NOW());
+#seat_types
+INSERT INTO seat_types (id, name, base_price, description) VALUES
+(1, 'standard', 0, 'Ghế thường'),
+(2, 'vip', 10000, 'Ghế VIP'),
+(3, 'couple', 20000, 'Ghế đôi');
 
 #rooms
-INSERT INTO rooms (theater_id, name, seat_capacity, created_at, updated_at)
-SELECT t.id,
-       CONCAT('Room ', r.room_no),
-       144,
-       NOW(), NOW()
-FROM theaters t
-JOIN (
-    SELECT 1 AS room_no UNION ALL
-    SELECT 2 UNION ALL
-    SELECT 3 UNION ALL
-    SELECT 4
-) r;
+INSERT INTO rooms (id, name, total_rows, seats_per_row, screen_type_id) VALUES
+(1, 'Room 1', 8, 18, 1), -- 2D
+(2, 'Room 2', 8, 18, 1), -- 2D
+(3, 'Room 3', 8, 18, 2), -- 3D
+(4, 'Room 4', 8, 18, 3); -- IMAX 4D
+
+#movies
+INSERT INTO movies 
+(title, genre, language, director, duration, release_date, age_rating, status, description)
+VALUES
+-- Action
+('Action Hero', 'Action', 'English', 'John Lee', 120, '2024-11-01', 'T16', 'now_showing', 'Action movie 1'),
+('Fast Strike', 'Action', 'English', 'David Kim', 110, '2024-12-01', 'T16', 'now_showing', 'Action movie 2'),
+('Last Warrior', 'Action', 'English', 'Alan Wong', 130, '2023-06-01', 'T18', 'ended', 'Action movie 3'),
+
+-- Comedy
+('Funny Days', 'Comedy', 'English', 'Tom White', 100, '2024-10-10', 'P', 'now_showing', 'Comedy movie 1'),
+('Laugh Out Loud', 'Comedy', 'English', 'Peter Chan', 95, '2024-12-15', 'P', 'coming_soon', 'Comedy movie 2'),
+('Crazy Family', 'Comedy', 'English', 'Sam Lee', 105, '2023-05-01', 'P', 'ended', 'Comedy movie 3'),
+
+-- Horror
+('Night Fear', 'Horror', 'English', 'James Wan', 110, '2024-10-20', 'T18', 'now_showing', 'Horror movie 1'),
+('Dark House', 'Horror', 'English', 'Mike Chen', 115, '2024-12-25', 'T18', 'coming_soon', 'Horror movie 2'),
+('Bloody Room', 'Horror', 'English', 'Ken Park', 100, '2022-10-01', 'T18', 'ended', 'Horror movie 3'),
+
+-- Romance
+('Love Story', 'Romance', 'English', 'Anna Smith', 120, '2024-11-15', 'T13', 'now_showing', 'Romance movie 1'),
+('Forever Us', 'Romance', 'English', 'Linda Ray', 125, '2024-12-30', 'T13', 'coming_soon', 'Romance movie 2'),
+('Broken Heart', 'Romance', 'English', 'Chris Nolan', 118, '2023-02-01', 'T16', 'ended', 'Romance movie 3'),
+
+-- Sci-Fi
+('Future World', 'Sci-Fi', 'English', 'Ridley Scott', 135, '2024-12-05', 'T13', 'coming_soon', 'Sci-fi movie 1'),
+('Space War', 'Sci-Fi', 'English', 'George Lucas', 140, '2023-08-01', 'T13', 'ended', 'Sci-fi movie 2'),
+('AI Reborn', 'Sci-Fi', 'English', 'Steven AI', 128, '2024-11-20', 'T16', 'now_showing', 'Sci-fi movie 3');
 
 #seats
-INSERT INTO seats (
-    room_id,
-    seat_row,
-    seat_number,
-    seat_code,
-    seat_type,
-    created_at,
-    updated_at
-)
-SELECT
-    r.id AS room_id,
-    rws.seat_row,
-    nums.seat_number,
-    CONCAT(rws.seat_row, nums.seat_number) AS seat_code,
-    CASE
-        WHEN rws.seat_row = 'H' THEN 'couple'
-        WHEN rws.seat_row IN ('C','D','E')
-             AND nums.seat_number BETWEEN 7 AND 12
-        THEN 'vip'
-        ELSE 'standard'
-    END AS seat_type,
-    NOW(),
-    NOW()
-FROM rooms r
-CROSS JOIN (
-    SELECT 'A' AS seat_row UNION ALL
-    SELECT 'B' UNION ALL
-    SELECT 'C' UNION ALL
-    SELECT 'D' UNION ALL
-    SELECT 'E' UNION ALL
-    SELECT 'F' UNION ALL
-    SELECT 'G' UNION ALL
-    SELECT 'H'
-) rws
-CROSS JOIN (
-    SELECT 1 AS seat_number UNION ALL
-    SELECT 2 UNION ALL
-    SELECT 3 UNION ALL
-    SELECT 4 UNION ALL
-    SELECT 5 UNION ALL
-    SELECT 6 UNION ALL
-    SELECT 7 UNION ALL
-    SELECT 8 UNION ALL
-    SELECT 9 UNION ALL
-    SELECT 10 UNION ALL
-    SELECT 11 UNION ALL
-    SELECT 12 UNION ALL
-    SELECT 13 UNION ALL
-    SELECT 14 UNION ALL
-    SELECT 15 UNION ALL
-    SELECT 16 UNION ALL
-    SELECT 17 UNION ALL
-    SELECT 18
-) nums;
+DELIMITER $$
+
+CREATE PROCEDURE seed_seats()
+BEGIN
+    DECLARE r INT DEFAULT 1;
+    DECLARE s INT;
+    DECLARE row_char CHAR(1);
+    DECLARE seat_type INT;
+
+    WHILE r <= 4 DO
+        SET row_char = 'A';
+        WHILE row_char <= 'H' DO
+            SET s = 1;
+            WHILE s <= 18 DO
+
+                IF row_char = 'H' THEN
+                    SET seat_type = 3; -- couple
+                ELSEIF row_char IN ('C','D','E') AND s BETWEEN 7 AND 12 THEN
+                    SET seat_type = 2; -- vip
+                ELSE
+                    SET seat_type = 1; -- standard
+                END IF;
+
+                INSERT INTO seats (room_id, seat_row, seat_number, seat_code, seat_type_id)
+                VALUES (r, row_char, s, CONCAT(row_char, s), seat_type);
+
+                SET s = s + 1;
+            END WHILE;
+
+            SET row_char = CHAR(ASCII(row_char) + 1);
+        END WHILE;
+
+        SET r = r + 1;
+    END WHILE;
+END$$
+
+DELIMITER ;
+
+CALL seed_seats();
+DROP PROCEDURE seed_seats;
+
+#users
+INSERT INTO users (name, email, password, role) VALUES
+('Admin', 'admin@cinebook.com', '123456', 'admin'),
+('User One', 'user1@gmail.com', '123456', 'user'),
+('User Two', 'user2@gmail.com', '123456', 'user');

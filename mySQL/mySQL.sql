@@ -1,9 +1,5 @@
 #CREATE DATABASE
-CREATE DATABASE IF NOT EXISTS cinema_booking
-CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci;
-
-USE cinema_booking;
+CREATE DATABASE IF NOT EXISTS cinebook
 
 #USERS
 CREATE TABLE users (
@@ -13,12 +9,14 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     phone VARCHAR(20) UNIQUE,
     city VARCHAR(100),
-    avatar_url TEXT,
+    avatar_url VARCHAR(255),
     role ENUM('user','admin') DEFAULT 'user',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_users_role (role)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_email (email),
+    INDEX idx_role (role)
 );
+
 
 #MOVIES
 CREATE TABLE movies (
@@ -26,45 +24,41 @@ CREATE TABLE movies (
     title VARCHAR(200) NOT NULL,
     genre VARCHAR(100),
     language VARCHAR(50),
-    director VARCHAR(150),
-    actors TEXT,
+    director VARCHAR(100),
+    cast TEXT,
     duration INT,
     release_date DATE,
     age_rating ENUM('P','T13','T16','T18','C'),
-    status ENUM('now_showing','coming_soon','ended'),
-    poster_url TEXT,
-    trailer_url TEXT,
+    status ENUM('now_showing','coming_soon','ended') DEFAULT 'coming_soon',
+    poster_url VARCHAR(255),
+    trailer_url VARCHAR(255),
     description TEXT,
-    rating_avg DECIMAL(3,2),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_movies_release (release_date),
-    INDEX idx_movies_status (status),
-    INDEX idx_movies_rating (rating_avg)
+    rating_avg DECIMAL(3,2) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_status (status),
+    INDEX idx_release_date (release_date),
+    INDEX idx_rating_avg (rating_avg)
 );
 
-#THEATERS
-CREATE TABLE theaters (
+#screen_type
+CREATE TABLE screen_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(150) NOT NULL,
-    city VARCHAR(100),
-    address VARCHAR(255),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    name VARCHAR(50) NOT NULL,
+    price DECIMAL(10,2) DEFAULT 0
 );
 
 #ROOMS
 CREATE TABLE rooms (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    theater_id INT NOT NULL,
-    name VARCHAR(50),
-    total_rows INT,
-    seats_per_row INT,
-    screen_type ENUM('2D','3D','IMAX'),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_rooms_theater (theater_id),
-    FOREIGN KEY (theater_id) REFERENCES theaters(id)
+    name VARCHAR(50) NOT NULL,
+    total_rows INT NOT NULL,
+    seats_per_row INT NOT NULL,
+    screen_type_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_screen_type (screen_type_id),
+    FOREIGN KEY (screen_type_id) REFERENCES screen_types(id)
 );
 
 #SEAT_TYPES
@@ -72,49 +66,54 @@ CREATE TABLE seat_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
     base_price DECIMAL(10,2) NOT NULL,
-    description TEXT
+    description VARCHAR(255)
 );
+
 
 #SEATS
 CREATE TABLE seats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     room_id INT NOT NULL,
-    seat_row VARCHAR(5),
-    seat_number INT,
-    seat_code VARCHAR(10),
-    seat_type_id INT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_seats_room (room_id),
-    INDEX idx_seats_type (seat_type_id),
-    UNIQUE KEY uq_room_seat (room_id, seat_code),
+    seat_row CHAR(1) NOT NULL,
+    seat_number INT NOT NULL,
+    seat_code VARCHAR(5) NOT NULL,
+    seat_type_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (room_id, seat_code),
+    INDEX idx_room (room_id),
+    INDEX idx_seat_type (seat_type_id),
     FOREIGN KEY (room_id) REFERENCES rooms(id),
     FOREIGN KEY (seat_type_id) REFERENCES seat_types(id)
 );
+
 
 #SHOWTIMES
 CREATE TABLE showtimes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     movie_id INT NOT NULL,
     room_id INT NOT NULL,
-    show_date DATE,
-    show_time TIME,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_show_date (show_date),
-    INDEX idx_show_time (show_time),
+    show_date DATE NOT NULL,
+    show_time TIME NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_movie_date (movie_id, show_date),
+    INDEX idx_room_time (room_id, show_date, show_time),
     FOREIGN KEY (movie_id) REFERENCES movies(id),
     FOREIGN KEY (room_id) REFERENCES rooms(id)
 );
+
 
 #SHOWTIMES_PRICES
 CREATE TABLE showtime_prices (
     id INT AUTO_INCREMENT PRIMARY KEY,
     showtime_id INT NOT NULL,
     seat_type_id INT NOT NULL,
-    price DECIMAL(10,2),
+    price DECIMAL(10,2) NOT NULL,
+    UNIQUE (showtime_id, seat_type_id),
     FOREIGN KEY (showtime_id) REFERENCES showtimes(id),
     FOREIGN KEY (seat_type_id) REFERENCES seat_types(id)
 );
+
 
 #SHOWTIMES_SEATS
 CREATE TABLE showtime_seats (
@@ -122,53 +121,58 @@ CREATE TABLE showtime_seats (
     showtime_id INT NOT NULL,
     seat_id INT NOT NULL,
     status ENUM('available','booked','locked') DEFAULT 'available',
-    INDEX idx_status (status),
+    UNIQUE (showtime_id, seat_id),
+    INDEX idx_showtime_status (showtime_id, status),
     FOREIGN KEY (showtime_id) REFERENCES showtimes(id),
     FOREIGN KEY (seat_id) REFERENCES seats(id)
 );
+
 
 #BOOKINGS
 CREATE TABLE bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     showtime_id INT NOT NULL,
-    booking_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     total_price DECIMAL(10,2),
-    status ENUM('pending','confirmed','cancelled','expired'),
-    payment_method ENUM('cash','card','momo','vnpay'),
-    payment_status ENUM('pending','paid','refunded'),
-    qr_code TEXT,
-    expired_at DATETIME,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_booking_status (status),
+    status ENUM('pending','confirmed','cancelled','expired') DEFAULT 'pending',
+    payment_method VARCHAR(50),
+    payment_status ENUM('pending','paid','refunded') DEFAULT 'pending',
+    qr_code VARCHAR(255),
+    expired_at TIMESTAMP NULL DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_user_status (user_id, status),
+    INDEX idx_showtime (showtime_id),
     INDEX idx_payment_status (payment_status),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (showtime_id) REFERENCES showtimes(id)
 );
 
+
 #BOOKING_SEATS
 CREATE TABLE booking_seats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     booking_id INT NOT NULL,
-    showtime_id INT NOT NULL,
     seat_id INT NOT NULL,
-    price DECIMAL(10,2),
+    price DECIMAL(10,2) NOT NULL,
+    UNIQUE (booking_id, seat_id),
     FOREIGN KEY (booking_id) REFERENCES bookings(id),
-    FOREIGN KEY (showtime_id) REFERENCES showtimes(id),
     FOREIGN KEY (seat_id) REFERENCES seats(id)
 );
+
 
 #REVIEWS
 CREATE TABLE reviews (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     movie_id INT NOT NULL,
-    rating TINYINT CHECK (rating BETWEEN 1 AND 5),
+    rating INT CHECK (rating BETWEEN 1 AND 5),
     comment TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_movie_review (movie_id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE (user_id, movie_id),
+    INDEX idx_movie (movie_id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (movie_id) REFERENCES movies(id)
 );
