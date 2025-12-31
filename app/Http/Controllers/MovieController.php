@@ -37,22 +37,5 @@ class MovieController extends Controller
         $movies = DB::table('movies')->where('status', 'now_showing')->get();
         return view('movie.now_showing', compact('movies'));
     }
-    //4. showtimes function to fetch showtimes for a specific movie
-    public function showtimes($id)
-    {
-        $movie = DB::table('movies')->where('id', $id)->first();
-        $showtimes = DB::table('showtimes')
-        ->join('rooms', 'showtimes.room_id', '=', 'rooms.id')
-        ->where('showtimes.movie_id', $id)
-        ->select(
-            'showtimes.id',
-            'showtimes.show_date',
-            'showtimes.show_time',
-            'rooms.id as room_id',
-        )
-        ->orderBy('show_date', 'asc')
-        ->orderBy('show_time', 'asc')
-        ->get();
-        return view('movie.showtimes', compact('movie', 'showtimes'));
-    }
+    
 }

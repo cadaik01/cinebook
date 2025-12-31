@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ShowtimeController;
 use Illuminate\Auth\Events\Login;
 //homepage Route
 Route::get('/index', [MovieController::class, 'index'])->name('movies.index');
@@ -20,5 +21,7 @@ Route::get('/now-showing', [MovieController::class, 'nowShowing'])->name('now_sh
 // Upcoming Movies Route
 Route::get('/upcoming-movies', [MovieController::class, 'upcomingMovies'])->name('upcoming_movies');
 //showtime Route
-Route::get('/movies/{id}/showtimes', [MovieController::class, 'showtimes'])->name('movies.showtimes');
+Route::get('/movies/{id}/showtimes', [ShowtimeController::class, 'showtimes'])->name('movies.showtimes');
+//Seat Map Route
+Route::get('/showtimes/{showtime_id}/seats', [ShowtimeController::class, 'seatMap'])->name('movies.seatmap');
 ?>
