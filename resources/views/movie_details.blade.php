@@ -34,7 +34,7 @@
 <p><strong>Description:</strong> {{ $movie->description }}</p>
 
 <div>
-    <a href="">Book Now</a>
+   <a href="{{ route('movies.showtimes', ['id' => $movie->id]) }}">Book Now</a>
     <a href="/index">Back to List</a>
 </div>
 @endsection

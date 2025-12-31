@@ -182,3 +182,20 @@ INSERT INTO users (name, email, password, role) VALUES
 ('Admin', 'admin@cinebook.com', '123456', 'admin'),
 ('User One', 'user1@gmail.com', '123456', 'user'),
 ('User Two', 'user2@gmail.com', '123456', 'user');
+
+#showtimes
+INSERT INTO showtimes (movie_id, room_id, show_date, show_time)
+VALUES
+-- Movie 1
+(1, 1, '2025-01-10', '10:00:00'),
+(1, 1, '2025-01-10', '13:00:00'),
+(1, 2, '2025-01-10', '16:00:00'),
+(1, 2, '2025-01-11', '18:30:00'),
+(1, 1, '2025-01-12', '20:45:00'),
+
+-- Movie 2
+(2, 1, '2025-01-10', '11:00:00'),
+(2, 2, '2025-01-10', '14:30:00'),
+(2, 1, '2025-01-11', '17:00:00'),
+(2, 2, '2025-01-11', '19:30:00'),
+(2, 1, '2025-01-12', '21:00:00');

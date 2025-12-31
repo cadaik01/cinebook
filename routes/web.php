@@ -19,4 +19,6 @@ Route::post('register',[LoginController::class, 'register'])->name('register');
 Route::get('/now-showing', [MovieController::class, 'nowShowing'])->name('now_showing');
 // Upcoming Movies Route
 Route::get('/upcoming-movies', [MovieController::class, 'upcomingMovies'])->name('upcoming_movies');
+//showtime Route
+Route::get('/movies/{id}/showtimes', [MovieController::class, 'showtimes'])->name('movies.showtimes');
 ?>
