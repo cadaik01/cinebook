@@ -13,7 +13,7 @@
         @yield('content')
     </main>
     
-    @include('partials.footer-simple')
+    @include('partials.footer')
     
     @stack('scripts')
 </body>

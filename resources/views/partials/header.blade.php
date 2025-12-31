@@ -31,26 +31,23 @@
                 </ul>
             </div>
 
-            <!-- Auth Buttons -->
+            <!-- Credential Buttons -->
             <div class="nav-auth">
-                @auth
+                @if(session('user_id'))
                     <div class="user-menu">
-                        <span class="user-greeting">Hello, {{ Auth::user()->name }}!</span>
+                        <span class="user-greeting">Hello, {{ session('user_name') }}!</span>
                         <a href="" class="btn btn-outline">
                             <i class="fas fa-user"></i>
                             Profile
                         </a>
-                        <form action="" method="POST" class="logout-form">
-                            @csrf
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-sign-out-alt"></i>
-                                Logout
-                            </button>
-                        </form>
+                        <a href="{{ route('logout') }}" class="btn btn-primary">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </a>
                     </div>
                 @else
                     <div class="auth-buttons">
-                        <a href="" class="btn btn-outline">
+                        <a href="{{ route('login') }}" class="btn btn-outline">
                             <i class="fas fa-sign-in-alt"></i>
                             Login
                         </a>
@@ -59,7 +56,7 @@
                             Sign Up
                         </a>
                     </div>
-                @endauth
+                @endif
             </div>
 
             <!-- Mobile Menu Toggle -->
