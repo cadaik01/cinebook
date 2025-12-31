@@ -51,7 +51,7 @@
                             <i class="fas fa-sign-in-alt"></i>
                             Login
                         </a>
-                        <a href="" class="btn btn-primary">
+                        <a href="{{ route('register') }}" class="btn btn-primary">
                             <i class="fas fa-user-plus"></i>
                             Sign Up
                         </a>
