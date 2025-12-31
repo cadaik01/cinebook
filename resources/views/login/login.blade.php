@@ -23,7 +23,12 @@
     <div class="error-message">
         {{ session('error') }}
     </div>
-    
+@endif
+
+@if (session('success'))
+    <div class="success-message">
+        {{ session('success') }}
+    </div>
 @endif
 
 @endsection

@@ -8,11 +8,21 @@
 <p><strong>Language:</strong> {{ $movie->language }}</p>
 <p><strong>Duration:</strong> {{ $movie->duration }}</p>
 <p><strong>Release Date:</strong> {{ $movie->release_date }}</p>
-<p><strong>Status:</strong> {{ $movie->status }}</p>
+<p><strong>Age Rating:</strong> {{ $movie->age_rating }}</p>
+<p><strong>Director:</strong> {{ $movie->director }}</p>
+<p><strong>Cast:</strong> {{ $movie->cast }}</p>
+<p><strong>Status:</strong> 
+    @if($movie->status == 'now_showing')
+        Now Showing
+    @elseif($movie->status == 'coming_soon')
+        Coming Soon
+    @else
+        {{ $movie->status }}
+    @endif
+</p>
 
 @if($movie->poster_url)
     <div>
-        <strong>Poster:</strong><br>
         <img src="{{ $movie->poster_url }}" alt="{{ $movie->title }} Poster" width="300">
     </div>
 @endif
