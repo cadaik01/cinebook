@@ -20,7 +20,8 @@
 
             <div class="poster-buttons">
                 @if($movie->status == 'now_showing')
-                <a href="{{ route('movies.showtimes', ['id' => $movie->id]) }}" class="detail-btn detail-btn-primary">Book Now</a>
+                <a href="{{ route('movies.showtimes', ['id' => $movie->id]) }}"
+                    class="detail-btn detail-btn-primary">Book Now</a>
                 @else
                 <button class="detail-btn detail-btn-disabled" disabled>Coming Soon</button>
                 @endif
@@ -63,7 +64,11 @@
     </div>
 
     <div class="back-button">
-        <a href="/index" class="detail-btn detail-btn-secondary">Back to List</a>
+        @if($movie->status == 'now_showing')
+        <a href="{{ route('now_showing') }}" class="detail-btn detail-btn-secondary">Back to Now Showing</a>
+        @else
+        <a href="{{ route('upcoming_movies') }}" class="detail-btn detail-btn-secondary">Back to Upcoming</a>
+        @endif
     </div>
 
     <!-- Trailer Modal -->
@@ -93,32 +98,32 @@
 </div>
 
 <script>
-    function openTrailerModal() {
-        document.getElementById('trailerModal').style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
+function openTrailerModal() {
+    document.getElementById('trailerModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
 
-    function closeTrailerModal() {
-        document.getElementById('trailerModal').style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
+function closeTrailerModal() {
+    document.getElementById('trailerModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
 
-    // Close modal when clicking outside of it
-    window.onclick = function(event) {
+// Close modal when clicking outside of it
+window.onclick = function(event) {
+    const modal = document.getElementById('trailerModal');
+    if (modal && event.target == modal) {
+        closeTrailerModal();
+    }
+}
+
+// Close modal when pressing Escape
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
         const modal = document.getElementById('trailerModal');
-        if (modal && event.target == modal) {
+        if (modal && modal.style.display === 'flex') {
             closeTrailerModal();
         }
     }
-
-    // Close modal when pressing Escape
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            const modal = document.getElementById('trailerModal');
-            if (modal && modal.style.display === 'flex') {
-                closeTrailerModal();
-            }
-        }
-    });
+});
 </script>
 @endsection
