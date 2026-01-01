@@ -24,4 +24,6 @@ Route::get('/upcoming-movies', [MovieController::class, 'upcomingMovies'])->name
 Route::get('/movies/{id}/showtimes', [ShowtimeController::class, 'showtimes'])->name('movies.showtimes');
 //Seat Map Route
 Route::get('/showtimes/{showtime_id}/seats', [ShowtimeController::class, 'seatMap'])->name('movies.seatmap');
+//Select Seats Route
+Route::post('/showtimes/{showtime_id}/seats/select', [ShowtimeController::class, 'selectSeats'])->name('movies.selectseats');
 ?>

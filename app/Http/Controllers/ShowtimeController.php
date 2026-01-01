@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 class ShowtimeController extends Controller
 {
     //1. showtimes function to fetch showtimes for a specific movie
@@ -29,11 +30,17 @@ class ShowtimeController extends Controller
     {
         //table showtime
         $showtime = DB::table('showtimes')->where('id', $showtime_id)->first();
-        //table room
-        $room = DB::table('rooms')->where('id', $showtime->room_id)->first();
-        // rooms's seats
+        //table room with screen type
+        $room = DB::table('rooms')
+            ->join('screen_types', 'rooms.screen_type_id', '=', 'screen_types.id')//Join screen_types table for screen price
+            ->where('rooms.id', $showtime->room_id)
+            ->select('rooms.*', 'screen_types.price as screen_price')
+            ->first(); //room of the showtime
+        // rooms's seats with seat types and prices
         $seats = DB::table('seats')
+            ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')//Join seat_types table for base price
             ->where('room_id', $room->id)
+            ->select('seats.*', 'seat_types.name as seat_type_name', 'seat_types.base_price')//select seat base price
             ->orderBy('seat_row', 'asc')
             ->orderBy('seat_number', 'asc')
             ->get();
@@ -45,4 +52,79 @@ class ShowtimeController extends Controller
             ->toArray();
         return view('booking.seat_map', compact('showtime', 'room', 'seats', 'bookedSeats'));
     }
-}
+    //3. selectSeats function to handle seat selection and booking
+    public function selectSeats(Request $request, $showtime_id)
+    {
+        // take selected seats from request by decoding JSON array
+        $selectedSeatsJson = $request->input('seats', '[]');
+        $selectedSeats = json_decode($selectedSeatsJson, true);
+        
+        // Check if user is logged in
+        $user_id = Session::get('user_id');
+        if (!$user_id) {
+            return redirect('/login')->with('error', 'Please log in to book seats.');
+        }
+        
+        // Validate selected seats input by checking if it's empty or not an array
+        if (empty($selectedSeats) || !is_array($selectedSeats)) {
+            return redirect()->route('movies.seatmap', ['showtime_id' => $showtime_id])//redirect back with error
+                           ->with('error', 'No seats selected.');
+        }
+        
+        // start transaction for booking seats for data integrity
+        DB::beginTransaction();
+        // try-catch block to handle booking process
+        try {
+            $bookedSeats = [];
+            $alreadyBookedSeats = [];
+            
+            foreach ($selectedSeats as $seat_id) {
+                // Validate seat exists
+                $seat = DB::table('seats')->where('id', $seat_id)->first();
+                if (!$seat) {
+                    DB::rollback();// Rollback transaction
+                    return redirect()->route('movies.seatmap', ['showtime_id' => $showtime_id])//redirect back with error
+                                   ->with('error', 'Invalid seat selected.');
+                }
+                
+                // Check if the seat is already booked for this showtime
+                $existingBooking = DB::table('showtime_seats')
+                    ->where('showtime_id', $showtime_id)
+                    ->where('seat_id', $seat_id)
+                    ->first();
+                // If not booked, proceed to book
+                if (!$existingBooking) {
+                    // Book the seat
+                    DB::table('showtime_seats')->insert([
+                        'showtime_id' => $showtime_id,
+                        'seat_id' => $seat_id,
+                        'status' => 'booked',
+                        'user_id' => $user_id,
+                    ]);
+                    $bookedSeats[] = $seat->seat_code;// Collect successfully booked seat codes
+                } else {
+                    $alreadyBookedSeats[] = $seat->seat_code;// Collect already booked seat codes
+                }
+            }
+            // Commit transaction after processing all seats
+            DB::commit();
+            
+            // Prepare success message
+            $message = '';
+            if (!empty($bookedSeats)) {
+                $message .= 'Successfully booked seats: ' . implode(', ', $bookedSeats) . '. ';
+            }
+            if (!empty($alreadyBookedSeats)) {
+                $message .= 'Some seats were already booked: ' . implode(', ', $alreadyBookedSeats) . '.';
+            }
+            // Redirect back with success message
+            return redirect()->route('movies.seatmap', ['showtime_id' => $showtime_id])
+                           ->with('success', $message ?: 'Seats booked successfully.');
+        // catch block to handle exceptions                   
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->route('movies.seatmap', ['showtime_id' => $showtime_id])
+                           ->with('error', 'An error occurred while booking seats. Please try again.');
+        }
+    }
+    }
