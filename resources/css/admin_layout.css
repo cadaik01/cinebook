@@ -1,0 +1,255 @@
+/* ===== RESET & GENERAL ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* box-sizing: border-box → padding/border không tăng kích thước element */
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    /* Màu nền sáng cho toàn trang admin */
+}
+
+/* ===== WRAPPER ===== */
+.admin-layout-wrapper {
+    display: flex;
+    /* Flexbox: sidebar và main nằm ngang */
+    min-height: 100vh;
+    /* min-height: 100vh → Chiều cao tối thiểu = 100% viewport height */
+}
+
+/* ===== SIDEBAR ===== */
+.admin-layout-sidebar {
+    /* CUSTOM CLASS - không phải Bootstrap */
+    width: 260px;
+    /* Chiều rộng cố định sidebar */
+    background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+    /* Gradient từ xanh đậm → xanh nhạt (top to bottom) */
+    color: #ecf0f1;
+    /* Màu chữ trắng ngà */
+    position: fixed;
+    /* Fixed: Sidebar cố định khi scroll */
+    height: 100vh;
+    /* Chiều cao = 100% viewport */
+    overflow-y: auto;
+    /* Scroll khi nội dung dài */
+    z-index: 1000;
+    /* z-index cao → luôn hiện trên cùng */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    /* Đổ bóng nhẹ bên phải sidebar */
+}
+
+.admin-layout-sidebar-header {
+    /* CUSTOM CLASS */
+    padding: 25px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    /* Border mờ phân cách header */
+    text-align: center;
+}
+
+.admin-layout-sidebar-header h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.admin-layout-sidebar-header i {
+    /* Icon trong header */
+    margin-right: 10px;
+    color: #3498db;
+    /* Màu xanh dương sáng */
+}
+
+/* ===== SIDEBAR NAVIGATION ===== */
+.admin-layout-sidebar-nav {
+    /* CUSTOM CLASS */
+    padding: 20px 0;
+}
+
+.admin-layout-sidebar-menu {
+    /* CUSTOM CLASS */
+    list-style: none;
+    /* Bỏ bullet points của ul */
+    padding: 0;
+    margin: 0;
+}
+
+.admin-layout-sidebar-item {
+    /* CUSTOM CLASS */
+    margin: 5px 15px;
+}
+
+.admin-layout-sidebar-link {
+    /* CUSTOM CLASS */
+    display: flex;
+    /* Flex: icon và text nằm ngang */
+    align-items: center;
+    /* Căn giữa theo chiều dọc */
+    padding: 12px 20px;
+    color: #ecf0f1;
+    text-decoration: none;
+    /* Bỏ underline của link */
+    border-radius: 8px;
+    /* Bo góc */
+    transition: all 0.3s ease;
+    /* Hiệu ứng mượt khi hover */
+}
+
+.admin-layout-sidebar-link:hover {
+    /* Khi hover chuột vào */
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Nền trắng mờ */
+    color: #3498db;
+    /* Chữ màu xanh */
+    transform: translateX(5px);
+    /* Dịch sang phải 5px */
+}
+
+.admin-layout-sidebar-link i {
+    /* Icon trong menu */
+    width: 20px;
+    margin-right: 15px;
+    font-size: 18px;
+}
+
+/* Active Menu Item */
+.admin-layout-sidebar-item.active .admin-layout-sidebar-link {
+    /* Khi item có class 'active' */
+    background-color: #3498db;
+    /* Nền xanh sáng */
+    color: #ffffff;
+    /* Chữ trắng */
+    font-weight: 600;
+}
+
+/* ===== MAIN CONTENT AREA ===== */
+.admin-layout-main {
+    /* CUSTOM CLASS */
+    flex: 1;
+    /* flex: 1 → Chiếm hết không gian còn lại */
+    margin-left: 260px;
+    /* Margin = chiều rộng sidebar */
+    display: flex;
+    flex-direction: column;
+    /* Navbar trên, content dưới */
+}
+
+/* ===== NAVBAR ===== */
+.admin-layout-navbar {
+    /* CUSTOM CLASS kết hợp với Bootstrap .navbar */
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    /* Đổ bóng nhẹ */
+}
+
+.admin-layout-navbar-right {
+    /* CUSTOM CLASS */
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    /* Khoảng cách giữa user info và logout button */
+}
+
+.admin-layout-user-info {
+    /* CUSTOM CLASS */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.admin-layout-user-info i {
+    font-size: 24px;
+    color: #3498db;
+}
+
+.admin-layout-btn-logout {
+    /* CUSTOM CLASS kết hợp với Bootstrap .btn */
+    border-radius: 20px;
+    /* Bo góc tròn */
+    padding: 5px 15px;
+    transition: all 0.3s ease;
+}
+
+.admin-layout-btn-logout:hover {
+    background-color: #e74c3c;
+    /* Nền đỏ khi hover */
+    color: #ffffff;
+    /* Chữ trắng */
+    border-color: #e74c3c;
+    transform: scale(1.05);
+    /* Phóng to nhẹ 5% */
+}
+
+/* ===== CONTENT AREA ===== */
+.admin-layout-content {
+    /* CUSTOM CLASS */
+    flex: 1;
+    /* Chiếm hết không gian còn lại */
+    padding: 30px;
+    overflow-y: auto;
+    /* Scroll khi nội dung dài */
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    /* Màn hình nhỏ hơn 768px (tablet, mobile) */
+
+    .admin-layout-sidebar {
+        width: 80px;
+        /* Thu nhỏ sidebar */
+    }
+
+    .admin-layout-sidebar-header h3 span {
+        display: none;
+        /* Ẩn text, chỉ hiện icon */
+    }
+
+    .admin-layout-sidebar-link span {
+        display: none;
+        /* Ẩn text menu */
+    }
+
+    .admin-layout-main {
+        margin-left: 80px;
+        /* Điều chỉnh margin */
+    }
+}
+
+@media (max-width: 576px) {
+    /* Màn hình rất nhỏ (mobile) */
+
+    .admin-layout-sidebar {
+        transform: translateX(-100%);
+        /* Ẩn sidebar ra ngoài màn hình */
+    }
+
+    .admin-layout-main {
+        margin-left: 0;
+    }
+
+    /* NOTE: Cần thêm JavaScript để toggle sidebar trên mobile */
+}
+
+/* ===== SCROLLBAR CUSTOM ===== */
+.admin-layout-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.admin-layout-sidebar::-webkit-scrollbar-track {
+    background: #2c3e50;
+}
+
+.admin-layout-sidebar::-webkit-scrollbar-thumb {
+    background: #3498db;
+    border-radius: 3px;
+}
+
+.admin-layout-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #2980b9;
+}
