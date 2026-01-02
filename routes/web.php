@@ -5,6 +5,8 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ShowtimeController;
 use Illuminate\Auth\Events\Login;
+use App\Http\Controllers\AdminController;
+
 //homepage Route
 Route::get('/index', [MovieController::class, 'index'])->name('movies.index');
 Route::get('/movies/{id}', [MovieController::class, 'show']);
@@ -26,4 +28,24 @@ Route::get('/movies/{id}/showtimes', [ShowtimeController::class, 'showtimes'])->
 Route::get('/showtimes/{showtime_id}/seats', [ShowtimeController::class, 'seatMap'])->name('movies.seatmap');
 //Select Seats Route
 Route::post('/showtimes/{showtime_id}/seats/select', [ShowtimeController::class, 'selectSeats'])->name('movies.selectseats');
+
+//Admin Routes - Nhóm tất cả các route admin với prefix 'admin'
+Route::prefix('admin')->group(function () {
+    //Dashboard
+    Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
+
+     // Quản lý phim
+    Route::get('/movies', [AdminController::class, 'moviesList'])->name('admin.movies.list');
+    Route::get('/movies/create', [AdminController::class, 'movieCreate'])->name('admin.movies.create');
+    Route::post('/movies', [AdminController::class, 'movieStore'])->name('admin.movies.store');
+    Route::get('/movies/{id}/edit', [AdminController::class, 'movieEdit'])->name('admin.movies.edit');
+    Route::put('/movies/{id}', [AdminController::class, 'movieUpdate'])->name('admin.movies.update');
+    Route::delete('/movies/{id}', [AdminController::class, 'movieDelete'])->name('admin.movies.delete');
+    
+    // Quản lý người dùng
+    Route::get('/users', [AdminController::class, 'usersList'])->name('admin.users.list');
+    
+    // Quản lý đặt vé
+    Route::get('/bookings', [AdminController::class, 'bookingsList'])->name('admin.bookings.list');
+});
 ?>
