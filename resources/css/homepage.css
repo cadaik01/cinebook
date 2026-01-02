@@ -1,0 +1,244 @@
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(rgba(3, 29, 68, 0.6), rgba(4, 57, 94, 0.6)), url('https://i.postimg.cc/wBRRZycq/c0896a8f2e95a5b66a2a6a47ecc245dd.jpg') center/cover no-repeat;
+    color: white;
+    padding: 120px 20px;
+    text-align: center;
+    margin-bottom: 50px;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-section h1 {
+    font-size: 3em;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-section p {
+    font-size: 1.3em;
+    opacity: 0.9;
+}
+
+/* Featured Movies Section */
+.featured-movies {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title {
+    font-size: 2.2em;
+    color: var(--prussian-blue);
+    margin-bottom: 30px;
+    font-weight: bold;
+    border-bottom: 3px solid var(--tan);
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+/* Movie Card */
+.movie-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.movie-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(75, 111, 91, 0.2);
+}
+
+.movie-poster {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    background-color: #e9ecef;
+}
+
+.movie-info {
+    padding: 15px;
+}
+
+.movie-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--prussian-blue);
+    margin-bottom: 8px;
+    min-height: 2.4em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.movie-genre {
+    color: var(--burnt-peach);
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.movie-duration {
+    color: #999;
+    font-size: 0.85em;
+    margin-bottom: 12px;
+}
+
+.btn-detail {
+    display: inline-block;
+    background-color: var(--deep-teal);
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
+.btn-detail:hover {
+    background-color: var(--deep-space-blue);
+    color: white;
+}
+
+/* View All Button */
+.btn-view-all-container {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.btn-view-all {
+    background-color: var(--tan);
+    color: var(--prussian-blue);
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: 2px solid var(--tan);
+    display: inline-block;
+}
+
+.btn-view-all:hover {
+    background-color: transparent;
+    color: var(--tan);
+}
+
+/* CTA Section */
+.cta-section {
+    background: linear-gradient(135deg, var(--deep-space-blue) 0%, var(--prussian-blue) 100%);
+    color: white;
+    padding: 50px 20px;
+    text-align: center;
+    margin-top: 60px;
+}
+
+.cta-section h2 {
+    font-size: 2em;
+    margin-bottom: 15px;
+}
+
+.cta-section p {
+    font-size: 1.1em;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-cta {
+    padding: 12px 30px;
+    border: 2px solid white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    font-size: 1em;
+}
+
+.btn-cta-primary {
+    background-color: var(--tan);
+    color: var(--prussian-blue);
+}
+
+.btn-cta-primary:hover {
+    background-color: var(--burnt-peach);
+    border-color: var(--burnt-peach);
+    color: white;
+}
+
+.btn-cta-secondary {
+    color: white;
+    background-color: transparent;
+}
+
+.btn-cta-secondary:hover {
+    background-color: white;
+    color: var(--prussian-blue);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: #999;
+}
+
+.empty-state p {
+    font-size: 1.1em;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2em;
+    }
+
+    .hero-section p {
+        font-size: 1.1em;
+    }
+
+    .section-title {
+        font-size: 1.8em;
+    }
+
+    .movies-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+    }
+
+    .cta-section h2 {
+        font-size: 1.5em;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+    }
+
+    .btn-cta {
+        width: 100%;
+    }
+}
