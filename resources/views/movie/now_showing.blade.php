@@ -3,7 +3,7 @@
 @section('title', 'Now Showing - TCA Cine')
 
 @push('styles')
-@vite('resources/css/now_showing.css')
+{{-- @vite('resources/css/now_showing.css') --}}
 @endpush
 
 @section('content')

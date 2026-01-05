@@ -3,7 +3,7 @@
 @section('title', 'Upcoming Movies - TCA Cine')
 
 @push('styles')
-@vite('resources/css/upcoming_movies.css')
+{{-- @vite('resources/css/upcoming_movies.css') --}}
 @endpush
 
 @section('content')

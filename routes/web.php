@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ShowtimeController;
+use App\Http\Controllers\BookingController;
 use Illuminate\Auth\Events\Login;
 //homepage Route
 Route::get('/index', [MovieController::class, 'index'])->name('movies.index');
@@ -22,8 +23,9 @@ Route::get('/now-showing', [MovieController::class, 'nowShowing'])->name('now_sh
 Route::get('/upcoming-movies', [MovieController::class, 'upcomingMovies'])->name('upcoming_movies');
 //showtime Route
 Route::get('/movies/{id}/showtimes', [ShowtimeController::class, 'showtimes'])->name('movies.showtimes');
-//Seat Map Route
-Route::get('/showtimes/{showtime_id}/seats', [ShowtimeController::class, 'seatMap'])->name('movies.seatmap');
-//Select Seats Route
+
+// Booking Routes (using BookingController)
+Route::get('/showtimes/{showtime_id}/seats', [BookingController::class, 'seatMap'])->name('booking.seatmap');
+Route::post('/showtimes/{showtime_id}/book', [BookingController::class, 'bookSeats'])->name('booking.book');
 Route::post('/showtimes/{showtime_id}/seats/select', [ShowtimeController::class, 'selectSeats'])->name('movies.selectseats');
 ?>

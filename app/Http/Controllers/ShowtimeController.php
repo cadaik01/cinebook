@@ -25,33 +25,6 @@ class ShowtimeController extends Controller
         ->get();
         return view('movie.showtimes', compact('movie', 'showtimes'));
     }
-    //2. seatMap function to display seat map for a specific showtime
-    public function seatMap($showtime_id)
-    {
-        //table showtime
-        $showtime = DB::table('showtimes')->where('id', $showtime_id)->first();
-        //table room with screen type
-        $room = DB::table('rooms')
-            ->join('screen_types', 'rooms.screen_type_id', '=', 'screen_types.id')//Join screen_types table for screen price
-            ->where('rooms.id', $showtime->room_id)
-            ->select('rooms.*', 'screen_types.price as screen_price')
-            ->first(); //room of the showtime
-        // rooms's seats with seat types and prices
-        $seats = DB::table('seats')
-            ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')//Join seat_types table for base price
-            ->where('room_id', $room->id)
-            ->select('seats.*', 'seat_types.name as seat_type_name', 'seat_types.base_price')//select seat base price
-            ->orderBy('seat_row', 'asc')
-            ->orderBy('seat_number', 'asc')
-            ->get();
-        // booked seats for the showtime
-        $bookedSeats = DB::table('showtime_seats')
-            ->where('showtime_id', $showtime_id)
-            ->where('status', 'booked')
-            ->pluck('seat_id')
-            ->toArray();
-        return view('booking.seat_map', compact('showtime', 'room', 'seats', 'bookedSeats'));
-    }
     //3. selectSeats function to handle seat selection and booking
     public function selectSeats(Request $request, $showtime_id)
     {
