@@ -2,6 +2,10 @@
 
 @section('title', 'TCA Cine - Home')
 
+@push('styles')
+    @vite(['resources/css/homepage.css'])
+@endpush
+
 @section('content')
 <!-- Hero Banner -->
 <div class="hero-section">

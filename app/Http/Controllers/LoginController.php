@@ -21,8 +21,8 @@ class LoginController extends Controller
         $password = $request->input('password');
         //2. find user in database with email
         $user = DB::table('users')->where('email', $email)->first();
-        //3. check if user exists and password matches
-        if ($user && Hash::check($password, $user->password)) {
+        //3. check if user exists and password matches (plain text compare as requested)
+        if ($user && $password === $user->password) {
             //4. log the user in
             Session::put('user_id', $user->id);
             Session::put('user_name', $user->name);
@@ -63,7 +63,7 @@ class LoginController extends Controller
         $userId = DB::table('users')->insertGetId([
             'name' => $name,
             'email' => $email,
-            'password' => Hash::make($password),
+            'password' => $password, // storing plain text per request
             'city' => $city,
             'phone' => $phone
         ]);

@@ -6,6 +6,12 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ShowtimeController;
 use Illuminate\Auth\Events\Login;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminMovieController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminRoomController;
+use App\Http\Controllers\Admin\AdminShowtimeController;
+use App\Http\Controllers\Admin\AdminBookingController;
 
 //homepage Route
 Route::get('/index', [MovieController::class, 'index'])->name('movies.index');
@@ -15,6 +21,7 @@ Route::get('/', [MovieController::class, 'homepage'])->name('homepage');
 Route::get('/login', [LoginController::class, 'showLoginForm']);
 Route::post('/login',[LoginController::class, 'login'])->name('login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/logout', [LoginController::class, 'logout']);
 // Register Routes
 Route::get('register',[LoginController::class, 'showRegisterForm']);
 Route::post('register',[LoginController::class, 'register'])->name('register');
@@ -31,20 +38,29 @@ Route::post('/showtimes/{showtime_id}/seats/select', [ShowtimeController::class,
 
 //Admin Routes - Nhóm tất cả các route admin với prefix 'admin'
 Route::prefix('admin')->group(function () {
-    //Dashboard
-    Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
+    // Dashboard
+    Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
-     // Quản lý phim
-    Route::get('/movies', [AdminController::class, 'moviesList'])->name('admin.movies.list');
-    Route::get('/movies/create', [AdminController::class, 'movieCreate'])->name('admin.movies.create');
-    Route::post('/movies', [AdminController::class, 'movieStore'])->name('admin.movies.store');
-    Route::get('/movies/{id}/edit', [AdminController::class, 'movieEdit'])->name('admin.movies.edit');
-    Route::put('/movies/{id}', [AdminController::class, 'movieUpdate'])->name('admin.movies.update');
-    Route::delete('/movies/{id}', [AdminController::class, 'movieDelete'])->name('admin.movies.delete');
-    
-    // Quản lý người dùng
-    Route::get('/users', [AdminController::class, 'usersList'])->name('admin.users.list');
-    
-    // Quản lý đặt vé
-    Route::get('/bookings', [AdminController::class, 'bookingsList'])->name('admin.bookings.list');
+    // Movies Management
+    Route::resource('movies', AdminMovieController::class, ['as' => 'admin']);
+
+    // Users Management
+    Route::get('users', [AdminUserController::class, 'index'])->name('admin.users.index');
+    Route::get('users/{user}', [AdminUserController::class, 'show'])->name('admin.users.show');
+    Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
+    Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+    Route::post('users/{user}/toggle-role', [AdminUserController::class, 'toggleRole'])->name('admin.users.toggle-role');
+
+    // Rooms Management
+    Route::resource('rooms', AdminRoomController::class, ['as' => 'admin']);
+    Route::post('rooms/{room}/update-seats', [AdminRoomController::class, 'updateSeats'])->name('admin.rooms.update-seats');
+
+    // Showtimes Management
+    Route::resource('showtimes', AdminShowtimeController::class, ['as' => 'admin']);
+
+    // Bookings Management
+    Route::get('bookings', [AdminBookingController::class, 'index'])->name('admin.bookings.index');
+    Route::get('bookings/{booking}', [AdminBookingController::class, 'show'])->name('admin.bookings.show');
+    Route::post('bookings/{booking}/cancel', [AdminBookingController::class, 'cancel'])->name('admin.bookings.cancel');
 });
