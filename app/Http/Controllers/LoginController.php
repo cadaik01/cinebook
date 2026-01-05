@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {   // Show login form
@@ -21,7 +22,7 @@ class LoginController extends Controller
         //2. find user in database with email
         $user = DB::table('users')->where('email', $email)->first();
         //3. check if user exists and password matches
-        if ($user && $user->password === $password) {
+        if ($user && Hash::check($password, $user->password)) {
             //4. log the user in
             Session::put('user_id', $user->id);
             Session::put('user_name', $user->name);
@@ -62,7 +63,7 @@ class LoginController extends Controller
         $userId = DB::table('users')->insertGetId([
             'name' => $name,
             'email' => $email,
-            'password' => $password,
+            'password' => Hash::make($password),
             'city' => $city,
             'phone' => $phone
         ]);
