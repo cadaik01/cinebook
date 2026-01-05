@@ -1,7 +1,7 @@
-#CREATE DATABASE
-CREATE DATABASE IF NOT EXISTS cinebook
+-- CREATE DATABASE
+CREATE DATABASE IF NOT EXISTS cinebook;
 
-#USERS
+-- USERS
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE users (
 );
 
 
-#MOVIES
+-- MOVIES
 CREATE TABLE movies (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
@@ -41,14 +41,14 @@ CREATE TABLE movies (
     INDEX idx_rating_avg (rating_avg)
 );
 
-#screen_type
+-- screen_type
 CREATE TABLE screen_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     price DECIMAL(10,2) DEFAULT 0
 );
 
-#ROOMS
+-- ROOMS
 CREATE TABLE rooms (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE rooms (
     FOREIGN KEY (screen_type_id) REFERENCES screen_types(id)
 );
 
-#SEAT_TYPES
+-- SEAT_TYPES
 CREATE TABLE seat_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
@@ -70,7 +70,7 @@ CREATE TABLE seat_types (
 );
 
 
-#SEATS
+-- SEATS
 CREATE TABLE seats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     room_id INT NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE seats (
 );
 
 
-#SHOWTIMES
+-- SHOWTIMES
 CREATE TABLE showtimes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     movie_id INT NOT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE showtimes (
 );
 
 
-#SHOWTIMES_PRICES
+-- SHOWTIMES_PRICES
 CREATE TABLE showtime_prices (
     id INT AUTO_INCREMENT PRIMARY KEY,
     showtime_id INT NOT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE showtime_prices (
 );
 
 
-#SHOWTIMES_SEATS
+-- SHOWTIMES_SEATS
 CREATE TABLE showtime_seats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     showtime_id INT NOT NULL,
@@ -128,7 +128,7 @@ CREATE TABLE showtime_seats (
 );
 
 
-#BOOKINGS
+-- BOOKINGS
 CREATE TABLE bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -150,7 +150,7 @@ CREATE TABLE bookings (
 );
 
 
-#BOOKING_SEATS
+-- BOOKING_SEATS
 CREATE TABLE booking_seats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     booking_id INT NOT NULL,
@@ -162,7 +162,7 @@ CREATE TABLE booking_seats (
 );
 
 
-#REVIEWS
+-- REVIEWS
 CREATE TABLE reviews (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,

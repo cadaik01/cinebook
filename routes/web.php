@@ -48,4 +48,3 @@ Route::prefix('admin')->group(function () {
     // Quản lý đặt vé
     Route::get('/bookings', [AdminController::class, 'bookingsList'])->name('admin.bookings.list');
 });
-?>
