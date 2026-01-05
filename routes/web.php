@@ -5,7 +5,6 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ShowtimeController;
 use Illuminate\Auth\Events\Login;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminMovieController;
 use App\Http\Controllers\Admin\AdminUserController;
