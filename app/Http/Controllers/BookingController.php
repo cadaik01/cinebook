@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Session;
 
 class BookingController extends Controller
 {
-    /**
-     * Display seat map for a specific showtime
-     */
+    //Display seat map for a specific showtime
     public function seatMap($showtime_id)
     {
         // Get showtime details
@@ -22,16 +20,16 @@ class BookingController extends Controller
         
         // Get room with screen type and pricing
         $room = DB::table('rooms')
-            ->join('screen_types', 'rooms.screen_type_id', '=', 'screen_types.id')
-            ->where('rooms.id', $showtime->room_id)
-            ->select('rooms.*', 'screen_types.price as screen_price')
+            ->join('screen_types', 'rooms.screen_type_id', '=', 'screen_types.id') //join screen_types to get pricing
+            ->where('rooms.id', $showtime->room_id) //find room by showtime's room_id
+            ->select('rooms.*', 'screen_types.price as screen_price') //select room fields and screen price
             ->first();
         
         // Get all seats in the room with their types
         $seats = DB::table('seats')
-            ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')
-            ->where('room_id', $room->id)
-            ->select('seats.*', 'seat_types.name as seat_type_name', 'seat_types.base_price')
+            ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')//join seat_types to get seat type info
+            ->where('room_id', $room->id) //find seats by room id
+            ->select('seats.*', 'seat_types.name as seat_type_name', 'seat_types.base_price') //select seat fields and seat type info
             ->orderBy('seat_row', 'asc')
             ->orderBy('seat_number', 'asc')
             ->get();
@@ -39,35 +37,34 @@ class BookingController extends Controller
         // Get booked seats for this showtime
         $bookedSeats = DB::table('showtime_seats')
             ->where('showtime_id', $showtime_id)
-            ->where('status', 'booked')
-            ->pluck('seat_id')
-            ->toArray();
+            ->where('status', 'booked')//only get booked seats
+            ->pluck('seat_id') //pluck seat_id for booked seats
+            ->toArray();//convert to array
             
-        return view('booking.seat_map', compact('showtime', 'room', 'seats', 'bookedSeats'));
+        return view('booking.seat_map', compact('showtime', 'room', 'seats', 'bookedSeats'));//return seat map view with data- compact is used to pass multiple variables to the view
     }
     
-    /**
-     * Process seat booking with proper validation and pricing
-     */
+    /*Process seat booking with proper validation and pricing*/
     public function bookSeats(Request $request, $showtime_id)
     {
-        // Check if user is logged in
+        //1. Check if user is logged in
         $user_id = Session::get('user_id');
         if (!$user_id) {
             return redirect('/login')->with('error', 'Please log in to book seats.');
         }
         
-        // Get selected seats from request
-        $selectedSeatsJson = $request->input('seats', '[]');
-        $selectedSeats = json_decode($selectedSeatsJson, true);
+        //2. Get selected seats from request
+        $selectedSeatsJson = $request->input('seats', '[]');//decode JSON array of selected seats
+        $selectedSeats = json_decode($selectedSeatsJson, true);//decode to PHP array
         
-        // Validate input
-        if (empty($selectedSeats) || !is_array($selectedSeats)) {
+        //3. Validate input
+        if (empty($selectedSeats) || !is_array($selectedSeats))//check if seats are selected - with seat array is empty or not an array
+        {
             return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
                            ->with('error', 'No seats selected.');
         }
         
-        // Get showtime and room information for pricing
+        //4. Get showtime and room information for pricing
         $showtime = DB::table('showtimes')->where('id', $showtime_id)->first();
         if (!$showtime) {
             return redirect()->route('homepage')->with('error', 'Invalid showtime.');
@@ -79,130 +76,63 @@ class BookingController extends Controller
             ->select('rooms.*', 'screen_types.price as screen_price')
             ->first();
         
-        // Begin transaction for data integrity
-        DB::beginTransaction();
-        
-        try {
-            $bookedSeats = [];
-            $alreadyBookedSeats = [];
-            $totalPrice = 0;
-            $couplePairs = [];
+        //5. Collect seat information for confirmation and pricing
+        $seatDetails = [];
+        $totalPrice = 0;
+        $validatedCouplePairs = []; // Track validated couple pairs to avoid duplicate validation
+        foreach ($selectedSeats as $seat_id) {
+            //Get seat info with pricing
+            $seat = DB::table('seats')
+                ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')
+                ->where('seats.id', $seat_id)
+                ->select('seats.*', 'seat_types.base_price', 'seat_types.name as seat_type_name')
+                ->first();
+            //check if seat exists
+            if (!$seat) {
+            return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                           ->with('error', 'Invalid seat selected.');
+            }
+             //check if seat is already booked
+            $existingBooking = DB::table('showtime_seats')
+                ->where('showtime_id', $showtime_id)
+                ->where('seat_id', $seat_id)
+                ->first();
+            //if booked, redirect back with error
+            if ($existingBooking) {
+                return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                               ->with('error', 'Seat ' . $seat->seat_code . ' is already booked.');
+            }
             
-            // Validate and process each selected seat
-            foreach ($selectedSeats as $seat_id) {
-                // Validate seat exists
-                $seat = DB::table('seats')
-                    ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')
-                    ->where('seats.id', $seat_id)
-                    ->select('seats.*', 'seat_types.base_price', 'seat_types.name as seat_type_name')
-                    ->first();
-                    
-                if (!$seat) {
-                    DB::rollback();
-                    return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                                   ->with('error', 'Invalid seat selected.');
-                }
-                
-                // Check if seat is already booked
-                $existingBooking = DB::table('showtime_seats')
-                    ->where('showtime_id', $showtime_id)
-                    ->where('seat_id', $seat_id)
-                    ->first();
-                    
-                if ($existingBooking) {
-                    $alreadyBookedSeats[] = $seat->seat_code;
-                    continue;
-                }
-                
-                // Calculate real price from database
-                $seatPrice = ($room->screen_price ?? 0) + ($seat->base_price ?? 0);
-                
-                // Handle couple seat validation
-                if ($seat->seat_type_id == 3) { // Couple seat
-                    $pairValidation = $this->validateCoupleSeat($seat, $selectedSeats, $showtime_id);
-                    if (!$pairValidation['valid']) {
-                        DB::rollback();
+            // If seat is couple type, validate pair seat
+            if ($seat->seat_type_id === '3') {
+                $pairKey = $this->getCouplePairKey($seat->seat_code);
+                // Only validate if this couple pair hasn't been validated yet
+                if (!in_array($pairKey, $validatedCouplePairs)) {
+                    $validation = $this->validateCoupleSeat($seat, $selectedSeats, $showtime_id);
+                    if (!$validation['valid']) {
                         return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                                       ->with('error', $pairValidation['message']);
+                                       ->with('error', $validation['message']);
                     }
-                    
-                    // Track couple pairs to avoid double processing
-                    $pairKey = $this->getCouplePairKey($seat->seat_code);
-                    if (!in_array($pairKey, $couplePairs)) {
-                        $couplePairs[] = $pairKey;
-                    }
-                }
-                
-                // Book the seat
-                DB::table('showtime_seats')->insert([
-                    'showtime_id' => $showtime_id,
-                    'seat_id' => $seat_id,
-                    'status' => 'booked',
-                    'user_id' => $user_id,
-                ]);
-                
-                $bookedSeats[] = $seat->seat_code;
-                $totalPrice += $seatPrice;
-            }
-            
-            // If we have successfully booked seats, create booking record
-            if (!empty($bookedSeats)) {
-                $booking_id = DB::table('bookings')->insertGetId([
-                    'user_id' => $user_id,
-                    'showtime_id' => $showtime_id,
-                    'total_price' => $totalPrice,
-                    'status' => 'confirmed',
-                    'payment_status' => 'pending',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-                
-                // Create booking_seats records
-                foreach ($selectedSeats as $seat_id) {
-                    if (!DB::table('showtime_seats')
-                           ->where('showtime_id', $showtime_id)
-                           ->where('seat_id', $seat_id)
-                           ->where('status', 'booked')
-                           ->exists()) {
-                        continue; // Skip seats that weren't actually booked
-                    }
-                    
-                    $seat = DB::table('seats')
-                        ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')
-                        ->where('seats.id', $seat_id)
-                        ->select('seats.*', 'seat_types.base_price')
-                        ->first();
-                        
-                    $seatPrice = ($room->screen_price ?? 0) + ($seat->base_price ?? 0);
-                    
-                    DB::table('booking_seats')->insert([
-                        'booking_id' => $booking_id,
-                        'seat_id' => $seat_id,
-                        'price' => $seatPrice,
-                    ]);
+                    $validatedCouplePairs[] = $pairKey; // Mark this pair as validated
                 }
             }
             
-            DB::commit();
-            
-            // Prepare success message
-            $message = '';
-            if (!empty($bookedSeats)) {
-                $message .= 'Successfully booked seats: ' . implode(', ', $bookedSeats) . '. ';
-                $message .= 'Total: ' . number_format($totalPrice) . ' VND. ';
-            }
-            if (!empty($alreadyBookedSeats)) {
-                $message .= 'Some seats were already booked: ' . implode(', ', $alreadyBookedSeats) . '.';
-            }
-            
-            return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                           ->with('success', $message ?: 'Booking completed.');
-                           
-        } catch (\Exception $e) {
-            DB::rollback();
-            return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                           ->with('error', 'An error occurred while booking seats. Please try again.');
+        //6. Calculate real price from database
+            $seatPrice = ($room->screen_price ?? 0) + ($seat->base_price ?? 0);
+            $totalPrice += $seatPrice;
+
+        //7. Store seat details for confirmation
+            $seatDetails[] = [
+                'id' => $seat->id,
+                'seat_code' => $seat->seat_code,
+                'seat_type' => $seat->seat_type_name,
+                'price' => $seatPrice,
+            ];
         }
+        //8. Get Movie info
+        $movie = DB::table('movies')->where('id', $showtime->movie_id)->first();
+        //9. Redirect to confirmation page with booking details
+        return view('booking.confirmation', compact('movie', 'showtime', 'seatDetails', 'totalPrice', 'showtime_id'));
     }
     
     /**
@@ -245,9 +175,8 @@ class BookingController extends Controller
         
         return ['valid' => true, 'message' => ''];
     }
-    
     /**
-     * Get couple pair key for tracking
+     * Generate a unique key for couple seat pairs
      */
     private function getCouplePairKey($seatCode)
     {
@@ -255,5 +184,93 @@ class BookingController extends Controller
         $seatNumber = (int)substr($seatCode, 1);
         $lowerNumber = ($seatNumber % 2 === 1) ? $seatNumber : $seatNumber - 1;
         return $rowLetter . $lowerNumber . '-' . ($lowerNumber + 1);
+    }
+    //Process booking confirmation and payment
+    public function processBooking(Request $request)
+    {
+        //1.Get data from form
+        $showtime_id = $request->input('showtime_id');
+        $seat_ids = $request->input('seat_ids', []);
+        $total_price = $request->input('total_price');  
+        $user_id = Session::get('user_id');
+        if (!$user_id) {
+            return redirect('/login')->with('error', 'Please log in to complete booking.');
+        }
+        $payment_method = $request->input('payment_method');
+        //2.Decode seat ids from JSON
+        $selectedSeats = json_decode($seat_ids, true);
+        //3.Validate input
+        if (empty($selectedSeats) || !is_array($selectedSeats)) {
+            return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                           ->with('error', 'No seats selected for booking.');
+        }
+        //4.Start transaction
+        DB::beginTransaction();
+        try {
+            //a. re-check seat availability
+            foreach ($selectedSeats as $seat_id) {
+                $existingBooking = DB::table('showtime_seats')
+                    ->where('showtime_id', $showtime_id)
+                    ->where('seat_id', $seat_id)
+                    ->first();
+                if ($existingBooking) {
+                    DB::rollback();
+                    return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                                   ->with('error', 'Seat already booked during your booking process. Please select different seats.');
+                }
+            }
+            
+            //b. Book seats in showtime_seats table
+            foreach ($selectedSeats as $seat_id) {
+                DB::table('showtime_seats')->insert([
+                    'showtime_id' => $showtime_id,
+                    'seat_id' => $seat_id,
+                    'status' => 'booked',
+                    'user_id' => $user_id,
+                ]);
+            }
+            
+            //c. Create booking record
+            $bookingId = DB::table('bookings')->insertGetId([
+                'user_id' => $user_id,
+                'showtime_id' => $showtime_id,
+                'total_price' => $total_price,
+                'status' => 'confirmed',
+                'payment_method' => $payment_method,
+                'payment_status' => ($payment_method === 'online') ? 'paid' : 'pending',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            
+            //d. Insert into booking_seats table with pricing for each seat
+            foreach ($selectedSeats as $seat_id) {
+                $seat = DB::table('seats')
+                    ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')
+                    ->join('showtimes', 'showtimes.id', '=', DB::raw($showtime_id))
+                    ->join('rooms', 'showtimes.room_id', '=', 'rooms.id')
+                    ->join('screen_types', 'rooms.screen_type_id', '=', 'screen_types.id')
+                    ->where('seats.id', $seat_id)
+                    ->select('seats.*', 'seat_types.base_price', 'screen_types.price as screen_price')
+                    ->first();
+                    
+                $seatPrice = ($seat->base_price ?? 0) + ($seat->screen_price ?? 0);
+                
+                DB::table('booking_seats')->insert([
+                    'booking_id' => $bookingId,
+                    'seat_id' => $seat_id,
+                    'price' => $seatPrice,
+                ]);
+            }
+            
+            //5.Commit transaction
+            DB::commit();
+            //6.Redirect to success page
+            return redirect()->route('homepage')->with('success', 'Booking successful! Your booking ID is ' . $bookingId);
+        } catch (\Exception $e) {
+            //7.Rollback on error
+            DB::rollback();
+            return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                           ->with('error', 'An error occurred during booking: ' . $e->getMessage());
+        }
     }
 }

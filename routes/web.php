@@ -28,4 +28,5 @@ Route::get('/movies/{id}/showtimes', [ShowtimeController::class, 'showtimes'])->
 Route::get('/showtimes/{showtime_id}/seats', [BookingController::class, 'seatMap'])->name('booking.seatmap');
 Route::post('/showtimes/{showtime_id}/book', [BookingController::class, 'bookSeats'])->name('booking.book');
 Route::post('/showtimes/{showtime_id}/seats/select', [ShowtimeController::class, 'selectSeats'])->name('movies.selectseats');
+Route::post('/booking/process', [BookingController::class, 'processBooking'])->name('booking.process');
 ?>
