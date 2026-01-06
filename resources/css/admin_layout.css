@@ -342,17 +342,20 @@ body {
 }
 
 .seat-visual {
-    width: 35px;
-    height: 35px;
-    border: 2px solid;
-    border-radius: 5px;
+    width: 24px;
+    height: 24px;
+    border: 1px solid;
+    border-radius: 3px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s;
-    font-size: 0.75rem;
+    font-size: 0.55rem;
     font-weight: bold;
+    padding: 1px;
+    min-width: 24px;
+    min-height: 24px;
 }
 
 .seat-visual:hover {
@@ -376,7 +379,8 @@ body {
     background-color: var(--tan);
     border-color: var(--tan);
     color: var(--prussian-blue);
-    width: 50px;
+    width: 36px;
+    min-width: 36px;
 }
 
 /* ===== RESPONSIVE ===== */

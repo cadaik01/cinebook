@@ -112,6 +112,18 @@
     color: white;
 }
 
+.btn-warning {
+    background-color: transparent;
+    color: var(--tan);
+    border: 2px solid var(--tan);
+}
+
+.btn-warning:hover {
+    background-color: var(--tan);
+    color: var(--prussian-blue);
+    border-color: var(--tan);
+}
+
 .user-menu {
     display: flex;
     align-items: center;
