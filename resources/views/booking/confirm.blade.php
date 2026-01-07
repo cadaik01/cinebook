@@ -5,6 +5,12 @@ extends('layouts.main')
 @section('content')
 <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
     <h2>Confirm Booking</h2>
+    <!-- Countdown Timer -->
+<div style="background: #ff6b6b; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+    <h3 style="margin: 0;">⏰ Expiration Time</h3>
+    <div id="countdown" style="font-size: 32px; font-weight: bold; margin-top: 10px;">10:00</div>
+    <p style="margin: 5px 0 0 0; font-size: 14px;">Booking will be automatically canceled if not paid within this time</p>
+</div>
     <!-- Display movie and showtime details -->
     <div>
         <h3>Booking Details</h3>
@@ -60,4 +66,5 @@ extends('layouts.main')
             <a href="{{ route('booking.seatmap', ['showtime_id' => $showtime->id]) }}">Back to Seat Selection</a>
         </div>
     </form>
+    <script src="{{ asset('js/booking-countdown.js') }}"></script>
 @endsection

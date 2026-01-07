@@ -231,13 +231,17 @@ class BookingController extends Controller
             }
             
             //c. Create booking record
+            //calculate expiration time (10 minutes from now)
+            $expirationTime = now()->addMinutes(10);
+            //Booking record
             $bookingId = DB::table('bookings')->insertGetId([
                 'user_id' => $user_id,
                 'showtime_id' => $showtime_id,
                 'total_price' => $total_price,
-                'status' => 'confirmed',
+                'status' => 'pending',
                 'payment_method' => $payment_method,
-                'payment_status' => ($payment_method === 'online') ? 'paid' : 'pending',
+                'payment_status' => 'pending',
+                'expires_at' => $expirationTime,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -272,5 +276,54 @@ class BookingController extends Controller
             return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
                            ->with('error', 'An error occurred during booking: ' . $e->getMessage());
         }
+    }
+    //**Display booking success page */
+    public function bookingSuccess($booking_id){
+        //Check logged in
+        $user_id = Session::get('user_id');
+        if (!$user_id) {
+            return redirect('/login')->with('error', 'Please log in to view booking details.');
+        }
+
+        //Get booking details
+        $booking = DB::table('bookings')
+        ->join('showtimes', 'bookings.showtime_id', '=', 'showtimes.id')
+        ->join('movies', 'showtimes.movie_id', '=', 'movies.id')
+        ->where('bookings.id', $booking_id)
+        ->where('bookings.user_id', $user_id)
+        ->select([
+            'bookings.*',
+            'movies.title as movie_title',
+            'movies.poster_url as movie_poster',
+            'showtimes.start_time as showtime_start',
+            'rooms.name as room_name'
+        ])
+        ->first();
+
+        //check if booking exists
+        if (!$booking) {
+            return redirect()->route('homepage')->with('error', 'Booking not found.');
+        }
+
+        //Get booked seats details
+        $seats = DB::table('booking_seats')
+        ->join('seats', 'booking_seats.seat_id', '=', 'seats.id')
+        ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')
+        ->where('booking_seats.booking_id', $booking_id)
+        ->select([
+            'seats.seat_code',
+            'seat_types.name as seat_type',
+            'booking_seats.price'
+        ])
+        ->get();
+
+        //Generate QR code data (booking info)
+        $qrData = "Booking ID: " . $booking->id . "\n"
+                . "Movie: " . $booking->movie_title . "\n"
+                . "Showtime: " . $booking->showtime_start . "\n"
+                . "Seats: " . implode(', ', $seats->pluck('seat_code')->toArray()) . "\n"
+                . "Total Price: $" . number_format($booking->total_price, 2);
+        //Return success view with data
+        return view('booking.success', compact('booking', 'seats', 'qrData'));
     }
 }
