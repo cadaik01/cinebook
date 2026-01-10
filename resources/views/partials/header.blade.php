@@ -39,9 +39,18 @@
 
             <!-- Credential Buttons -->
             <div class="nav-auth">
-                @if(session('user_id'))
+                @php
+                    $currentUser = session('user_id') ? \App\Models\User::find(session('user_id')) : null;
+                @endphp
+                @if($currentUser)
                     <div class="user-menu">
-                        <span class="user-greeting">Hello, {{ session('user_name') }}!</span>
+                        <span class="user-greeting">Hello, {{ $currentUser->name }}!</span>
+                        @if($currentUser->role === 'admin')
+                            <a href="{{ route('admin.dashboard') }}" class="btn btn-warning">
+                                <i class="fas fa-tools"></i>
+                                Admin Panel
+                            </a>
+                        @endif
                         <a href="" class="btn btn-outline">
                             <i class="fas fa-user"></i>
                             Profile

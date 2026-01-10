@@ -16,7 +16,7 @@
         <input type="password" id="password" name="password" required>
     </div>
     <button type="submit">Login</button>
-    <a href="{{ route('register') }}" style="background: none; border: none; color: blue; text-decoration: underline;">Sign Up</a>
+    <a href="{{ route('register') }}" class="btn btn-link">Register</a>
 </form>
 
 @if(session('error'))

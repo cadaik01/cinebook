@@ -6,6 +6,13 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ShowtimeController;
 use App\Http\Controllers\BookingController;
 use Illuminate\Auth\Events\Login;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminMovieController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminRoomController;
+use App\Http\Controllers\Admin\AdminShowtimeController;
+use App\Http\Controllers\Admin\AdminBookingController;
 
 //***Movie Controller */
 //movie list Route
@@ -49,4 +56,32 @@ Route::get('/booking/success/{booking_id}', [BookingController::class, 'bookingS
 // Mock Payment
 Route::get('payment/mock/{booking_id}', [BookingController::class, 'mockPayment'])->name('payment.mock');
 Route::post('payment/mock/{booking_id}', [BookingController::class, 'confirmPayment'])->name('payment.confirm');
-?>
+
+//Admin Routes - Nhóm tất cả các route admin với prefix 'admin'
+Route::prefix('admin')->group(function () {
+    // Dashboard
+    Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
+    // Movies Management
+    Route::resource('movies', AdminMovieController::class, ['as' => 'admin']);
+
+    // Users Management
+    Route::get('users', [AdminUserController::class, 'index'])->name('admin.users.index');
+    Route::get('users/{user}', [AdminUserController::class, 'show'])->name('admin.users.show');
+    Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
+    Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+    Route::post('users/{user}/toggle-role', [AdminUserController::class, 'toggleRole'])->name('admin.users.toggle-role');
+
+    // Rooms Management
+    Route::resource('rooms', AdminRoomController::class, ['as' => 'admin']);
+    Route::post('rooms/{room}/update-seats', [AdminRoomController::class, 'updateSeats'])->name('admin.rooms.update-seats');
+
+    // Showtimes Management
+    Route::resource('showtimes', AdminShowtimeController::class, ['as' => 'admin']);
+
+    // Bookings Management
+    Route::get('bookings', [AdminBookingController::class, 'index'])->name('admin.bookings.index');
+    Route::get('bookings/{booking}', [AdminBookingController::class, 'show'])->name('admin.bookings.show');
+    Route::post('bookings/{booking}/cancel', [AdminBookingController::class, 'cancel'])->name('admin.bookings.cancel');
+});

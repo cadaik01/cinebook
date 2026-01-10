@@ -1,23 +1,23 @@
-#screen_type
+-- screen_type
 INSERT INTO screen_types (id, name, price) VALUES
 (1, '2D', 0),
 (2, '3D', 40000),
 (3, 'IMAX 4D', 60000);
 
-#seat_types
+-- seat_types
 INSERT INTO seat_types (id, name, base_price, description) VALUES
 (1, 'standard', 0, 'standard seat'),
 (2, 'vip', 10000, 'VIP seat'),
 (3, 'couple', 20000, 'Couple seat');
 
-#rooms
+-- rooms
 INSERT INTO rooms (id, name, total_rows, seats_per_row, screen_type_id) VALUES
 (1, 'Room 1', 8, 18, 1), -- 2D
 (2, 'Room 2', 8, 18, 1), -- 2D
 (3, 'Room 3', 8, 18, 2), -- 3D
 (4, 'Room 4', 8, 18, 3); -- IMAX 4D
 
-#movies
+-- movies
 INSERT INTO movies
 (title, genre, language, director, cast, duration, release_date, age_rating, status, poster_url, trailer_url, description, rating_avg)
 VALUES
@@ -157,8 +157,7 @@ VALUES
 'https://www.youtube.com/watch?v=pyWuHv2-Abk',
 'During a sudden zombie outbreak, passengers aboard a train fight desperately for survival while confronting moral choices and personal sacrifice. The film combines relentless action with emotional depth, redefining the zombie genre.',
 4.6
-);
-
+),
 
 -- ================= COMING SOON (15) =================
 (
@@ -250,7 +249,7 @@ VALUES
 'https://www.youtube.com/watch?v=wDtJ3M4arIc',
 'A documentary crew follows a family of shamans in rural Thailand, uncovering terrifying supernatural possession rooted in ancient beliefs. Blending realism with escalating horror, the film delivers a deeply unsettling experience that explores faith, inheritance, and spiritual terror.',
 4.1
-);
+),
 
 -- ================= ENDED (5) =================
 (
@@ -318,8 +317,8 @@ VALUES
 );
 
 
-#seats
-//first 4 rooms, rows A-H, seats 1-18
+-- seats
+-- first 4 rooms, rows A-H, seats 1-18
 INSERT INTO seats (room_id, seat_row, seat_number, seat_code, seat_type_id)
 SELECT
     r.id,
@@ -347,7 +346,7 @@ JOIN (
 ) sn
 WHERE r.id BETWEEN 1 AND 4;
 
-//then update some seats to vip
+-- then update some seats to vip
 
 UPDATE seats
 SET seat_type_id = 2
@@ -355,7 +354,7 @@ WHERE seat_row IN ('C','D','E')
   AND seat_number BETWEEN 7 AND 12;
 
 
-//then update some seats to couple
+-- then update some seats to couple
 
 UPDATE seats
 SET seat_type_id = 3
@@ -363,13 +362,13 @@ WHERE seat_row = 'H';
 
 
 
-#users
+-- users
 INSERT INTO users (name, email, password, role) VALUES
 ('Admin', 'admin@cinebook.com', '123456', 'admin'),
 ('User One', 'user1@gmail.com', '123456', 'user'),
 ('User Two', 'user2@gmail.com', '123456', 'user');
 
-#showtimes
+-- showtimes
 INSERT INTO showtimes (movie_id, room_id, show_date, show_time)
 VALUES
 -- Movie 1

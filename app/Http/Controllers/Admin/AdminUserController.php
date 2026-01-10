@@ -1,0 +1,108 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Booking;
+use Illuminate\Http\Request;
+
+class AdminUserController extends Controller
+{
+    public function index(Request $request)
+    {
+        $query = User::withCount('bookings');
+
+        // Filter by role
+        if ($request->role) {
+            $query->where('role', $request->role);
+        }
+
+        // Search by name or email
+        if ($request->search) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        $users = $query->orderBy('created_at', 'desc')->paginate(20);
+
+        // Statistics
+        $stats = [
+            'total' => User::count(),
+            'admins' => User::where('role', 'admin')->count(),
+            'users' => User::where('role', 'user')->count(),
+            'regular_users' => User::where('role', 'user')->count(),
+            'users_with_bookings' => User::has('bookings')->count(),
+        ];
+
+        return view('admin.users.index', compact('users', 'stats'));
+    }
+
+    public function show(User $user)
+    {
+        $user->load(['bookings.showtime.movie', 'bookings.showtime.room']);
+
+        $stats = [
+            'total_bookings' => $user->bookings()->count(),
+            'confirmed_bookings' => $user->bookings()->where('status', 'confirmed')->count(),
+            'cancelled_bookings' => $user->bookings()->where('status', 'cancelled')->count(),
+            'total_spent' => $user->bookings()->where('payment_status', 'paid')->sum('total_price'),
+        ];
+
+        return view('admin.users.show', compact('user', 'stats'));
+    }
+
+    public function edit(User $user)
+    {
+        return view('admin.users.edit', compact('user'));
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+            'city' => 'nullable|string|max:100',
+            'role' => 'required|in:user,admin',
+        ]);
+
+        $user->update($request->only(['name', 'email', 'phone', 'city', 'role']));
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'User updated successfully!');
+    }
+
+    public function destroy(User $user)
+    {
+        // Check if user has bookings
+        if ($user->bookings()->exists()) {
+            return back()->with('error', 'Cannot delete user with existing bookings.');
+        }
+
+        // Prevent deleting yourself
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'You cannot delete your own account.');
+        }
+
+        $user->delete();
+
+        return back()->with('success', 'User deleted successfully!');
+    }
+
+    public function toggleRole(User $user)
+    {
+        // Prevent changing your own role
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'You cannot change your own role.');
+        }
+
+        $newRole = $user->role === 'admin' ? 'user' : 'admin';
+        $user->update(['role' => $newRole]);
+
+        return back()->with('success', "User role changed to {$newRole} successfully!");
+    }
+}

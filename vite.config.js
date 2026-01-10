@@ -7,6 +7,10 @@ export default defineConfig({
             input: [
                 "resources/css/app.css",
                 "resources/js/app.js",
+                "resources/css/admin_layout.css",
+                "resources/css/header.css",
+                "resources/css/footer.css",
+                "resources/css/homepage.css",
                 "resources/css/movie_details.css",
                 "resources/css/now_showing.css",
                 "resources/css/upcoming_movies.css",
