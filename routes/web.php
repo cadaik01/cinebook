@@ -44,4 +44,7 @@ Route::post('/showtimes/{showtime_id}/seats/select', [ShowtimeController::class,
 Route::post('/booking/process', [BookingController::class, 'processBooking'])->name('booking.process');
 // Booking Success
 Route::get('/booking/success/{booking_id}', [BookingController::class, 'bookingSuccess'])->name('booking.success');
+// Mock Payment
+Route::get('payment/mock/{booking_id}', [BookingController::class, 'mockPayment'])->name('payment.mock');
+Route::post('payment/mock/{booking_id}', [BookingController::class, 'confirmPayment'])->name('payment.confirm');
 ?>
