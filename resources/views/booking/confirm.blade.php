@@ -54,11 +54,8 @@ extends('layouts.main')
         <h3>Payment method</h3>
         <select name="payment_method" required>
             <option value="">Select Payment Method</option>
-            <option value="cash">Cash</option>
-            <option value="credit_card">Credit Card</option>
-            <option value="VnPay">VNPay</option>
-            <option value="paypal">Momo</option>
-            <option value="bank_transfer">Bank Transfer</option>
+            <option value="vnpay">VNPay</option>
+            <option value="momo">Momo</option>
         </select>
 
         <div>

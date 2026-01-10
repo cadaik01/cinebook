@@ -269,21 +269,9 @@ class BookingController extends Controller
             //5.Commit transaction
             DB::commit();
 
-            //** Mock payment processing (Momo/VNpay) */
-            // Here you would integrate with actual payment gateways
-            // For this example, we assume payment is always successful
-            if (in_array($payment_method, ['momo', 'vnpay'])) {
-                //Refirect to mock payment page
-                return redirect()->route('payment.mock', ['booking_id' => $bookingId]);
-            }
-            else {
-                //Cash or credit card payment assumed successful
-                return redirect()
-                ->route('booking.success', ['booking_id' => $bookingId])
-                ->with('success', 'Booking successful! Your booking ID is ' . $bookingId);
-            }
-            //6.Redirect to success page
-            return redirect()->route('homepage')->with('success', 'Booking successful! Your booking ID is ' . $bookingId);
+            //** Mock payment processing (Momo/VNPay only) */
+            // All payments go through mock payment gateway
+            return redirect()->route('payment.mock', ['booking_id' => $bookingId]);
         } catch (\Exception $e) {
             //7.Rollback on error
             DB::rollback();
