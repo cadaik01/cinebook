@@ -22,7 +22,6 @@ CREATE TABLE users (
 CREATE TABLE movies (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
-    genre VARCHAR(100),
     language VARCHAR(50),
     director VARCHAR(100),
     cast TEXT,
@@ -41,11 +40,28 @@ CREATE TABLE movies (
     INDEX idx_rating_avg (rating_avg)
 );
 
--- screen_type
+-- Genres
+CREATE TABLE genres (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Movie Genres pivot
+CREATE TABLE movie_genres (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    movie_id INT NOT NULL,
+    genre_id INT NOT NULL,
+    FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE,
+    FOREIGN KEY (genre_id) REFERENCES genres(id) ON DELETE CASCADE
+);
+
+-- Screen types
 CREATE TABLE screen_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    price DECIMAL(10,2) DEFAULT 0
+    price INT NOT NULL
 );
 
 -- ROOMS
@@ -65,7 +81,7 @@ CREATE TABLE rooms (
 CREATE TABLE seat_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
-    base_price DECIMAL(10,2) NOT NULL,
+    base_price INT NOT NULL,
     description VARCHAR(255)
 );
 
@@ -108,7 +124,7 @@ CREATE TABLE showtime_prices (
     id INT AUTO_INCREMENT PRIMARY KEY,
     showtime_id INT NOT NULL,
     seat_type_id INT NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
+    price INT NOT NULL,
     UNIQUE (showtime_id, seat_type_id),
     FOREIGN KEY (showtime_id) REFERENCES showtimes(id),
     FOREIGN KEY (seat_type_id) REFERENCES seat_types(id)
@@ -134,9 +150,9 @@ CREATE TABLE bookings (
     user_id INT NOT NULL,
     showtime_id INT NOT NULL,
     booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    total_price DECIMAL(10,2),
+    total_price INT NOT NULL,
     status ENUM('pending','confirmed','cancelled','expired') DEFAULT 'pending',
-    payment_method VARCHAR(50),
+    payment_method ENUM('momo','vnpay'),
     payment_status ENUM('pending','paid','refunded') DEFAULT 'pending',
     qr_code VARCHAR(255),
     expired_at TIMESTAMP NULL DEFAULT NULL,
@@ -155,7 +171,7 @@ CREATE TABLE booking_seats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     booking_id INT NOT NULL,
     seat_id INT NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
+    price INT NOT NULL,
     UNIQUE (booking_id, seat_id),
     FOREIGN KEY (booking_id) REFERENCES bookings(id),
     FOREIGN KEY (seat_id) REFERENCES seats(id)

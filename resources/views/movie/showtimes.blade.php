@@ -20,7 +20,7 @@
             <td>{{ $showtime->show_date }}</td>
             <td>{{ $showtime->show_time }}</td>
             <td>{{ $showtime->room_id }}</td>
-            <td><a href="/showtimes/{{ $showtime->id }}/seats">Select Seats</a></td>
+            <td><a href="{{ route('booking.seatmap', ['showtime_id' => $showtime->id]) }}">Select Seats</a></td>
         </tr>
         @endforeach
     </tbody>
