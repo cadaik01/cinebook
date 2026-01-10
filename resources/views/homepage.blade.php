@@ -29,7 +29,18 @@
 
             <div class="movie-info">
                 <h3 class="movie-title">{{ $movie->title }}</h3>
-                <p class="movie-genre">{{ $movie->genre ?? 'Unknown' }}</p>
+                
+                <!-- Display Genres -->
+                @if(isset($movie->genres) && count($movie->genres) > 0)
+                    <p class="movie-genre">
+                        @foreach($movie->genres as $index => $genre)
+                            <span class="genre-tag">{{ $genre }}</span>{{ $index < count($movie->genres) - 1 ? ', ' : '' }}
+                        @endforeach
+                    </p>
+                @else
+                    <p class="movie-genre">Unknown</p>
+                @endif
+                
                 <p class="movie-duration">⏱️ {{ $movie->duration ?? '120' }} min</p>
 
                 <a href="/movies/{{ $movie->id }}" class="btn-detail">

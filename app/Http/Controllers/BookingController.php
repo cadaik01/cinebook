@@ -44,7 +44,9 @@ class BookingController extends Controller
         return view('booking.seat_map', compact('showtime', 'room', 'seats', 'bookedSeats'));//return seat map view with data- compact is used to pass multiple variables to the view
     }
     
-    /*Process seat booking with proper validation and pricing*/
+    /**
+     * Process seat booking with proper validation and pricing
+    */
     public function bookSeats(Request $request, $showtime_id)
     {
         //1. Check if user is logged in
@@ -136,7 +138,7 @@ class BookingController extends Controller
     }
     
     /**
-     * Validate couple seat logic
+     * Validate couple seat logic to call into bookSeats method
      */
     private function validateCoupleSeat($seat, $selectedSeats, $showtime_id)
     {
@@ -185,6 +187,49 @@ class BookingController extends Controller
         $lowerNumber = ($seatNumber % 2 === 1) ? $seatNumber : $seatNumber - 1;
         return $rowLetter . $lowerNumber . '-' . ($lowerNumber + 1);
     }
+    /**
+     * Display booking confirmation page
+     */
+    public function confirmBooking($booking_id)
+    {
+        //check logged in
+        $user_id = Session::get('user_id');
+        if (!$user_id) {
+            return redirect('/login')->with('error', 'Please log in to view booking details.');
+        }
+        //get booking details
+        $booking = DB::table('bookings')
+        ->join('showtimes', 'bookings.showtime_id', '=', 'showtimes.id')
+        ->join('movies', 'showtimes.movie_id', '=', 'movies.id')
+        ->where('bookings.id', $booking_id)
+        ->where('bookings.user_id', $user_id)
+        ->select([
+            'bookings.*',
+            'movies.title as movie_title',
+            'movies.poster_url as movie_poster',
+            'showtimes.start_time as showtime_start',
+            'rooms.name as room_name'
+        ])
+        ->first();
+        //check if booking exists
+        if (!$booking) {
+            return redirect()->route('homepage')->with('error', 'Booking not found.');
+        }
+        //get booked seats details
+        $seats = DB::table('booking_seats')
+        ->join('seats', 'booking_seats.seat_id', '=', 'seats.id')
+        ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')
+        ->where('booking_seats.booking_id', $booking_id)
+        ->select([
+            'seats.seat_code',
+            'seat_types.name as seat_type',
+            'booking_seats.price'
+        ])
+        ->get();
+        //return confirmation view with data
+        return view('booking.confirmation_details', compact('booking', 'seats'));
+    }
+
     //Process booking confirmation and payment
     public function processBooking(Request $request)
     {

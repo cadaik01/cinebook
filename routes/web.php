@@ -40,6 +40,8 @@ Route::get('/showtimes/{showtime_id}/seats', [BookingController::class, 'seatMap
 Route::post('/showtimes/{showtime_id}/book', [BookingController::class, 'bookSeats'])->name('booking.book');
 // Select Seats Page
 Route::post('/showtimes/{showtime_id}/seats/select', [ShowtimeController::class, 'selectSeats'])->name('movies.selectseats');
+//Confirm Booking
+Route::get('/booking/confirm/{booking_id}', [BookingController::class, 'confirmBooking'])->name('booking.confirmation');
 // Process Booking
 Route::post('/booking/process', [BookingController::class, 'processBooking'])->name('booking.process');
 // Booking Success

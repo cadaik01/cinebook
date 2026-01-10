@@ -35,7 +35,18 @@
         <div class="movie-info">
             <div class="info-section">
                 <h3>Movie Information</h3>
-                <p><strong>Genre:</strong> {{ $movie->genre }}</p>
+                
+                <!-- Display Genres -->
+                <p><strong>Genres:</strong> 
+                    @if(isset($movie->genres) && count($movie->genres) > 0)
+                        @foreach($movie->genres as $index => $genre)
+                            <span class="genre-badge">{{ $genre }}</span>{{ $index < count($movie->genres) - 1 ? ' ' : '' }}
+                        @endforeach
+                    @else
+                        <span class="genre-badge">Unknown</span>
+                    @endif
+                </p>
+                
                 <p><strong>Language:</strong> {{ $movie->language }}</p>
                 <p><strong>Duration:</strong> {{ $movie->duration }} minutes</p>
                 <p><strong>Director:</strong> {{ $movie->director }}</p>
