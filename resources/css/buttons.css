@@ -1,0 +1,300 @@
+/* ========== BUTTON STYLES ========== */
+
+/* Base button styles */
+button,
+.btn {
+    cursor: pointer;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    font-weight: 600;
+    transition: all var(--transition-base);
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+/* ========== PRIMARY BUTTON ========== */
+/* Used for primary actions, highest priority
+   Example: Login, Confirm, Save, Submit form
+   Color: Teal (brand signature) */
+.btn-primary,
+.btn-primary-cinebook {
+    background-color: var(--deep-teal);
+    color: #fff;
+    border: 2px solid var(--deep-teal);
+}
+
+.btn-primary:hover,
+.btn-primary-cinebook:hover {
+    background-color: var(--deep-space-blue);
+    border-color: var(--deep-space-blue);
+    box-shadow: var(--shadow-soft);
+}
+
+.btn-primary:focus-visible,
+.btn-primary-cinebook:focus-visible {
+    outline: 2px solid var(--tan);
+    outline-offset: 2px;
+}
+
+/* ========== SECONDARY BUTTON ========== */
+/* Used for secondary actions, lower priority than primary
+   Example: Cancel, Back, Add, Edit
+   Color: Burnt Peach (secondary brand color) */
+.btn-secondary,
+.btn-secondary-cinebook {
+    background-color: var(--burnt-peach);
+    color: #fff;
+    border: 2px solid var(--burnt-peach);
+}
+
+.btn-secondary:hover,
+.btn-secondary-cinebook:hover {
+    background-color: #c07760;
+    border-color: #c07760;
+    box-shadow: var(--shadow-soft);
+}
+
+.btn-secondary:focus-visible,
+.btn-secondary-cinebook:focus-visible {
+    outline: 2px solid var(--tan);
+    outline-offset: 2px;
+}
+
+/* ========== OUTLINE BUTTON ========== */
+/* Used for optional actions, lowest priority
+   Example: Links rather than submit buttons
+   Need to restore visual focus on light background
+   Color: Outline Teal */
+.btn-outline,
+.btn-outline-cinebook {
+    background-color: transparent;
+    color: var(--deep-teal);
+    border: 2px solid var(--deep-teal);
+}
+
+.btn-outline:hover,
+.btn-outline-cinebook:hover {
+    background-color: var(--deep-teal);
+    color: #fff;
+    box-shadow: var(--shadow-soft);
+}
+
+.btn-outline:focus-visible,
+.btn-outline-cinebook:focus-visible {
+    outline: 2px solid var(--deep-teal);
+    outline-offset: 2px;
+}
+
+/* ========== DETAIL BUTTON ========== */
+/* Used for viewing product details, movie card
+   Located in movie card, spans full width
+   Action: Open movie details page
+   Color: Teal primary */
+.btn-detail {
+    background-color: var(--deep-teal);
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.9em;
+    width: 100%;
+    text-align: center;
+    border: none;
+}
+
+.btn-detail:hover {
+    background-color: var(--deep-space-blue);
+    color: white;
+    box-shadow: var(--shadow-soft);
+}
+
+/* ========== VIEW ALL BUTTON ========== */
+/* Used for 'view all' in homepage
+   Example: 'View all movies' at the end of each section
+   Action: Navigate to movie list page
+   Color: Tan (yellow)
+   Style: Border + background highlight on hover */
+.btn-view-all {
+    background-color: var(--tan);
+    color: var(--prussian-blue);
+    padding: 12px 30px;
+    border-radius: var(--radius-md);
+    font-size: 1em;
+    font-weight: bold;
+    border: 2px solid var(--tan);
+    display: inline-block;
+}
+
+.btn-view-all:hover {
+    background-color: transparent;
+    color: var(--tan);
+    box-shadow: 0 4px 12px rgba(218, 183, 133, 0.3);
+}
+
+/* ========== CTA BUTTONS ========== */
+/* Call-To-Action: Used in marketing/promotional sections
+   Usually has 2 types: Primary (main action) + Secondary (secondary action)
+   Example: 'Book ticket now' (primary) + 'Watch trailer' (secondary)
+   Color: Tan primary, Transparent secondary
+   Context: On dark gradient background */
+.btn-cta {
+    padding: 12px 30px;
+    border: 2px solid white;
+    border-radius: var(--radius-md);
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.btn-cta-primary {
+    background-color: var(--tan);
+    color: var(--prussian-blue);
+    border-color: var(--tan);
+}
+
+.btn-cta-primary:hover {
+    background-color: var(--burnt-peach);
+    border-color: var(--burnt-peach);
+    color: white;
+    box-shadow: 0 4px 12px rgba(213, 137, 111, 0.3);
+}
+
+.btn-cta-secondary {
+    color: white;
+    background-color: transparent;
+    border-color: white;
+}
+
+.btn-cta-secondary:hover {
+    background-color: white;
+    color: var(--prussian-blue);
+    box-shadow: var(--shadow-soft);
+}
+
+/* ========== WARNING BUTTON ========== */
+/* Used for warning actions, optional
+   Example: Links in header/nav
+   Color: Tan (stands out but not dangerous red)
+   Style: Outline style, activate background on hover */
+.btn-warning {
+    background-color: transparent;
+    color: var(--tan);
+    border: 2px solid var(--tan);
+}
+
+.btn-warning:hover {
+    background-color: var(--tan);
+    color: var(--prussian-blue);
+    box-shadow: var(--shadow-soft);
+}
+
+/* ========== MOVIE PAGE BUTTONS ========== */
+/* Special buttons for movie pages (now_showing, upcoming_movies)
+   Has 3 variants: primary (booking), secondary (watch trailer), notify (coming soon) */
+
+/* Movie Primary - Now Showing
+   Used for: 'Book ticket now' on now_showing page
+   Color: Blue (gradient) - different from main page
+   Action: Navigate to showtime selection page */
+.movie-btn {
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    flex: 1;
+}
+
+.movie-btn-primary {
+    background: linear-gradient(135deg, var(--color-btn-now-showing) 0%, var(--color-btn-now-showing-dark) 100%);
+    color: #fff;
+}
+
+.movie-btn-primary:hover {
+    background: linear-gradient(135deg, var(--color-btn-now-showing-dark) 0%, #2471a3 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
+/* Movie Secondary - Watch Trailer
+   Used for: 'Watch trailer' on movie page
+   Color: Green - secondary action
+   Action: Open modal/popup to watch trailer */
+.movie-btn-secondary {
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    color: #fff;
+}
+
+.movie-btn-secondary:hover {
+    background: linear-gradient(135deg, #229954 0%, #1e8449 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+}
+
+/* Movie Notify - Coming Soon
+   Used for: 'Get notification' on upcoming_movies page
+   Color: Purple (gradient) - unique to coming soon
+   Action: Register to receive notification when movie releases */
+.movie-btn-notify {
+    background: linear-gradient(135deg, var(--color-header-purple) 0%, var(--color-header-purple-dark) 100%);
+    color: #fff;
+}
+
+.movie-btn-notify:hover {
+    background: linear-gradient(135deg, var(--color-header-purple-dark) 0%, #5b2c6f 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(142, 68, 173, 0.4);
+}
+
+/* ========== DISABLED STATE ========== */
+/* Used when button cannot be clicked (form invalid, waiting for API, etc.)
+   Display: Dimmed (opacity 0.6), cursor not-allowed, no shadow */
+button:disabled,
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* ========== SIZE VARIANTS ========== */
+/* Small size: For small, inline actions
+   Example: Edit icon button, close modal button */
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85em;
+}
+
+/* Large size: For primary actions, easy to click
+   Example: 'Book ticket' on hero section */
+.btn-lg {
+    padding: 14px 28px;
+    font-size: 1.1em;
+}
+
+/* Span full width
+   Example: Button in form, button in card */
+.btn-block {
+    width: 100%;
+    display: block;
+}
+
+/* ========== RESPONSIVE ========== */
+/* Adjust padding/font-size on mobile
+   Ensure button is easy to click on mobile devices */
+@media (max-width: 768px) {
+    .btn-cta {
+        padding: 10px 20px;
+        font-size: 0.95em;
+    }
+
+    .movie-btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+}

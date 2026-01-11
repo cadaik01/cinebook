@@ -41,4 +41,32 @@
     /* Motion */
     --transition-fast: 150ms ease;
     --transition-base: 220ms ease;
+
+    /* Page-specific colors */
+    --color-dark-bg: #1a1a2e;
+    --color-dark-bg-secondary: #16213e;
+    --color-card-bg: #2a2a2a;
+    --color-card-dark: #1a1a1a;
+    --color-overlay-dark: #1e1e1e;
+
+    /* Badge colors */
+    --color-badge-now-showing: #e74c3c;
+    --color-badge-now-dark: #c0392b;
+    --color-badge-upcoming: #f39c12;
+    --color-badge-upcoming-dark: #d68910;
+
+    /* Button colors */
+    --color-btn-now-showing: #3498db;
+    --color-btn-now-showing-dark: #2980b9;
+    --color-btn-upcoming: #f39c12;
+
+    /* Accent colors */
+    --color-accent-gold: #ffd700;
+    --color-header-purple: #8e44ad;
+    --color-header-purple-dark: #6c3483;
+
+    /* Additional for admin */
+    --white: #ffffff;
+    --color-btn-hover-dark: #3a5847;
+    --color-btn-secondary-hover: #c07760;
 }

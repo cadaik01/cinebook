@@ -1,8 +1,11 @@
 @import './root.css';
 @import './base.css';
+@import './buttons.css';
 @import 'header.css';
 @import 'footer.css';
 @import 'homepage.css';
+@import 'now_showing.css';
+@import 'upcoming_movies.css';
 
 /* Genre Styles */
 .genre-tag {
