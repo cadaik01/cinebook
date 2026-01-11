@@ -1,0 +1,44 @@
+:root {
+    /* Brand palette */
+    --deep-teal: #496F5B;
+    --prussian-blue: #031D44;
+    --tan: #DAB785;
+    --deep-space-blue: #04395E;
+    --burnt-peach: #D5896F;
+
+    /* Neutral + backgrounds */
+    --color-bg: #f8f9fa;
+    --color-surface: #ffffff;
+    --color-overlay: rgba(0, 0, 0, 0.04);
+
+    /* Text */
+    --color-text-primary: #1f2933;
+    --color-text-secondary: #4b5563;
+    --color-text-muted: #6b7280;
+
+    /* Borders & shadow */
+    --border-color: #e5e7eb;
+    --shadow-soft: 0 8px 20px rgba(0, 0, 0, 0.08);
+
+    /* Radii */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-pill: 999px;
+
+    /* Spacing scale */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+
+    /* Fonts */
+    --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-heading: 'Segoe UI Semibold', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    /* Motion */
+    --transition-fast: 150ms ease;
+    --transition-base: 220ms ease;
+}

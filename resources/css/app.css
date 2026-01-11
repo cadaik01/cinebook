@@ -1,38 +1,8 @@
-/* Import component styles */
+@import './root.css';
+@import './base.css';
 @import 'header.css';
 @import 'footer.css';
 @import 'homepage.css';
-
-/* Color Palette */
-:root {
-    --deep-teal: #496F5B;
-    --prussian-blue: #031D44;
-    --tan: #DAB785;
-    --deep-space-blue: #04395E;
-    --burnt-peach: #D5896F;
-}
-
-/* General Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-main {
-    min-height: calc(100vh - 200px);
-}
 
 /* Genre Styles */
 .genre-tag {
@@ -57,5 +27,5 @@ main {
     display: inline-block;
     margin-right: 8px;
     margin-bottom: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
