@@ -1,9 +1,29 @@
+/* ==================== Movie Details Page Styles ==================== */
+/*
+ * TABLE OF CONTENTS:
+ * 1. Container & Layout
+ * 2. Movie Header
+ * 3. Movie Content Grid
+ * 4. Movie Poster Section
+ * 5. Movie Information Section
+ * 6. Genre Badges
+ * 7. Status & Rating Badges
+ * 8. Action Buttons
+ * 9. Back Button
+ * 10. Movie Description (Legacy)
+ * 11. Trailer Modal
+ * 12. Trailer Section (Legacy)
+ * 13. Responsive Design (Tablet & Mobile)
+ */
+
+/* ========== Container & Layout ========== */
 .movie-details-container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 40px 20px;
 }
 
+/* ========== Movie Header ========== */
 .movie-header {
     margin-bottom: 40px;
     border-bottom: 3px solid #333;
@@ -17,35 +37,41 @@
     font-weight: 700;
 }
 
+/* ========== Movie Content Grid ========== */
 .movie-content {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 50px;
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
     margin-bottom: 50px;
     background: #f5f5f5;
     padding: 30px;
     border-radius: 10px;
+    align-items: flex-start;
 }
 
+/* ========== Movie Poster Section ========== */
 .movie-poster {
     flex-shrink: 0;
+    width: 250px;
 }
 
 .poster-img {
     width: 100%;
-    max-width: 300px;
-    border-radius: 12px;
+    height: auto;
+    border-radius: 8px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     display: block;
+    object-fit: cover;
 }
 
 .poster-buttons {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: 20px;
+    gap: 10px;
+    margin-top: 15px;
 }
 
+/* ========== Movie Information Section ========== */
 .movie-info {
     display: flex;
     flex-direction: column;
@@ -81,51 +107,68 @@
     font-weight: 600;
 }
 
+/* ========== Genre Badges ========== */
+.genre-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    margin-right: 8px;
+    margin-bottom: 5px;
+}
+
+/* ========== Status & Rating Badges ========== */
 .age-rating {
     display: inline-block;
-    background-color: #ff6b6b;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
     color: white;
     padding: 6px 14px;
-    border-radius: 6px;
+    border-radius: 20px;
     font-weight: bold;
-    font-size: 0.95em;
+    font-size: 0.9em;
     margin-left: 8px;
 }
 
 .status-badge {
     display: inline-block;
     padding: 8px 16px;
-    border-radius: 6px;
+    border-radius: 20px;
     font-weight: 600;
-    font-size: 0.95em;
+    font-size: 0.9em;
     margin-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .status-showing {
-    background-color: #51cf66;
+    background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
     color: white;
 }
 
 .status-soon {
-    background-color: #ffd43b;
+    background: linear-gradient(135deg, #ffd43b 0%, #fab005 100%);
     color: #333;
 }
 
 .status-ended {
-    background-color: #868e96;
+    background: linear-gradient(135deg, #868e96 0%, #6c757d 100%);
     color: white;
 }
 
 .rating {
     display: inline-block;
-    background-color: #4c6ef5;
+    background: linear-gradient(135deg, #4c6ef5 0%, #3d5fd4 100%);
     color: white;
     padding: 6px 14px;
-    border-radius: 6px;
+    border-radius: 20px;
     font-weight: 600;
     margin-left: 8px;
 }
 
+/* ========== Action Buttons ========== */
 .action-buttons {
     display: flex;
     gap: 15px;
@@ -135,53 +178,54 @@
 }
 
 .detail-btn {
-    padding: 14px 35px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 6px;
-    font-size: 1em;
+    border-radius: 8px;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
     transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
     text-align: center;
+    flex: 1;
 }
 
 .detail-btn-primary {
-    background-color: #ff6b6b;
-    color: white;
-    flex: 1;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
 }
 
 .detail-btn-primary:hover {
-    background-color: #ff5252;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(255, 107, 107, 0.35);
+    background: linear-gradient(135deg, #2980b9 0%, #2471a3 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(52, 152, 219, 0.4);
 }
 
 .detail-btn-trailer {
-    background-color: #4c6ef5;
-    color: white;
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
 }
 
 .detail-btn-trailer:hover {
-    background-color: #3d5fd4;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(76, 110, 245, 0.35);
+    background: linear-gradient(135deg, #229954 0%, #1e8449 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(39, 174, 96, 0.4);
 }
 
 .detail-btn-secondary {
-    background-color: #e0e0e0;
-    color: #333;
+    background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+    color: #fff;
     flex: 1;
+    box-shadow: 0 4px 12px rgba(149, 165, 166, 0.3);
 }
 
 .detail-btn-secondary:hover {
-    background-color: #d0d0d0;
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #7f8c8d 0%, #6c7a7b 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(149, 165, 166, 0.4);
 }
 
 .detail-btn-disabled {
@@ -192,6 +236,20 @@
     opacity: 0.7;
 }
 
+/* ========== Back Button ========== */
+.back-button {
+    margin-top: 30px;
+    padding-top: 20px;
+    text-align: left;
+}
+
+.back-button .detail-btn {
+    width: auto;
+    flex: none;
+    display: inline-block;
+}
+
+/* ========== Movie Description (Legacy - if used separately) ========== */
 .movie-description {
     background-color: white;
     padding: 35px;
@@ -214,19 +272,7 @@
     font-size: 1em;
 }
 
-.back-button {
-    margin-top: 30px;
-    padding-top: 20px;
-    text-align: left;
-}
-
-.back-button .detail-btn {
-    width: auto;
-    flex: none;
-    display: inline-block;
-}
-
-/* Modal Styles */
+/* ========== Trailer Modal ========== */
 .modal {
     display: none;
     position: fixed;
@@ -289,6 +335,7 @@
     border: none;
 }
 
+/* ========== Trailer Section (Legacy - if embedded directly) ========== */
 .movie-trailer {
     margin-bottom: 50px;
 }
@@ -313,35 +360,9 @@
     height: 600px;
 }
 
-@media (max-width: 1024px) {
-    .movie-content {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
+/* ==================== Responsive Design ==================== */
 
-    .poster-img {
-        max-width: 250px;
-    }
-
-    .poster-buttons {
-        flex-direction: row;
-        gap: 10px;
-    }
-
-    .detail-btn-primary,
-    .detail-btn-trailer {
-        flex: 1;
-    }
-
-    .movie-header h1 {
-        font-size: 2.2em;
-    }
-
-    .trailer-container iframe {
-        height: 450px;
-    }
-}
-
+/* ========== Mobile (768px and below) ========== */
 @media (max-width: 768px) {
     .movie-details-container {
         padding: 20px 15px;
@@ -362,9 +383,13 @@
         padding: 20px;
     }
 
+    .movie-poster {
+        max-width: 100%;
+    }
+
     .poster-img {
         width: 100%;
-        max-width: 350px;
+        max-width: 100%;
         margin: 0 auto;
     }
 

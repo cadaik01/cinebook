@@ -5,24 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use App\Models\Showtime;
+use App\Models\Movie;
+use App\Models\Room;
 class ShowtimeController extends Controller
 {
-    //1. showtimes function to fetch showtimes for a specific movie
+    //1. showtimes function to fetch showtimes for a specific movie using relationships
     public function showtimes($id)
     {
-        $movie = DB::table('movies')->where('id', $id)->first();
-        $showtimes = DB::table('showtimes')
-        ->join('rooms', 'showtimes.room_id', '=', 'rooms.id')
-        ->where('showtimes.movie_id', $id)
-        ->select(
-            'showtimes.id',
-            'showtimes.show_date',
-            'showtimes.show_time',
-            'rooms.id as room_id',
-        )
-        ->orderBy('show_date', 'asc')
-        ->orderBy('show_time', 'asc')
-        ->get();
+        $movie = Movie::find($id);
+        $showtimes = Showtime::with('room')
+            ->where('movie_id', $id)
+            ->orderBy('show_date', 'asc')
+            ->orderBy('show_time', 'asc')
+            ->get();
         return view('movie.showtimes', compact('movie', 'showtimes'));
     }
     //3. selectSeats function to handle seat selection and booking

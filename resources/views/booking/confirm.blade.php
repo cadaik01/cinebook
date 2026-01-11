@@ -1,4 +1,4 @@
-extends('layouts.main')
+@extends('layouts.main')
 
 @section('title', 'Confirm Booking')
 
@@ -14,10 +14,10 @@ extends('layouts.main')
     <!-- Display movie and showtime details -->
     <div>
         <h3>Booking Details</h3>
-        <p><strong>Movie:</strong> {{ $movie->title }}</p>
-        <p><strong>Showday:</strong> {{ date('F j, Y', strtotime($showtime->start_time)) }}</p>
-        <p><strong>Showtime:</strong> {{ date('g:i A', strtotime($showtime->start_time)) }}</p>
-        <p><strong>Room:</strong> {{ $room->name }}</p>
+        <p><strong>Movie:</strong> {{ $movie->title ?? 'N/A' }}</p>
+        <p><strong>Showday:</strong> {{ $showtime->show_date ? $showtime->show_date->format('F j, Y') : 'N/A' }}</p>
+        <p><strong>Showtime:</strong> {{ $showtime->show_time ?? 'N/A' }}</p>
+        <p><strong>Room:</strong> {{ $room->name ?? 'N/A' }}</p>
     </div>
     <!-- Display selected seats -->
     <div>
@@ -48,7 +48,7 @@ extends('layouts.main')
     <form method="POST" action="{{ route('booking.process', ['showtime_id' => $showtime_id]) }}">
         @csrf
         <input type="hidden" name="showtime_id" value="{{ $showtime_id }}">
-        <input type="hidden" name="seats" value='@json_encode(array_column($seatDetails, "id"))'>
+        <input type="hidden" name="seats" value="{{ json_encode(array_column($seatDetails, 'id')) }}">
         <input type="hidden" name="total_price" value="{{ $totalPrice }}">
         
         <h3>Payment method</h3>
@@ -60,7 +60,7 @@ extends('layouts.main')
 
         <div>
             <button type="submit">Confirm and Pay</button>
-            <a href="{{ route('booking.seatmap', ['showtime_id' => $showtime->id]) }}">Back to Seat Selection</a>
+            <a href="{{ route('booking.seatmap', ['showtime_id' => $showtime_id]) }}">Back to Seat Selection</a>
         </div>
     </form>
     <script src="{{ asset('js/booking-countdown.js') }}"></script>

@@ -17,7 +17,6 @@ CREATE TABLE users (
     INDEX idx_role (role)
 );
 
-
 -- MOVIES
 CREATE TABLE movies (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -48,7 +47,7 @@ CREATE TABLE genres (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Movie Genres pivot
+-- Movie_Genres
 CREATE TABLE movie_genres (
     id INT AUTO_INCREMENT PRIMARY KEY,
     movie_id INT NOT NULL,
@@ -57,7 +56,7 @@ CREATE TABLE movie_genres (
     FOREIGN KEY (genre_id) REFERENCES genres(id) ON DELETE CASCADE
 );
 
--- Screen types
+-- screen_types
 CREATE TABLE screen_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
@@ -85,7 +84,6 @@ CREATE TABLE seat_types (
     description VARCHAR(255)
 );
 
-
 -- SEATS
 CREATE TABLE seats (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -98,10 +96,9 @@ CREATE TABLE seats (
     UNIQUE (room_id, seat_code),
     INDEX idx_room (room_id),
     INDEX idx_seat_type (seat_type_id),
-    FOREIGN KEY (room_id) REFERENCES rooms(id),
+    FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,
     FOREIGN KEY (seat_type_id) REFERENCES seat_types(id)
 );
-
 
 -- SHOWTIMES
 CREATE TABLE showtimes (
@@ -115,9 +112,8 @@ CREATE TABLE showtimes (
     INDEX idx_movie_date (movie_id, show_date),
     INDEX idx_room_time (room_id, show_date, show_time),
     FOREIGN KEY (movie_id) REFERENCES movies(id),
-    FOREIGN KEY (room_id) REFERENCES rooms(id)
+    FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE
 );
-
 
 -- SHOWTIMES_PRICES
 CREATE TABLE showtime_prices (
@@ -126,23 +122,21 @@ CREATE TABLE showtime_prices (
     seat_type_id INT NOT NULL,
     price INT NOT NULL,
     UNIQUE (showtime_id, seat_type_id),
-    FOREIGN KEY (showtime_id) REFERENCES showtimes(id),
+    FOREIGN KEY (showtime_id) REFERENCES showtimes(id) ON DELETE CASCADE,
     FOREIGN KEY (seat_type_id) REFERENCES seat_types(id)
 );
-
 
 -- SHOWTIMES_SEATS
 CREATE TABLE showtime_seats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     showtime_id INT NOT NULL,
     seat_id INT NOT NULL,
-    status ENUM('available','booked','locked') DEFAULT 'available',
+    status ENUM('available','booked','reserved','locked') DEFAULT 'available',
     UNIQUE (showtime_id, seat_id),
     INDEX idx_showtime_status (showtime_id, status),
-    FOREIGN KEY (showtime_id) REFERENCES showtimes(id),
+    FOREIGN KEY (showtime_id) REFERENCES showtimes(id) ON DELETE CASCADE,
     FOREIGN KEY (seat_id) REFERENCES seats(id)
 );
-
 
 -- BOOKINGS
 CREATE TABLE bookings (
@@ -165,7 +159,6 @@ CREATE TABLE bookings (
     FOREIGN KEY (showtime_id) REFERENCES showtimes(id)
 );
 
-
 -- BOOKING_SEATS
 CREATE TABLE booking_seats (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -173,10 +166,9 @@ CREATE TABLE booking_seats (
     seat_id INT NOT NULL,
     price INT NOT NULL,
     UNIQUE (booking_id, seat_id),
-    FOREIGN KEY (booking_id) REFERENCES bookings(id),
+    FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE,
     FOREIGN KEY (seat_id) REFERENCES seats(id)
 );
-
 
 -- REVIEWS
 CREATE TABLE reviews (
@@ -190,5 +182,5 @@ CREATE TABLE reviews (
     UNIQUE (user_id, movie_id),
     INDEX idx_movie (movie_id),
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (movie_id) REFERENCES movies(id)
+    FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE
 );

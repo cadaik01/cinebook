@@ -39,10 +39,16 @@
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Genre</label>
-                    <input type="text" name="genre" class="form-control @error('genre') is-invalid @enderror" 
-                           value="{{ old('genre') }}" placeholder="e.g., Action, Drama, Comedy">
-                    @error('genre')
+                    <label class="form-label">Genres</label>
+                    <select name="genres[]" class="form-control @error('genres') is-invalid @enderror" multiple>
+                        @foreach($genres as $genre)
+                            <option value="{{ $genre->id }}" {{ (in_array($genre->id, old('genres', []))) ? 'selected' : '' }}>
+                                {{ $genre->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <small class="form-text text-muted">Hold Ctrl/Cmd to select multiple genres</small>
+                    @error('genres')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -63,15 +69,6 @@
                     <input type="date" name="release_date" class="form-control @error('release_date') is-invalid @enderror" 
                            value="{{ old('release_date') }}" required>
                     @error('release_date')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">End Date</label>
-                    <input type="date" name="end_date" class="form-control @error('end_date') is-invalid @enderror" 
-                           value="{{ old('end_date') }}">
-                    @error('end_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

@@ -83,7 +83,8 @@ class AdminBookingController extends Controller
 
             // Release seats
             foreach ($booking->bookingSeats as $bookingSeat) {
-                ShowtimeSeat::where('showtime_id', $booking->showtime_id)
+                DB::table('showtime_seats')
+                    ->where('showtime_id', $booking->showtime_id)
                     ->where('seat_id', $bookingSeat->seat_id)
                     ->update(['status' => 'available']);
             }

@@ -33,3 +33,29 @@ a {
 main {
     min-height: calc(100vh - 200px);
 }
+
+/* Genre Styles */
+.genre-tag {
+    background: linear-gradient(135deg, var(--deep-teal), var(--deep-space-blue));
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-block;
+    margin-right: 4px;
+    margin-bottom: 2px;
+}
+
+.genre-badge {
+    background: linear-gradient(135deg, var(--tan), var(--burnt-peach));
+    color: var(--prussian-blue);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+    margin-right: 8px;
+    margin-bottom: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
