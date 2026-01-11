@@ -60,7 +60,15 @@
                             <small class="text-muted">{{ Str::limit($movie->director, 20) }}</small>
                         </td>
                         <td>{{ $movie->duration }} mins</td>
-                        <td>{{ $movie->genre }}</td>
+                        <td>
+                            @if(isset($movie->genres) && count($movie->genres) > 0)
+                                @foreach($movie->genres as $genre)
+                                    <span class="badge bg-info me-1">{{ $genre }}</span>
+                                @endforeach
+                            @else
+                                <span class="text-muted">No genres</span>
+                            @endif
+                        </td>
                         <td>{{ \Carbon\Carbon::parse($movie->release_date)->format('M d, Y') }}</td>
                         <td>
                             @if($movie->status == 'now_showing')

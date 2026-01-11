@@ -48,7 +48,7 @@ Route::post('/showtimes/{showtime_id}/book', [BookingController::class, 'bookSea
 // Select Seats Page
 Route::post('/showtimes/{showtime_id}/seats/select', [ShowtimeController::class, 'selectSeats'])->name('movies.selectseats');
 //Confirm Booking
-Route::get('/booking/confirm/{booking_id}', [BookingController::class, 'confirmBooking'])->name('booking.confirmation');
+Route::get('/booking/confirm/{booking_id}', [BookingController::class, 'confirmBooking'])->name('booking.confirm');
 // Process Booking
 Route::post('/booking/process', [BookingController::class, 'processBooking'])->name('booking.process');
 // Booking Success
@@ -57,7 +57,7 @@ Route::get('/booking/success/{booking_id}', [BookingController::class, 'bookingS
 Route::get('payment/mock/{booking_id}', [BookingController::class, 'mockPayment'])->name('payment.mock');
 Route::post('payment/mock/{booking_id}', [BookingController::class, 'confirmPayment'])->name('payment.confirm');
 
-//Admin Routes - Nhóm tất cả các route admin với prefix 'admin'
+//Admin Routes - Grouped with 'admin' prefix
 Route::prefix('admin')->group(function () {
     // Dashboard
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');

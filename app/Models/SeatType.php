@@ -10,4 +10,9 @@ class SeatType extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'base_price', 'description'];
+
+    public function seats()
+    {
+        return $this->hasMany(Seat::class);
+    }
 }

@@ -10,8 +10,28 @@ class Movie extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'genre', 'language', 'director', 'cast', 'duration',
+        'title', 'language', 'director', 'cast', 'duration',
         'release_date', 'age_rating', 'status', 'poster_url', 'trailer_url',
         'description', 'rating_avg'
     ];
+
+    protected $casts = [
+        'release_date' => 'datetime',
+    ];
+
+    /**
+     * Get the genres associated with the movie.
+     */
+    public function genres()
+    {
+        return $this->belongsToMany(Genre::class, 'movie_genres');
+    }
+
+    /**
+     * Helper method to get genres as a comma-separated string
+     */
+    public function getGenresStringAttribute()
+    {
+        return $this->genres->pluck('name')->join(', ');
+    }
 }

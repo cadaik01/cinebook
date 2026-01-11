@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Seat Map - {{ $showtime->movie_title }}')
+@section('title', 'Seat Map - {{ $showtime->movie->title }}')
 
 @section('content')
 <h2>Select Seats</h2>

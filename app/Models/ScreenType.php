@@ -10,4 +10,9 @@ class ScreenType extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'price'];
+
+    public function rooms()
+    {
+        return $this->hasMany(Room::class);
+    }
 }

@@ -17,8 +17,8 @@
                 💳 {{ $booking->payment_method }}
             @endif
         </h3>
-        <p><strong>Movie:</strong> {{ $booking->movie_title }}</p>
-        <p><strong>Showtime:</strong> {{ date('d/m/Y H:i', strtotime($booking->start_time)) }}</p>
+        <p><strong>Movie:</strong> {{ $booking->showtime->movie->title }}</p>
+        <p><strong>Showtime:</strong> {{ $booking->showtime->show_date->format('d/m/Y') }} {{ $booking->showtime->show_time }}</p>
         <p><strong>Total Price:</strong> {{ number_format($booking->total_price) }} VND</p>
         <p><strong>Booking ID:</strong> #{{ $booking->id }}</p>
     </div>

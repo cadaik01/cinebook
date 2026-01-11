@@ -13,9 +13,10 @@
         <h2 style="font-size: 24px; margin-bottom: 15px;">Booking Details:</h2>
         <ul style="list-style-type: none; padding: 0; font-size: 18px;">
             <li><strong>Booking ID:</strong> {{ $booking->id }}</li>
-            <li><strong>Date:</strong> {{ $booking->date->format('F j, Y') }}</li>
-            <li><strong>Time:</strong> {{ $booking->time }}</li>
-            <li><strong>Room:</strong> {{ $booking->room }}</li>
+            <li><strong>Movie:</strong> {{ $booking->showtime->movie->title }}</li>
+            <li><strong>Date:</strong> {{ $booking->showtime->show_date->format('F j, Y') }}</li>
+            <li><strong>Time:</strong> {{ $booking->showtime->show_time }}</li>
+            <li><strong>Room:</strong> {{ $booking->showtime->room->name }}</li>
             <li><strong>Payment Method:</strong> {{ $booking->payment_method }}</li>
             <li><strong>Status:</strong> {{ $booking->status }}</li>
             @if ($booking->payment_status =='paid')
@@ -30,10 +31,11 @@
     <div style="margin-top: 30px; text-align: left;">
         <h2 style="font-size: 24px; margin-bottom: 15px;">Seat Details:</h2>
         <div style="list-style-type: none; padding: 0; font-size: 18px;">
-            @foreach ($booking->seats as $seat)
-                <p>Seat Number: {{ $seat->seat_number }}</p>
-                <p>Seat Type: {{ $seat->seat_type }}</p>
-                <p>Price: {{ $seat->price }}</p>
+            @foreach ($seats as $bookingSeat)
+                <p>Seat: {{ $bookingSeat->seat->seat_code }}</p>
+                <p>Type: {{ $bookingSeat->seat->seatType->name }}</p>
+                <p>Price: {{ number_format($bookingSeat->price) }} VND</p>
+                <hr style="border: 1px solid #ddd; margin: 10px 0;">
             @endforeach
         </div>
     </div>

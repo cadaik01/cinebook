@@ -4,28 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Movie;
+use App\Models\Genre;
 
 class MovieController extends Controller
 {
     /**
-     * Helper function to attach genres to movies
+     * Helper function to attach genres to movies (using Eloquent relationships)
      */
     private function attachGenresToMovies($movies)
     {   
-        // Get all movie IDs
+        // Eager load genres for all movies
         $movieIds = collect($movies)->pluck('id')->toArray();
         
-        // Get all genres for these movies in one query
-        $movieGenres = DB::table('movie_genres')
-            ->join('genres', 'movie_genres.genre_id', '=', 'genres.id')
-        ->whereIn('movie_genres.movie_id', $movieIds) //SQL where movie_id IN (...)
-            ->select('movie_genres.movie_id', 'genres.name as genre_name')
+        $moviesWithGenres = Movie::with('genres')
+            ->whereIn('id', $movieIds)
             ->get()
-            ->groupBy('movie_id');
+            ->keyBy('id');
         
         // Attach genres to each movie
         foreach ($movies as $movie) {
-            $movie->genres = $movieGenres->get($movie->id, collect())->pluck('genre_name')->toArray();//collect() to avoid null error - default empty collection
+            $movieModel = $moviesWithGenres->get($movie->id);
+            $movie->genres = $movieModel ? $movieModel->genres->pluck('name')->toArray() : [];
         }
         
         return $movies;
@@ -53,15 +53,12 @@ class MovieController extends Controller
     }
     public function show($id)
     {
-        $movie = DB::table('movies')->where('id', $id)->first();
+        // Use Eloquent Model instead of DB::table to enable relationships
+        $movie = Movie::with('genres')->find($id);
         
-        // Get genres for this movie
+        // Get genres for this movie using relationships
         if ($movie) {
-            $movie->genres = DB::table('movie_genres')
-                ->join('genres', 'movie_genres.genre_id', '=', 'genres.id')
-                ->where('movie_genres.movie_id', $movie->id)
-                ->pluck('genres.name')
-                ->toArray();
+            $movie->genres = $movie->genres->pluck('name')->toArray();
         }
         
         return view('movie_details', compact('movie'));

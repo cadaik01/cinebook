@@ -5,31 +5,31 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use App\Models\Showtime;
+use App\Models\Room;
+use App\Models\Seat;
+use App\Models\Booking;
 
 class BookingController extends Controller
 {
     //Display seat map for a specific showtime
     public function seatMap($showtime_id)
     {
-        // Get showtime details
-        $showtime = DB::table('showtimes')->where('id', $showtime_id)->first();
+        // Get showtime details using Eloquent
+        $showtime = Showtime::with('movie')->find($showtime_id);
         
         if (!$showtime) {
             return redirect()->route('homepage')->with('error', 'Showtime not found.');
         }
         
-        // Get room with screen type and pricing
-        $room = DB::table('rooms')
-            ->join('screen_types', 'rooms.screen_type_id', '=', 'screen_types.id') //join screen_types to get pricing
-            ->where('rooms.id', $showtime->room_id) //find room by showtime's room_id
-            ->select('rooms.*', 'screen_types.price as screen_price') //select room fields and screen price
-            ->first();
+        // Get room with screen type and pricing using relationships
+        $room = Room::with('screenType')->find($showtime->room_id);
+        if (!$room) {
+            return redirect()->route('homepage')->with('error', 'Room not found.');
+        }
         
-        // Get all seats in the room with their types
-        $seats = DB::table('seats')
-            ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')//join seat_types to get seat type info
-            ->where('room_id', $room->id) //find seats by room id
-            ->select('seats.*', 'seat_types.name as seat_type_name', 'seat_types.base_price') //select seat fields and seat type info
+        // Get all seats in the room with their types using relationships
+        $seats = $room->seats()->with('seatType')
             ->orderBy('seat_row', 'asc')
             ->orderBy('seat_number', 'asc')
             ->get();
@@ -67,28 +67,23 @@ class BookingController extends Controller
         }
         
         //4. Get showtime and room information for pricing
-        $showtime = DB::table('showtimes')->where('id', $showtime_id)->first();
+        $showtime = Showtime::find($showtime_id);
         if (!$showtime) {
             return redirect()->route('homepage')->with('error', 'Invalid showtime.');
         }
         
-        $room = DB::table('rooms')
-            ->join('screen_types', 'rooms.screen_type_id', '=', 'screen_types.id')
-            ->where('rooms.id', $showtime->room_id)
-            ->select('rooms.*', 'screen_types.price as screen_price')
-            ->first();
+        $room = $showtime->room()->with('screenType')->first();
+        if (!$room) {
+            return redirect()->route('homepage')->with('error', 'Room not found.');
+        }
         
         //5. Collect seat information for confirmation and pricing
         $seatDetails = [];
         $totalPrice = 0;
         $validatedCouplePairs = []; // Track validated couple pairs to avoid duplicate validation
         foreach ($selectedSeats as $seat_id) {
-            //Get seat info with pricing
-            $seat = DB::table('seats')
-                ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')
-                ->where('seats.id', $seat_id)
-                ->select('seats.*', 'seat_types.base_price', 'seat_types.name as seat_type_name')
-                ->first();
+            //Get seat info with pricing using relationships
+            $seat = Seat::with('seatType')->find($seat_id);
             //check if seat exists
             if (!$seat) {
             return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
@@ -120,21 +115,21 @@ class BookingController extends Controller
             }
             
         //6. Calculate real price from database
-            $seatPrice = ($room->screen_price ?? 0) + ($seat->base_price ?? 0);
+            $seatPrice = ($room->screenType->price ?? 0) + ($seat->seatType->base_price ?? 0);
             $totalPrice += $seatPrice;
 
         //7. Store seat details for confirmation
             $seatDetails[] = [
                 'id' => $seat->id,
                 'seat_code' => $seat->seat_code,
-                'seat_type' => $seat->seat_type_name,
+                'seat_type' => $seat->seatType->name ?? 'Unknown',
                 'price' => $seatPrice,
             ];
         }
-        //8. Get Movie info
-        $movie = DB::table('movies')->where('id', $showtime->movie_id)->first();
+        //8. Get Movie info using relationship
+        $movie = $showtime->movie;
         //9. Redirect to confirmation page with booking details
-        return view('booking.confirmation', compact('movie', 'showtime', 'seatDetails', 'totalPrice', 'showtime_id'));
+        return view('booking.confirm', compact('movie', 'showtime', 'seatDetails', 'totalPrice', 'showtime_id'));
     }
     
     /**
@@ -197,35 +192,17 @@ class BookingController extends Controller
         if (!$user_id) {
             return redirect('/login')->with('error', 'Please log in to view booking details.');
         }
-        //get booking details
-        $booking = DB::table('bookings')
-        ->join('showtimes', 'bookings.showtime_id', '=', 'showtimes.id')
-        ->join('movies', 'showtimes.movie_id', '=', 'movies.id')
-        ->where('bookings.id', $booking_id)
-        ->where('bookings.user_id', $user_id)
-        ->select([
-            'bookings.*',
-            'movies.title as movie_title',
-            'movies.poster_url as movie_poster',
-            'showtimes.start_time as showtime_start',
-            'rooms.name as room_name'
-        ])
-        ->first();
+        //get booking details using relationships
+        $booking = Booking::with(['showtime.movie', 'showtime.room'])
+            ->where('id', $booking_id)
+            ->where('user_id', $user_id)
+            ->first();
         //check if booking exists
         if (!$booking) {
             return redirect()->route('homepage')->with('error', 'Booking not found.');
         }
-        //get booked seats details
-        $seats = DB::table('booking_seats')
-        ->join('seats', 'booking_seats.seat_id', '=', 'seats.id')
-        ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')
-        ->where('booking_seats.booking_id', $booking_id)
-        ->select([
-            'seats.seat_code',
-            'seat_types.name as seat_type',
-            'booking_seats.price'
-        ])
-        ->get();
+        //get booked seats details using relationships
+        $seats = $booking->bookingSeats()->with(['seat.seatType'])->get();
         //return confirmation view with data
         return view('booking.confirmation_details', compact('booking', 'seats'));
     }
@@ -235,15 +212,14 @@ class BookingController extends Controller
     {
         //1.Get data from form
         $showtime_id = $request->input('showtime_id');
-        $seat_ids = $request->input('seat_ids', []);
         $total_price = $request->input('total_price');  
         $user_id = Session::get('user_id');
         if (!$user_id) {
             return redirect('/login')->with('error', 'Please log in to complete booking.');
         }
         $payment_method = $request->input('payment_method');
-        //2.Decode seat ids from JSON
-        $selectedSeats = json_decode($seat_ids, true);
+        //2.Get seat ids from form (already an array)
+        $selectedSeats = $request->input('seats', []);
         //3.Validate input
         if (empty($selectedSeats) || !is_array($selectedSeats)) {
             return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
@@ -332,44 +308,26 @@ class BookingController extends Controller
             return redirect('/login')->with('error', 'Please log in to view booking details.');
         }
 
-        //Get booking details
-        $booking = DB::table('bookings')
-        ->join('showtimes', 'bookings.showtime_id', '=', 'showtimes.id')
-        ->join('movies', 'showtimes.movie_id', '=', 'movies.id')
-        ->where('bookings.id', $booking_id)
-        ->where('bookings.user_id', $user_id)
-        ->select([
-            'bookings.*',
-            'movies.title as movie_title',
-            'movies.poster_url as movie_poster',
-            'showtimes.start_time as showtime_start',
-            'rooms.name as room_name'
-        ])
-        ->first();
+        //Get booking details using relationships
+        $booking = Booking::with(['showtime.movie', 'showtime.room'])
+            ->where('id', $booking_id)
+            ->where('user_id', $user_id)
+            ->first();
 
         //check if booking exists
         if (!$booking) {
             return redirect()->route('homepage')->with('error', 'Booking not found.');
         }
 
-        //Get booked seats details
-        $seats = DB::table('booking_seats')
-        ->join('seats', 'booking_seats.seat_id', '=', 'seats.id')
-        ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')
-        ->where('booking_seats.booking_id', $booking_id)
-        ->select([
-            'seats.seat_code',
-            'seat_types.name as seat_type',
-            'booking_seats.price'
-        ])
-        ->get();
-
+        //Get booked seats details using relationships
+        $seats = $booking->bookingSeats()->with(['seat.seatType'])->get();
+ 
         //Generate QR code data (booking info)
         $qrData = "Booking ID: " . $booking->id . "\n"
-                . "Movie: " . $booking->movie_title . "\n"
-                . "Showtime: " . $booking->showtime_start . "\n"
-                . "Seats: " . implode(', ', $seats->pluck('seat_code')->toArray()) . "\n"
-                . "Total Price: $" . number_format($booking->total_price, 2);
+                . "Movie: " . $booking->showtime->movie->title . "\n"
+                . "Showtime: " . $booking->showtime->show_date->format('Y-m-d') . " " . $booking->showtime->show_time . "\n"
+                . "Seats: " . implode(', ', $seats->pluck('seat.seat_code')->toArray()) . "\n"
+                . "Total Price: " . number_format($booking->total_price, 0) . " VND";
         //Return success view with data
         return view('booking.success', compact('booking', 'seats', 'qrData'));
     }
