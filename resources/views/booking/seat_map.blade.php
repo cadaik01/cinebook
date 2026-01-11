@@ -28,7 +28,6 @@
         <span style="color:#999">■</span> Booked
         <span style="color:#3498db">■</span> Selected
     </p>
-    <small style="color: #666;">*Giá cuối cùng sẽ được tính toán bởi hệ thống</small>
 </div>
 
 <!-- Form submit selected seats -->
@@ -83,7 +82,6 @@
     <!-- Show selected seats and total price -->
     <div id="selectedSeats" style="margin-bottom: 20px;">
         <h4>Selected Seats: <span id="seatList">None</span></h4>
-        <p>Total Price: <span id="totalPrice">0</span> VND</p>
     </div>
 
     <!-- Hidden input to store IDs of selected seats -->

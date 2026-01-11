@@ -3,7 +3,7 @@
 @section('title', '{{ $movie->title }} - Movie Details')
 
 @push('styles')
-{{-- @vite('resources/css/movie_details.css') --}}
+@vite('resources/css/movie_details.css')
 @endpush
 
 @section('content')

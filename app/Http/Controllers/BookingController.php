@@ -34,10 +34,10 @@ class BookingController extends Controller
             ->orderBy('seat_number', 'asc')
             ->get();
         
-        // Get booked seats for this showtime
+        // Get booked seats for this showtime (including reserved)
         $bookedSeats = DB::table('showtime_seats')
             ->where('showtime_id', $showtime_id)
-            ->where('status', 'booked')//only get booked seats
+            ->whereIn('status', ['booked', 'reserved'])//get both booked and reserved seats
             ->pluck('seat_id') //pluck seat_id for booked seats
             ->toArray();//convert to array
             
@@ -55,15 +55,21 @@ class BookingController extends Controller
             return redirect('/login')->with('error', 'Please log in to book seats.');
         }
         
-        //2. Get selected seats from request
-        $selectedSeatsJson = $request->input('seats', '[]');//decode JSON array of selected seats
-        $selectedSeats = json_decode($selectedSeatsJson, true);//decode to PHP array
+        //2. Get selected seats from request (support both array and JSON string)
+        $seatsInput = $request->input('seats', '[]');
+        
+        // Auto-detect if it's already an array or JSON string
+        if (is_array($seatsInput)) {
+            $selectedSeats = $seatsInput; // Already an array
+        } else {
+            $selectedSeats = json_decode($seatsInput, true); // Decode JSON string
+        }
         
         //3. Validate input
-        if (empty($selectedSeats) || !is_array($selectedSeats))//check if seats are selected - with seat array is empty or not an array
+        if (empty($selectedSeats) || !is_array($selectedSeats))
         {
             return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                           ->with('error', 'No seats selected.');
+                           ->with('error', 'No seats selected. Please select at least one seat.');
         }
         
         //4. Get showtime and room information for pricing
@@ -89,12 +95,13 @@ class BookingController extends Controller
             return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
                            ->with('error', 'Invalid seat selected.');
             }
-             //check if seat is already booked
+             //check if seat is already booked or reserved
             $existingBooking = DB::table('showtime_seats')
                 ->where('showtime_id', $showtime_id)
                 ->where('seat_id', $seat_id)
+                ->whereIn('status', ['booked', 'reserved'])
                 ->first();
-            //if booked, redirect back with error
+            //if booked or reserved, redirect back with error
             if ($existingBooking) {
                 return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
                                ->with('error', 'Seat ' . $seat->seat_code . ' is already booked.');
@@ -160,10 +167,11 @@ class BookingController extends Controller
             return ['valid' => false, 'message' => 'Both seats in couple pair must be selected.'];
         }
         
-        // Check if pair seat is already booked
+        // Check if pair seat is already booked or reserved
         $pairBooked = DB::table('showtime_seats')
             ->where('showtime_id', $showtime_id)
             ->where('seat_id', $pairSeat->id)
+            ->whereIn('status', ['booked', 'reserved'])
             ->exists();
             
         if ($pairBooked) {
@@ -207,100 +215,9 @@ class BookingController extends Controller
         return view('booking.confirmation_details', compact('booking', 'seats'));
     }
 
-    //Process booking confirmation and payment
-    public function processBooking(Request $request)
-    {
-        //1.Get data from form
-        $showtime_id = $request->input('showtime_id');
-        $total_price = $request->input('total_price');  
-        $user_id = Session::get('user_id');
-        if (!$user_id) {
-            return redirect('/login')->with('error', 'Please log in to complete booking.');
-        }
-        $payment_method = $request->input('payment_method');
-        //2.Get seat ids from form (already an array)
-        $selectedSeats = $request->input('seats', []);
-        //3.Validate input
-        if (empty($selectedSeats) || !is_array($selectedSeats)) {
-            return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                           ->with('error', 'No seats selected for booking.');
-        }
-        //4.Start transaction
-        DB::beginTransaction();
-        try {
-            //a. re-check seat availability
-            foreach ($selectedSeats as $seat_id) {
-                $existingBooking = DB::table('showtime_seats')
-                    ->where('showtime_id', $showtime_id)
-                    ->where('seat_id', $seat_id)
-                    ->first();
-                if ($existingBooking) {
-                    DB::rollback();
-                    return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                                   ->with('error', 'Seat already booked during your booking process. Please select different seats.');
-                }
-            }
-            
-            //b. Book seats in showtime_seats table
-            foreach ($selectedSeats as $seat_id) {
-                DB::table('showtime_seats')->insert([
-                    'showtime_id' => $showtime_id,
-                    'seat_id' => $seat_id,
-                    'status' => 'booked',
-                    'user_id' => $user_id,
-                ]);
-            }
-            
-            //c. Create booking record
-            //calculate expiration time (10 minutes from now)
-            $expirationTime = now()->addMinutes(10);
-            //Booking record
-            $bookingId = DB::table('bookings')->insertGetId([
-                'user_id' => $user_id,
-                'showtime_id' => $showtime_id,
-                'total_price' => $total_price,
-                'status' => 'pending',
-                'payment_method' => $payment_method,
-                'payment_status' => 'pending',
-                'expires_at' => $expirationTime,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-            
-            //d. Insert into booking_seats table with pricing for each seat
-            foreach ($selectedSeats as $seat_id) {
-                $seat = DB::table('seats')
-                    ->join('seat_types', 'seats.seat_type_id', '=', 'seat_types.id')
-                    ->join('showtimes', 'showtimes.id', '=', DB::raw($showtime_id))
-                    ->join('rooms', 'showtimes.room_id', '=', 'rooms.id')
-                    ->join('screen_types', 'rooms.screen_type_id', '=', 'screen_types.id')
-                    ->where('seats.id', $seat_id)
-                    ->select('seats.*', 'seat_types.base_price', 'screen_types.price as screen_price')
-                    ->first();
-                    
-                $seatPrice = ($seat->base_price ?? 0) + ($seat->screen_price ?? 0);
-                
-                DB::table('booking_seats')->insert([
-                    'booking_id' => $bookingId,
-                    'seat_id' => $seat_id,
-                    'price' => $seatPrice,
-                ]);
-            }
-
-            //5.Commit transaction
-            DB::commit();
-
-            //** Mock payment processing (Momo/VNPay only) */
-            // All payments go through mock payment gateway
-            return redirect()->route('payment.mock', ['booking_id' => $bookingId]);
-        } catch (\Exception $e) {
-            //7.Rollback on error
-            DB::rollback();
-            return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                           ->with('error', 'An error occurred during booking: ' . $e->getMessage());
-        }
-    }
-    //**Display booking success page */
+    /**
+     * Display booking success page
+     */
     public function bookingSuccess($booking_id){
         //Check logged in
         $user_id = Session::get('user_id');

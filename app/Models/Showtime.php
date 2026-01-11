@@ -16,7 +16,7 @@ class Showtime extends Model
     // Cast date/time attributes so Blade views receive Carbon instances
     protected $casts = [
         'show_date' => 'date',
-        'show_time' => 'datetime:H:i:s',
+        'show_time' => 'datetime:H:i A',
     ];
 
     public function movie()

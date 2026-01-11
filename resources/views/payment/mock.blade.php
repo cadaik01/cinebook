@@ -28,64 +28,48 @@
         <!-- VNPay Mock -->
         <div style="background: #0066cc; color: white; padding: 25px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
             <h3 style="margin: 0 0 15px 0;">🏦 VNPay Gateway</h3>
-            <!-- Fake QR Code -->
-            <div style="background: white; padding: 20px; border-radius: 10px; margin: 15px auto; max-width: 200px;">
-                <div style="width: 150px; height: 150px; background: #000; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; text-align: center;">
-                    QR CODE<br>
-                    TOTAL<br>
-                    {{ number_format($booking->total_price) }} VND
-                </div>
+            <!-- Real QR Code -->
+            <div style="background: white; padding: 20px; border-radius: 10px; margin: 15px auto; max-width: 250px;">
+                {!! QrCode::size(200)->generate('VNPAY-' . $booking->id . '-' . $booking->total_price) !!}
+            </div>
+            <p style="margin: 15px 0;">📱 Scan the QR code using the VNPay app to pay</p>
+            <p style="font-size: 14px; opacity: 0.9;">Total: {{ number_format($booking->total_price) }} VND</p>
         </div>
         
     @elseif($booking->payment_method == 'momo')
         <!-- MoMo Mock -->
         <div style="background: #d82d8b; color: white; padding: 25px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
-            <h3 style="margin: 0 0 15px 0;">💰MoMo</h3>
+            <h3 style="margin: 0 0 15px 0;">💰 MoMo</h3>
             
-            <!-- Fake QR Code -->
-            <div style="background: white; padding: 20px; border-radius: 10px; margin: 15px auto; max-width: 200px;">
-                <div style="width: 150px; height: 150px; background: #000; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; text-align: center;">
-                    QR CODE<br>
-                    TOTAL<br>
-                    {{ number_format($booking->total_price) }} VND
-                </div>
+            <!-- Real QR Code -->
+            <div style="background: white; padding: 20px; border-radius: 10px; margin: 15px auto; max-width: 250px;">
+                {!! QrCode::size(200)->generate('MOMO-' . $booking->id . '-' . $booking->total_price) !!}
             </div>
             
-            <p style="margin: 15px 0;">📱 Scan the QR code using the MoMo app</p>
+            <p style="margin: 15px 0;">📱 Scan the QR code using the MoMo app to pay</p>
+            <p style="font-size: 14px; opacity: 0.9;">Total: {{ number_format($booking->total_price) }} VND</p>
         </div>
     @endif
-    
-    <!-- Countdown Timer -->
-    <div style="background: #ff6b6b; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
-        <h4 style="margin: 0;">⏰ Thời gian còn lại</h4>
-        <div id="countdown" style="font-size: 24px; font-weight: bold; margin-top: 10px;">10:00</div>
-        <p style="margin: 5px 0 0 0; font-size: 12px;">Giao dịch sẽ tự động hủy nếu không hoàn tất</p>
-    </div>
-    
     <!-- Action Buttons -->
     <div style="display: flex; gap: 15px; flex-direction: column;">
-        <!-- Success Button (Mock) -->
-        <form method="POST" action="{{ route('payment.confirm', ['booking_id' => $booking->id]) }}">
-            @csrf
-            <button type="submit" 
-                    style="width: 100%; background: #28a745; color: white; padding: 15px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">
-                ✅ THANH TOÁN THÀNH CÔNG
-            </button>
-        </form>
+        <!-- Hidden Form (Auto-submit) -->
+    <form method="POST" action="{{ route('payment.confirm', ['booking_id' => $booking->id]) }}" id="paymentForm" style="display: none;">
+        @csrf
+    </form>
         
         <!-- Cancel Button -->
         <a href="{{ route('booking.seatmap', ['showtime_id' => $booking->showtime_id]) }}" 
            style="width: 100%; background: #6c757d; color: white; padding: 15px; border: none; border-radius: 8px; text-align: center; text-decoration: none; display: block; font-size: 16px; font-weight: bold;">
-            ❌ Hủy Thanh Toán
+            ❌ Cancel Booking
         </a>
-    </div>
-    
-    <!-- Warning Notice -->
-    <div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; margin-top: 20px; font-size: 14px;">
-        <p style="margin: 0;"><strong>⚠️ Lưu ý:</strong> Đây là giao diện thanh toán giả lập cho mục đích demo. Trong thực tế, bạn sẽ được chuyển đến cổng thanh toán thật của VNPay/MoMo.</p>
     </div>
 </div>
 
-<!-- Countdown Script -->
-<script src="{{ asset('js/booking-countdown.js') }}"></script>
+<!-- Auto-submit Script -->
+<script>
+    // Auto-submit the payment form after 10 seconds
+    setTimeout(function() {
+        document.getElementById('paymentForm').submit();
+    }, 10000);
+</script>
 @endsection

@@ -18,7 +18,7 @@
         @foreach($showtimes as $showtime)
         <tr>
             <td>{{ $showtime->show_date->format('d/m/Y') }}</td>
-            <td>{{ $showtime->show_time }}</td>
+            <td>{{ $showtime->show_time->format('H:i') }}</td>
             <td>{{ $showtime->room->name }}</td>
             <td><a href="{{ route('booking.seatmap', ['showtime_id' => $showtime->id]) }}">Select Seats</a></td>
         </tr>

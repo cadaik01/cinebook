@@ -49,7 +49,6 @@
 
     <!-- Action buttons -->
     <div style="margin-top: 30px;">
-        <a href="{{ route('booking.download', $booking->id) }}" style="display: inline-block; padding: 10px 20px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 5px; margin-right: 10px;">Download Ticket</a>
         <a href="{{ route('homepage') }}">Back to Homepage</a>
 </div>
 @endsection

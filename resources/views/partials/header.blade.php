@@ -55,10 +55,13 @@
                             <i class="fas fa-user"></i>
                             Profile
                         </a>
-                        <a href="{{ route('logout') }}" class="btn btn-primary">
-                            <i class="fas fa-sign-out-alt"></i>
-                            Logout
-                        </a>
+                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-primary" style="border: none; cursor: pointer;">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Logout
+                            </button>
+                        </form>
                     </div>
                 @else
                     <div class="auth-buttons">

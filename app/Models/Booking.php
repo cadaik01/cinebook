@@ -13,6 +13,10 @@ class Booking extends Model
         'user_id', 'showtime_id', 'total_price', 'status', 'payment_status', 'booking_date'
     ];
 
+    protected $casts = [
+        'booking_date' => 'datetime',
+    ];
+
     public function bookingSeats()
     {
         return $this->hasMany(BookingSeat::class);

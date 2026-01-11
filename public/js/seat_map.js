@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const seatButtons = document.querySelectorAll('.seat-btn.available');
     const selectedSeatIds = document.getElementById('selectedSeatIds');
     const seatList = document.getElementById('seatList');
-    const totalPrice = document.getElementById('totalPrice');
     const bookBtn = document.getElementById('bookBtn');
     
     let selectedSeats = [];
@@ -69,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 selectSeat(button, seatId, seatCode, seatType);
                 selectSeat(pairSeatButton, pairSeatId, pairSeatCode, pairSeatType);
             } else {
-                alert('Ghế đôi không khả dụng. Vui lòng chọn cặp ghế khác.');
+                alert('Couple seat selection failed.');
                 return;
             }
         }
@@ -129,17 +128,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateSelectedSeatsDisplay() {
         if (selectedSeats.length === 0) {
             seatList.textContent = 'None';
-            totalPrice.textContent = '0';
             selectedSeatIds.value = '';
             bookBtn.disabled = true;
             bookBtn.style.backgroundColor = '#6c757d';
         } else {
             const seatCodes = selectedSeats.map(seat => seat.code).join(', ');
             seatList.textContent = seatCodes;
-            
-            // Calculate estimated total (for display only)
-            const total = selectedSeats.reduce((sum, seat) => sum + seat.estimatedPrice, 0);
-            totalPrice.innerHTML = new Intl.NumberFormat('vi-VN').format(total) + ' <small>(ước tính)</small>';
             
             // Send only seat IDs to server
             const seatIds = selectedSeats.map(seat => seat.id);
