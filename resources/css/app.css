@@ -1,6 +1,7 @@
 @import './root.css';
 @import './base.css';
 @import './buttons.css';
+@import './auth.css';
 @import 'header.css';
 @import 'footer.css';
 @import 'homepage.css';
