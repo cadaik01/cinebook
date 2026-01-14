@@ -78,6 +78,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('user.profile.change-password.post');
 });
 
+    //Review Routes
+Route::middleware('auth')->group(function () {
+    Route::post('/movies/{movie_id}/reviews', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
+    Route::get('/reviews/{id}/edit', [\App\Http\Controllers\ReviewController::class, 'edit'])->name('reviews.edit');
+    Route::post('/reviews/{id}/update', [\App\Http\Controllers\ReviewController::class, 'update'])->name('reviews.update');
+    Route::post('/reviews/{id}/delete', [\App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
+});
+
 //Admin Routes - Grouped with 'admin' prefix
 Route::prefix('admin')->group(function () {
     // Dashboard

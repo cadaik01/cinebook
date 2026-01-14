@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Booking;
+use App\Models\Review;
 
 class User extends Authenticatable
 {
@@ -60,6 +61,14 @@ class User extends Authenticatable
         return $this->hasMany(Booking::class);
     }
 
+    /**
+     * Get all reviews for this user
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     // ==================== ROLE CHECKERS ====================
     
     public function isAdmin()
@@ -92,41 +101,6 @@ class User extends Authenticatable
             'created_at' => $this->created_at,
         ];
     }
-
-    /**
-     * Get user's booking history with movie details
-     * Sorted by newest first
-     */
-    public function getBookingHistory()
-    {
-        return $this->bookings()
-            ->with(['showtime.movie', 'showtime.room', 'bookingSeats.seat'])
-            ->orderBy('created_at', 'desc')
-            ->get();
-    }
-
-    /**
-     * Get user's recent bookings (last 5)
-     */
-    public function getRecentBookings($limit = 5)
-    {
-        return $this->bookings()
-            ->with(['showtime.movie'])
-            ->orderBy('created_at', 'desc')
-            ->limit($limit)
-            ->get();
-    }
-
-    /**
-     * Get total amount user has spent on bookings
-     */
-    public function getTotalSpent()
-    {
-        return $this->bookings()
-            ->where('payment_status', 'completed')
-            ->sum('total_price');
-    }
-
     /**
      * Count total bookings
      */
@@ -134,20 +108,6 @@ class User extends Authenticatable
     {
         return $this->bookings()->count();
     }
-
-    /**
-     * Get user's profile statistics
-     */
-    public function getProfileStats()
-    {
-        return [
-            'total_bookings' => $this->getTotalBookings(),
-            'total_spent' => $this->getTotalSpent(),
-            'member_since' => $this->created_at->format('M Y'),
-            'last_booking' => $this->bookings()->latest()->first(),
-        ];
-    }
-
     /**
      * Get user's upcoming bookings (showtimes in the future)
      */

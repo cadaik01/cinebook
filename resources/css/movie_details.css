@@ -463,3 +463,65 @@
         font-size: 28px;
     }
 }
+
+/* ========== Review Section ========== */
+/* ========== REVIEW SECTION ========== */
+
+/* Form nhập review */
+.review-form-container {
+    background-color: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border: 1px solid #e0e0e0;
+}
+
+.review-form-container h5 {
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Star rating input (form nhập sao) */
+.star-rating-input {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 5px;
+    font-size: 2.5rem;
+}
+
+.star-rating-input input[type="radio"] {
+    display: none;
+}
+
+.star-rating-input label {
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+/* Hover effect cho sao */
+.star-rating-input label:hover,
+.star-rating-input label:hover ~ label {
+    color: #ffc107;
+}
+
+/* Sao được chọn */
+.star-rating-input input[type="radio"]:checked ~ label {
+    color: #ffc107;
+}
+
+/* Textarea comment */
+.form-control {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}

@@ -22,10 +22,9 @@ class ProfileController extends Controller
         if($user->isAdmin()){
             return redirect('/admin/dashboard');
         }
-        $stats = $user->getProfileStats();
-        $recentBookings = $user->getRecentBookings(3);
+        $userInfo = $user->getUserInfo();
         
-        return view('profile.userprofile', compact('user', 'stats', 'recentBookings'));
+        return view('profile.userprofile', compact('user', 'userInfo'));
     }
 
     /**
@@ -50,7 +49,7 @@ class ProfileController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();//Authenticated user who is logged in (1: admin, 2: regular user, 3: guest)
-        $reviews = []; // $user->getReviews() when available
+        $reviews = $user->reviews()->with('movie')->orderBy('created_at', 'desc')->get();
 
         return view('profile.reviews_list', compact('reviews'));
     }
@@ -94,7 +93,7 @@ class ProfileController extends Controller
     // Show change password form
     public function showChangePasswordForm()
     {
-        return view('profile.change_password');
+        return view('profile.changepw');
     } 
     // Handle password change
     public function changePassword(Request $request)
@@ -110,7 +109,11 @@ class ProfileController extends Controller
         if (!Hash::check($validated['current_password'], $user->password)) {
             return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.']);
         }
-
+        //check new password is different from current password
+        if (Hash::check($validated['new_password'], $user->password)) {
+            return redirect()->back()->withErrors(['new_password' => 'New password must be different from the current password.']);
+        }
+        
         // Update to new password
         $user->password = Hash::make($validated['new_password']);
         $user->save();

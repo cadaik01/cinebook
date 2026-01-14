@@ -21,9 +21,9 @@
         <aside class="admin-layout-sidebar">
 
             <div class="admin-layout-sidebar-header">
-                <h3>
+                <h3 style="margin: 0;">
                     <i class="fas fa-film"></i>
-                    Profile
+                        <a href="/" style="color: inherit; text-decoration: none;">TCA Cine</a>
                 </h3>
             </div>
 
