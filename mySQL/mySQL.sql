@@ -159,16 +159,45 @@ CREATE TABLE bookings (
     FOREIGN KEY (showtime_id) REFERENCES showtimes(id)
 );
 
--- BOOKING_SEATS
+-- BOOKING_SEATS (Each row = 1 ticket = 1 seat + 1 showtime)
+
 CREATE TABLE booking_seats (
     id INT AUTO_INCREMENT PRIMARY KEY,
+
     booking_id INT NOT NULL,
+    showtime_id INT NOT NULL,
     seat_id INT NOT NULL,
+
     price INT NOT NULL,
-    UNIQUE (booking_id, seat_id),
-    FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE,
-    FOREIGN KEY (seat_id) REFERENCES seats(id)
+
+    qr_code VARCHAR(255) NOT NULL,
+    qr_status ENUM('active','checked','cancelled') DEFAULT 'active',
+    checked_at TIMESTAMP NULL DEFAULT NULL,
+
+    -- Prevent duplicate seat booking in the same showtime
+    CONSTRAINT uq_booking_seat_showtime
+        UNIQUE (booking_id, showtime_id, seat_id),
+
+    -- Indexes for check-in and lookup
+    INDEX idx_qr_code (qr_code),
+    INDEX idx_qr_status (qr_status),
+    INDEX idx_showtime (showtime_id),
+
+    -- Foreign keys
+    CONSTRAINT fk_booking_seats_booking
+        FOREIGN KEY (booking_id)
+        REFERENCES bookings(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_booking_seats_showtime
+        FOREIGN KEY (showtime_id)
+        REFERENCES showtimes(id),
+
+    CONSTRAINT fk_booking_seats_seat
+        FOREIGN KEY (seat_id)
+        REFERENCES seats(id)
 );
+
 
 -- REVIEWS
 CREATE TABLE reviews (
