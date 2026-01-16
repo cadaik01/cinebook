@@ -34,4 +34,12 @@ class Movie extends Model
     {
         return $this->genres->pluck('name')->join(', ');
     }
+
+    /**
+     * Get all reviews for this movie
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

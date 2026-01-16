@@ -50,11 +50,12 @@
                                 <i class="fas fa-tools"></i>
                                 Admin Panel
                             </a>
+                        @else
+                            <a href="{{ route('user.profile') }}" class="btn btn-outline">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
                         @endif
-                        <a href="" class="btn btn-outline">
-                            <i class="fas fa-user"></i>
-                            Profile
-                        </a>
                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                             @csrf
                             <button type="submit" class="btn btn-primary" style="border: none; cursor: pointer;">

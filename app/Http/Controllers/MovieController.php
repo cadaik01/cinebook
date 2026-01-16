@@ -54,7 +54,7 @@ class MovieController extends Controller
     public function show($id)
     {
         // Use Eloquent Model instead of DB::table to enable relationships
-        $movie = Movie::with('genres')->find($id);
+        $movie = Movie::with('genres','reviews')->findOrFail($id);
         
         // Get genres for this movie using relationships
         if ($movie) {

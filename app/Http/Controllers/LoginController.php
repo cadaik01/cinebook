@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -20,25 +23,53 @@ class LoginController extends Controller
         //take data from request
         $email = $request->input('email');
         $password = $request->input('password');
-        //find user in database with email
-        $user = DB::table('users')->where('email', $email)->first();
-        //take is user exists and password matches (plain text for simplicity)
-        if($user && $password === $user->password){
-            //log the user in
+<<<<<<< HEAD
+        //2. find user in database with email
+        $user = User::where('email', $email)->first();
+        //3. check if user exists and password matches
+        if ($user && $password === $user->password) {
+            //4. log the user in using Laravel Auth
+            Auth::login($user);
+            // Also keep session for backward compatibility with existing code
             Session::put('user_id', $user->id);
             Session::put('user_name', $user->name);
-            //Redirect to homepage
-            return redirect('/');
-        }else{
-            //redirect back with error message
-            return redirect('/login')->with('error', 'Invalid email or password');
+            //5. redirect to homepage
+            return redirect()->intended('/');
+        } else {
+            //6. redirect back with error
+            return redirect('/login')->with('error', 'Invalid credentials');
+=======
+        
+        //2. find user in database with email
+        $user = User::where('email', $email)->first();
+        
+        //3. check if user exists and password matches
+        if ($user && $password === $user->password) {
+            //4. log the user in using Laravel Auth
+            Auth::login($user);
+            
+            // Also keep session for backward compatibility with existing code
+            Session::put('user_id', $user->id);
+            Session::put('user_name', $user->name);
+            
+            //5. redirect to homepage
+            return redirect()->intended('/');
+        } else {
+            //6. redirect back with error
+            return redirect('/login')->with('error', 'Invalid credentials');
+>>>>>>> 311440401ab0f201a6672eca524dbc8e09b25787
         }
     }
     //Handle logout request
     public function logout()
     {
+        // Laravel Auth logout
+        Auth::logout();
+        
+        // Clear session
         Session::forget('user_id');
         Session::forget('user_name');
+        
         return redirect('/');
     }
     //Show registration form
@@ -55,23 +86,54 @@ class LoginController extends Controller
         $password = $request->input('password');
         $city = $request->input('city');
         $phone = $request->input('phone');
-        //check if user with email already exists
-        $existingUser = DB::table('users')->where('email',$email)->first();
-        if($existingUser){
+<<<<<<< HEAD
+        //2. check if user with email already exists
+        $existingUser = User::where('email', $email)->first();
+        if ($existingUser) {
             return redirect('/register')->with('error', 'Email already registered');
         }
-        //create new user
-        $userId = DB::table('users')->insertGetId([
-            'name'=>$name,
-            'email'=>$email,
-            'password'=>$password,
-            'city'=>$city,
-            'phone'=>$phone
+        //3. create new user
+        $user = User::create([
+            'name' => $name,
+            'email' => $email,
+            'password' => $password, // storing plain text per request
+            'city' => $city,
+            'phone' => $phone,
+            'role' => 'user' // default role
         ]);
-        //log the user in
-        Session::put('user_id', $userId);
-        Session::put('user_name', $name);
-        //redirect to homepage
+        //4. log the user in using Laravel Auth
+        Auth::login($user);
+        // Also keep session for backward compatibility
+        Session::put('user_id', $user->id);
+        Session::put('user_name', $user->name);
+        //5. redirect to homepage
+=======
+        
+        //2. check if user with email already exists
+        $existingUser = User::where('email', $email)->first();
+        if ($existingUser) {
+            return redirect('/register')->with('error', 'Email already registered');
+        }
+        
+        //3. create new user
+        $user = User::create([
+            'name' => $name,
+            'email' => $email,
+            'password' => $password, // storing plain text per request
+            'city' => $city,
+            'phone' => $phone,
+            'role' => 'user' // default role
+        ]);
+        
+        //4. log the user in using Laravel Auth
+        Auth::login($user);
+        
+        // Also keep session for backward compatibility
+        Session::put('user_id', $user->id);
+        Session::put('user_name', $user->name);
+
+        //5. redirect to homepage
+>>>>>>> 311440401ab0f201a6672eca524dbc8e09b25787
         return redirect('/');
     }
 }

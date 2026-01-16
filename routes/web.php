@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminRoomController;
 use App\Http\Controllers\Admin\AdminShowtimeController;
 use App\Http\Controllers\Admin\AdminBookingController;
+use App\Http\Controllers\User\ProfileController;
 
 //***Movie Controller */
 //movie list Route
@@ -60,6 +61,30 @@ Route::post('/booking/process', [PaymentController::class, 'processBooking'])->n
 Route::get('payment/mock/{booking_id}', [PaymentController::class, 'showMockPayment'])->name('payment.mock');
 // Confirm Payment
 Route::post('payment/confirm/{booking_id}', [PaymentController::class, 'confirmPayment'])->name('payment.confirm');
+
+//** User Profile - Protected by auth middleware */
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'userProfile'])->name('user.profile');
+    Route::get('/profile/bookings', [ProfileController::class, 'bookingsList'])->name('user.bookings.list');
+    Route::get('/profile/bookings/{booking_id}', [BookingController::class, 'bookingDetails'])->name('user.booking.details');
+    Route::get('/profile/reviews', [ProfileController::class, 'reviewsList'])->name('user.reviews.list');
+    
+    // Edit Profile - GET for form, POST for submit
+    Route::get('/profile/edit', [ProfileController::class, 'editProfile'])->name('user.profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('user.profile.update');
+    
+    // Change Password - GET for form, POST for submit
+    Route::get('/profile/change-password', [ProfileController::class, 'showChangePasswordForm'])->name('user.profile.change-password');
+    Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('user.profile.change-password.post');
+});
+
+    //Review Routes
+Route::middleware('auth')->group(function () {
+    Route::post('/movies/{movie_id}/reviews', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
+    Route::get('/reviews/{id}/edit', [\App\Http\Controllers\ReviewController::class, 'edit'])->name('reviews.edit');
+    Route::post('/reviews/{id}/update', [\App\Http\Controllers\ReviewController::class, 'update'])->name('reviews.update');
+    Route::post('/reviews/{id}/delete', [\App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
+});
 
 //Admin Routes - Grouped with 'admin' prefix
 Route::prefix('admin')->group(function () {

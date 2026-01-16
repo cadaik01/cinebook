@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Booking;
+use App\Models\Review;
 
 class User extends Authenticatable
 {
@@ -22,6 +23,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'city',
+        'phone',
+        'role',
     ];
 
     /**
@@ -47,8 +51,96 @@ class User extends Authenticatable
         ];
     }
 
+    // ==================== RELATIONSHIPS ====================
+    
+    /**
+     * Get all bookings for this user
+     */
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    /**
+     * Get all reviews for this user
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    // ==================== ROLE CHECKERS ====================
+    
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+    
+    public function isUser()
+    {
+        return $this->role === 'user';
+    }
+    
+    public function isGuest()
+    {
+        return $this->role === 'guest';
+    }
+
+    // ==================== PROFILE METHODS ====================
+    /**
+     * Get User Information
+     */
+    public function getUserInfo()
+    {
+        return [
+            'name' => $this->name,
+            'email' => $this->email,
+            'role' => $this->role,
+            'phone' => $this->phone,
+            'city' => $this->city,
+            'created_at' => $this->created_at,
+        ];
+    }
+    /**
+     * Count total bookings
+     */
+    public function getTotalBookings()
+    {
+        return $this->bookings()->count();
+    }
+    /**
+     * Get user's upcoming bookings (showtimes in the future)
+     */
+    public function getUpcomingBookings()
+    {
+        return $this->bookings()
+            ->whereHas('showtime', function($query) {
+                $query->where('show_date', '>=', now()->toDateString())
+                      ->orWhere(function($q) {
+                          $q->where('show_date', '=', now()->toDateString())
+                            ->where('show_time', '>', now()->toTimeString());
+                      });
+            })
+            ->with(['showtime.movie', 'showtime.room'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
+    /**
+     * Get user's past bookings
+     */
+    public function getPastBookings()
+    {
+        return $this->bookings()
+            ->whereHas('showtime', function($query) {
+                $query->where('show_date', '<', now()->toDateString())
+                      ->orWhere(function($q) {
+                          $q->where('show_date', '=', now()->toDateString())
+                            ->where('show_time', '<=', now()->toTimeString());
+                      });
+            })
+            ->with(['showtime.movie', 'showtime.room'])
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 }

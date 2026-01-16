@@ -71,8 +71,131 @@
                 <h3>Synopsis</h3>
                 <p>{{ $movie->description }}</p>
             </div>
+            <div class="info-section">
+    <h3>Reviews ({{ $movie->reviews->count() }})</h3>
+    
+    @auth
+        @php
+            // Check if the authenticated user has already reviewed this movie
+            $userReview = $movie->reviews->where('user_id', Auth::id())->first();
+        @endphp
+        
+        @if(!$userReview)
+            <!-- Form to add a new review -->
+            <div class="review-form-container mb-4">
+                <h5>Write a Review</h5>
+                <form action="{{ route('reviews.store', $movie->id) }}" method="POST">
+                    @csrf
+                    
+                    <!-- Star Rating Section -->
+                    <div class="mb-3">
+                        <label class="form-label">Your Rating</label>
+                        <div class="star-rating-input">
+                            <input type="radio" name="rating" value="5" id="star5" required>
+                            <label for="star5" title="5 stars">5★</label>
+                            
+                            <input type="radio" name="rating" value="4" id="star4">
+                            <label for="star4" title="4 stars">4★</label>
+                            
+                            <input type="radio" name="rating" value="3" id="star3">
+                            <label for="star3" title="3 stars">3★</label>
+                            
+                            <input type="radio" name="rating" value="2" id="star2">
+                            <label for="star2" title="2 stars">2★</label>
+                            
+                            <input type="radio" name="rating" value="1" id="star1">
+                            <label for="star1" title="1 star">1★</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Comment Section -->
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Your Comment</label>
+                        <textarea 
+                            name="comment" 
+                            id="comment" 
+                            class="form-control" 
+                            rows="4" 
+                            placeholder="Share your thoughts about this movie..."
+                            required 
+                            maxlength="1000">{{ old('comment') }}</textarea>
+                        <small class="text-muted">Maximum 1000 characters</small>
+                    </div>
+                    
+                    <button type="submit" class="detail-btn detail-btn-primary">Submit Review</button>
+                </form>
+            </div>
+        @else
+            <!-- User has already reviewed -->
+            <div class="alert alert-info">
+                You have already reviewed this movie. You can view and manage your review below.
+            </div>
+        @endif
+    @else
+        <!-- User not logged in -->
+        <div class="alert alert-warning">
+            Please <a href="{{ route('login') }}" class="alert-link">login</a> to write a review.
         </div>
+    @endauth
+
+    <!-- List of all reviews -->
+    <div class="reviews-list mt-4">
+        <h5 class="mb-3">All Reviews</h5>
+        
+        @forelse($movie->reviews->sortByDesc('created_at') as $review)
+            <div class="review-item">
+                <!-- User and time information -->
+                <div class="review-header">
+                    <div class="review-user-info">
+                        <strong class="review-username">{{ $review->user->name }}</strong>
+                        
+                        <!-- Display star rating -->
+                        <div class="review-stars">
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($i <= $review->rating)
+                                    <span class="star-filled">★</span>
+                                @else
+                                    <span class="star-empty">★</span>
+                                @endif
+                            @endfor
+                            <span class="rating-number">({{ $review->rating }}/5)</span>
+                        </div>
+                    </div>
+                    
+                    <small class="review-time">{{ $review->created_at->diffForHumans() }}</small>
+                </div>
+                
+                <!-- Review Content -->
+                <div class="review-content">
+                    <p>{{ $review->comment }}</p>
+                </div>
+                
+                <!-- Edit/Delete Buttons (only visible if it's the user's own review) -->
+                @auth
+                    @if($review->user_id === Auth::id())
+                        <div class="review-actions">
+                            <a href="{{ route('reviews.edit', $review->id) }}" class="btn-edit">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            
+                            <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this review?')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+                @endauth
+            </div>
+        @empty
+            <div class="no-reviews">
+                <p>No reviews yet. Be the first to review this movie!</p>
+            </div>
+        @endforelse
     </div>
+</div>
 
     <div class="back-button">
         @if($movie->status == 'now_showing')
