@@ -1,0 +1,340 @@
+/* ==================== Showtimes Page Styles ==================== */
+/*
+ * TABLE OF CONTENTS:
+ * 1. Container & Layout
+ * 2. Page Header
+ * 3. Showtimes Table
+ * 4. Table Header
+ * 5. Table Rows
+ * 6. Action Buttons
+ * 7. Empty State
+ * 8. Back Button
+ * 9. Responsive Design (Tablet & Mobile)
+ */
+
+/* ========== Container & Layout ========== */
+.showtimes-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* ========== Page Header ========== */
+.showtimes-header {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.showtimes-header h2 {
+    font-size: 2.5em;
+    margin: 0;
+    color: #1a1a1a;
+    font-weight: 700;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #333;
+    display: inline-block;
+}
+
+/* ========== Showtimes Table ========== */
+.showtimes-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+/* ========== Table Header ========== */
+.showtimes-table thead {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+}
+
+.showtimes-table thead th {
+    padding: 18px 20px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1.05em;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.showtimes-table thead th:first-child {
+    border-top-left-radius: 10px;
+}
+
+.showtimes-table thead th:last-child {
+    border-top-right-radius: 10px;
+}
+
+/* ========== Table Rows ========== */
+.showtimes-table tbody tr {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.showtimes-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.showtimes-table tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: translateX(5px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.showtimes-table tbody td {
+    padding: 20px;
+    color: #333;
+    font-size: 1em;
+    vertical-align: middle;
+}
+
+.showtimes-table tbody td:first-child {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+/* Date Column */
+.showtime-date {
+    color: #2980b9;
+    font-weight: 600;
+    font-size: 1.05em;
+}
+
+/* Time Column */
+.showtime-time {
+    color: #27ae60;
+    font-weight: 600;
+    font-size: 1.1em;
+    letter-spacing: 0.5px;
+}
+
+/* Room Column */
+.showtime-room {
+    color: #7f8c8d;
+    font-weight: 500;
+}
+
+.room-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+/* ========== Action Buttons ========== */
+.showtimes-select-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 0.95em;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+    border: none;
+    cursor: pointer;
+}
+
+.showtimes-select-btn:hover {
+    background: linear-gradient(135deg, #229954 0%, #1e8449 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(39, 174, 96, 0.4);
+    color: white;
+}
+
+.showtimes-select-btn:active {
+    transform: translateY(0);
+}
+
+/* ========== Empty State ========== */
+.no-showtimes {
+    text-align: center;
+    padding: 60px 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.no-showtimes p {
+    font-size: 1.2em;
+    color: #7f8c8d;
+    margin: 0;
+}
+
+.no-showtimes-icon {
+    font-size: 3em;
+    color: #bdc3c7;
+    margin-bottom: 15px;
+}
+
+/* ========== Back Button ========== */
+.back-navigation {
+    text-align: left;
+    padding-top: 20px;
+}
+
+.showtimes-back-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.95em;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(149, 165, 166, 0.3);
+}
+
+.showtimes-back-btn:hover {
+    background: linear-gradient(135deg, #7f8c8d 0%, #6c7a7b 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(149, 165, 166, 0.4);
+    color: white;
+}
+
+.showtimes-back-btn:before {
+    content: "← ";
+    margin-right: 5px;
+}
+
+/* ==================== Responsive Design ==================== */
+
+/* ========== Tablet (992px and below) ========== */
+@media (max-width: 992px) {
+    .showtimes-container {
+        padding: 30px 15px;
+    }
+
+    .showtimes-header h2 {
+        font-size: 2em;
+    }
+
+    .showtimes-table thead th,
+    .showtimes-table tbody td {
+        padding: 15px;
+        font-size: 0.95em;
+    }
+}
+
+/* ========== Mobile (768px and below) ========== */
+@media (max-width: 768px) {
+    .showtimes-container {
+        padding: 20px 10px;
+    }
+
+    .showtimes-header h2 {
+        font-size: 1.5em;
+        padding-bottom: 15px;
+    }
+
+    /* Convert table to card layout on mobile */
+    .showtimes-table {
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .showtimes-table thead {
+        display: none;
+    }
+
+    .showtimes-table tbody {
+        display: block;
+    }
+
+    .showtimes-table tbody tr {
+        display: block;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: none;
+        padding: 15px;
+    }
+
+    .showtimes-table tbody tr:hover {
+        transform: none;
+    }
+
+    .showtimes-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .showtimes-table tbody td:last-child {
+        border-bottom: none;
+        justify-content: center;
+        padding-top: 15px;
+    }
+
+    .showtimes-table tbody td:before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #555;
+        text-transform: uppercase;
+        font-size: 0.85em;
+        letter-spacing: 0.5px;
+    }
+
+    .showtimes-table tbody td:last-child:before {
+        display: none;
+    }
+
+    .showtimes-select-btn {
+        width: 100%;
+        text-align: center;
+        padding: 12px 20px;
+    }
+
+    .no-showtimes {
+        padding: 40px 15px;
+    }
+
+    .no-showtimes p {
+        font-size: 1em;
+    }
+
+    .back-navigation {
+        text-align: center;
+    }
+
+    .showtimes-back-btn {
+        width: 100%;
+        text-align: center;
+        padding: 14px 20px;
+    }
+}
+
+/* ========== Small Mobile (480px and below) ========== */
+@media (max-width: 480px) {
+    .showtimes-header h2 {
+        font-size: 1.3em;
+    }
+
+    .showtimes-table tbody tr {
+        padding: 12px;
+    }
+
+    .showtime-time {
+        font-size: 1em;
+    }
+
+    .showtimes-select-btn {
+        font-size: 0.9em;
+        padding: 10px 16px;
+    }
+}

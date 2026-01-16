@@ -75,61 +75,64 @@
     <h3>Reviews ({{ $movie->reviews->count() }})</h3>
     
     @auth
-        @php
-            // Check if the authenticated user has already reviewed this movie
-            $userReview = $movie->reviews->where('user_id', Auth::id())->first();
-        @endphp
-        
-        @if(!$userReview)
+        @if($canReview)
             <!-- Form to add a new review -->
             <div class="review-form-container mb-4">
                 <h5>Write a Review</h5>
                 <form action="{{ route('reviews.store', $movie->id) }}" method="POST">
                     @csrf
-                    
+                    <input type="hidden" name="movie_id" value="{{ $movie->id }}">
+
                     <!-- Star Rating Section -->
                     <div class="mb-3">
                         <label class="form-label">Your Rating</label>
                         <div class="star-rating-input">
                             <input type="radio" name="rating" value="5" id="star5" required>
-                            <label for="star5" title="5 stars">5★</label>
-                            
+                            <label for="star5" title="5 stars">★</label>
+
                             <input type="radio" name="rating" value="4" id="star4">
-                            <label for="star4" title="4 stars">4★</label>
-                            
+                            <label for="star4" title="4 stars">★</label>
+
                             <input type="radio" name="rating" value="3" id="star3">
-                            <label for="star3" title="3 stars">3★</label>
-                            
+                            <label for="star3" title="3 stars">★</label>
+
                             <input type="radio" name="rating" value="2" id="star2">
-                            <label for="star2" title="2 stars">2★</label>
-                            
+                            <label for="star2" title="2 stars">★</label>
+
                             <input type="radio" name="rating" value="1" id="star1">
-                            <label for="star1" title="1 star">1★</label>
+                            <label for="star1" title="1 star">★</label>
                         </div>
                     </div>
-                    
+
                     <!-- Comment Section -->
                     <div class="mb-3">
                         <label for="comment" class="form-label">Your Comment</label>
-                        <textarea 
-                            name="comment" 
-                            id="comment" 
-                            class="form-control" 
-                            rows="4" 
+                        <textarea
+                            name="comment"
+                            id="comment"
+                            class="form-control"
+                            rows="4"
                             placeholder="Share your thoughts about this movie..."
-                            required 
                             maxlength="1000">{{ old('comment') }}</textarea>
                         <small class="text-muted">Maximum 1000 characters</small>
                     </div>
-                    
+
                     <button type="submit" class="detail-btn detail-btn-primary">Submit Review</button>
                 </form>
             </div>
         @else
-            <!-- User has already reviewed -->
-            <div class="alert alert-info">
-                You have already reviewed this movie. You can view and manage your review below.
-            </div>
+            @php
+                $userReview = $movie->reviews->where('user_id', Auth::id())->first();
+            @endphp
+            @if($userReview)
+                <div class="alert alert-info">
+                    You have already reviewed this movie.
+                </div>
+            @else
+                <div class="alert alert-warning">
+                    You can only review movies you have watched. Book a ticket and watch the movie first!
+                </div>
+            @endif
         @endif
     @else
         <!-- User not logged in -->

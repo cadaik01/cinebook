@@ -1,0 +1,491 @@
+/* ==================== Seat Map Page Styles ==================== */
+/*
+ * TABLE OF CONTENTS:
+ * 1. Container & Layout
+ * 2. Page Header
+ * 3. Alert Messages
+ * 4. Legend Section
+ * 5. Seat Map Container
+ * 6. Seat Rows
+ * 7. Seat Buttons
+ * 8. Selected Seats Display
+ * 9. Action Buttons
+ * 10. Screen Display
+ * 11. Responsive Design (Tablet & Mobile)
+ */
+
+/* ========== Container & Layout ========== */
+.seat-map-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* ========== Page Header ========== */
+.seat-map-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.seat-map-header h2 {
+    font-size: 2.5em;
+    margin: 0 0 10px 0;
+    color: #1a1a1a;
+    font-weight: 700;
+}
+
+.seat-map-header .showtime-info {
+    font-size: 1.1em;
+    color: #7f8c8d;
+    margin-top: 10px;
+}
+
+/* ========== Alert Messages ========== */
+.alert {
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+.alert-error {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+/* ========== Legend Section ========== */
+.seat-legend {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.seat-legend h4 {
+    font-size: 1.2em;
+    margin: 0 0 15px 0;
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+.legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1em;
+    color: #333;
+}
+
+.legend-color {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.legend-color.standard {
+    background-color: #2ecc71;
+}
+
+.legend-color.vip {
+    background-color: #f1c40f;
+}
+
+.legend-color.couple {
+    background-color: #e84393;
+}
+
+.legend-color.booked {
+    background-color: #999;
+}
+
+.legend-color.selected {
+    background-color: #3498db;
+}
+
+/* ========== Screen Display ========== */
+.cinema-screen {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.screen-label {
+    display: inline-block;
+    background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+    color: white;
+    padding: 15px 60px;
+    border-radius: 10px 10px 100px 100px;
+    font-size: 1.1em;
+    font-weight: 600;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* ========== Seat Map Container ========== */
+.seat-map-wrapper {
+    background: #f8f9fa;
+    padding: 40px 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+#seatMap {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+/* ========== Seat Rows ========== */
+.seat-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    gap: 5px;
+}
+
+.seat-row-label {
+    font-weight: 700;
+    font-size: 1.1em;
+    color: #2c3e50;
+    min-width: 80px;
+    text-align: right;
+    padding-right: 15px;
+    letter-spacing: 1px;
+}
+
+.seats-container {
+    display: flex;
+    gap: 5px;
+    flex-wrap: nowrap;
+}
+
+/* ========== Seat Buttons ========== */
+.seat-btn {
+    width: 45px;
+    height: 45px;
+    margin: 0;
+    font-weight: bold;
+    font-size: 0.9em;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.seat-btn:hover:not(:disabled) {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.seat-btn:active:not(:disabled) {
+    transform: translateY(-1px) scale(1.02);
+}
+
+.seat-btn.available {
+    cursor: pointer;
+}
+
+.seat-btn.booked {
+    cursor: not-allowed;
+    opacity: 0.6;
+    background-color: #999 !important;
+}
+
+.seat-btn.booked:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Seat type colors */
+.seat-btn[data-seat-type="1"] {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+}
+
+.seat-btn[data-seat-type="2"] {
+    background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%);
+}
+
+.seat-btn[data-seat-type="3"] {
+    background: linear-gradient(135deg, #e84393 0%, #d63384 100%);
+}
+
+/* Selected state */
+.seat-btn.selected {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important;
+    border-color: #2980b9 !important;
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
+}
+
+/* ========== Selected Seats Display ========== */
+.selected-seats-display {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.selected-seats-display h4 {
+    font-size: 1.3em;
+    margin: 0 0 10px 0;
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+#seatList {
+    color: #3498db;
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+.seat-count {
+    display: inline-block;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    margin-left: 10px;
+    font-weight: 600;
+}
+
+/* ========== Action Buttons ========== */
+.seatmap-actions {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.seatmap-book-btn {
+    padding: 14px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.seatmap-book-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
+}
+
+.seatmap-book-btn:disabled {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    cursor: not-allowed;
+    opacity: 0.7;
+    box-shadow: none;
+}
+
+.seatmap-back-btn {
+    padding: 14px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+.seatmap-back-btn:hover {
+    background: linear-gradient(135deg, #5a6268 0%, #545b62 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(108, 117, 125, 0.4);
+    color: white;
+}
+
+.seatmap-back-btn:before {
+    content: "← ";
+    margin-right: 5px;
+}
+
+/* ==================== Responsive Design ==================== */
+
+/* ========== Tablet (992px and below) ========== */
+@media (max-width: 992px) {
+    .seat-map-container {
+        padding: 30px 15px;
+    }
+
+    .seat-map-header h2 {
+        font-size: 2em;
+    }
+
+    .seat-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 0.85em;
+    }
+
+    .seat-row-label {
+        min-width: 70px;
+        font-size: 1em;
+    }
+}
+
+/* ========== Mobile (768px and below) ========== */
+@media (max-width: 768px) {
+    .seat-map-container {
+        padding: 20px 10px;
+    }
+
+    .seat-map-header h2 {
+        font-size: 1.6em;
+    }
+
+    .seat-map-header .showtime-info {
+        font-size: 0.95em;
+    }
+
+    .seat-legend {
+        padding: 15px 20px;
+    }
+
+    .legend-items {
+        gap: 12px;
+    }
+
+    .legend-item {
+        font-size: 0.9em;
+    }
+
+    .legend-color {
+        width: 25px;
+        height: 25px;
+    }
+
+    .screen-label {
+        padding: 12px 40px;
+        font-size: 0.95em;
+    }
+
+    .seat-map-wrapper {
+        padding: 25px 10px;
+    }
+
+    #seatMap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .seat-row {
+        margin-bottom: 10px;
+        gap: 3px;
+    }
+
+    .seat-row-label {
+        min-width: 50px;
+        font-size: 0.9em;
+        padding-right: 10px;
+    }
+
+    .seats-container {
+        gap: 3px;
+    }
+
+    .seat-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.75em;
+        border-radius: 6px;
+    }
+
+    .selected-seats-display {
+        padding: 20px;
+    }
+
+    .selected-seats-display h4 {
+        font-size: 1.1em;
+    }
+
+    #seatList {
+        font-size: 1em;
+        word-break: break-word;
+    }
+
+    .seatmap-actions {
+        flex-direction: column;
+    }
+
+    .seatmap-book-btn,
+    .seatmap-back-btn {
+        width: 100%;
+        padding: 12px 20px;
+    }
+}
+
+/* ========== Small Mobile (480px and below) ========== */
+@media (max-width: 480px) {
+    .seat-map-header h2 {
+        font-size: 1.4em;
+    }
+
+    .seat-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 0.7em;
+    }
+
+    .seat-row-label {
+        min-width: 40px;
+        font-size: 0.85em;
+    }
+
+    .screen-label {
+        padding: 10px 30px;
+        font-size: 0.85em;
+    }
+
+    .legend-items {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* ========== Touch Device Optimizations ========== */
+@media (hover: none) and (pointer: coarse) {
+    .seat-btn:hover:not(:disabled) {
+        transform: none;
+    }
+
+    .seat-btn:active:not(:disabled) {
+        transform: scale(0.95);
+    }
+}

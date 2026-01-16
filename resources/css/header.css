@@ -3,6 +3,7 @@
     background-color: var(--prussian-blue);
     padding: 0;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    height: 100px;
 }
 
 .navbar {
@@ -128,6 +129,13 @@
     display: flex;
     align-items: center;
     gap: 15px;
+}
+
+.user-menu form {
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
 }
 
 .user-greeting {

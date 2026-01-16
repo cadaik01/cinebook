@@ -85,6 +85,10 @@ Route::middleware('auth')->group(function () {
 });
 
     //Review Routes
+// Public reviews page
+Route::get('/reviews', [\App\Http\Controllers\ReviewController::class, 'index'])->name('reviews.index');
+
+// Protected review routes (require authentication)
 Route::middleware('auth')->group(function () {
     Route::post('/movies/{movie_id}/reviews', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
     Route::get('/reviews/{id}/edit', [\App\Http\Controllers\ReviewController::class, 'edit'])->name('reviews.edit');
@@ -119,4 +123,8 @@ Route::prefix('admin')->group(function () {
     Route::get('bookings', [AdminBookingController::class, 'index'])->name('admin.bookings.index');
     Route::get('bookings/{booking}', [AdminBookingController::class, 'show'])->name('admin.bookings.show');
     Route::post('bookings/{booking}/cancel', [AdminBookingController::class, 'cancel'])->name('admin.bookings.cancel');
+
+    // Reviews Management
+    Route::get('reviews', [\App\Http\Controllers\Admin\AdminReviewController::class, 'index'])->name('admin.reviews.index');
+    Route::delete('reviews/{id}', [\App\Http\Controllers\Admin\AdminReviewController::class, 'destroy'])->name('admin.reviews.destroy');
 });

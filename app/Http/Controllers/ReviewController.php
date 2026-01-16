@@ -9,6 +9,18 @@ use App\Models\Movie;
 class ReviewController extends Controller
 {
     /**
+     * Display all public reviews
+     */
+    public function index()
+    {
+        $reviews = Review::with(['user', 'movie'])
+            ->latest()
+            ->paginate(20);
+
+        return view('reviews.index', compact('reviews'));
+    }
+
+    /**
      * Store a new review
      */
     public function store(Request $request)
@@ -16,47 +28,87 @@ class ReviewController extends Controller
         if (!Auth::check()) {
             return redirect('/login')->with('error', 'You must be logged in to submit a review.');
         }
+
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string|max:1000',
+            'movie_id' => 'required|exists:movies,id',
         ]);
-        //check if user has already reviewed this movie
-        $existingReview = Review::where('user_id', Auth::id())
-            ->where('movie_id', $request->input('movie_id'))
+
+        $movieId = $request->input('movie_id');
+        $userId = Auth::id();
+
+        // Check if user has already reviewed this movie
+        $existingReview = Review::where('user_id', $userId)
+            ->where('movie_id', $movieId)
             ->first();
+
         if ($existingReview) {
             return redirect()->back()->with('error', 'You have already reviewed this movie.');
         }
+
+        // Check if user has watched this movie (showtime must be in the past)
+        $hasWatched = \DB::table('booking_seats')
+            ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
+            ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
+            ->where('bookings.user_id', $userId)
+            ->where('showtimes.movie_id', $movieId)
+            ->where('bookings.payment_status', 'paid')
+            ->where(function($query) {
+                $query->where('showtimes.show_date', '<', now()->toDateString())
+                    ->orWhere(function($q) {
+                        $q->where('showtimes.show_date', '=', now()->toDateString())
+                          ->where('showtimes.show_time', '<', now()->toTimeString());
+                    });
+            })
+            ->exists();
+
+        if (!$hasWatched) {
+            return redirect()->back()->with('error', 'You can only review movies you have watched.');
+        }
+
         // Create and save the review
-        $review = new Review();
-        $review->user_id = Auth::id();
-        $review->movie_id = $request->input('movie_id');
-        $review->rating = $request->input('rating');
-        $review->comment = $request->input('comment');
-        $review->save();
+        $review = Review::create([
+            'user_id' => $userId,
+            'movie_id' => $movieId,
+            'rating' => $request->input('rating'),
+            'comment' => $request->input('comment'),
+        ]);
+
+        // Update movie average rating
+        $movie = Movie::find($movieId);
+        $movie->updateAverageRating();
 
         return redirect()->back()->with('success', 'Review submitted successfully.');
     }
-    // Update movie average rating
-    protected function updateMovieAverageRating($movieId)
+
+    /**
+     * Show the form for editing a review
+     */
+    public function edit($id)
     {
-        $movie = Movie::find($movieId);
-        if ($movie) {
-            $averageRating = Review::where('movie_id', $movieId)->avg('rating');
-            $movie->rating_avg = $averageRating;
-            $movie->save();
+        $review = Review::with('movie')->findOrFail($id);
+
+        // Ensure the authenticated user is the owner of the review
+        if (Auth::id() !== $review->user_id) {
+            return redirect()->back()->with('error', 'You are not authorized to edit this review.');
         }
+
+        return view('reviews.edit', compact('review'));
     }
+
     /**
      * Update an existing review
      */
     public function update(Request $request, $id)
     {
         $review = Review::findOrFail($id);
+
         // Ensure the authenticated user is the owner of the review
         if (Auth::id() !== $review->user_id) {
             return redirect()->back()->with('error', 'You are not authorized to edit this review.');
         }
+
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string|max:1000',
@@ -66,31 +118,71 @@ class ReviewController extends Controller
             'rating' => $request->rating,
             'comment' => $request->comment,
         ]);
+
         // Update movie average rating
-        $this->updateMovieAverageRating($review->movie_id);
-        return redirect()->route('user.reviews')->with('success', 'Review updated successfully.');
-}
+        $movie = Movie::find($review->movie_id);
+        $movie->updateAverageRating();
+
+        return redirect()->back()->with('success', 'Review updated successfully.');
+    }
     /**
-     * Delete a review
+     * Delete a review (User can delete own review)
      */
     public function destroy($id)
     {
         $review = Review::findOrFail($id);
+
         // Ensure the authenticated user is the owner of the review
         if (Auth::id() !== $review->user_id) {
             return redirect()->back()->with('error', 'You are not authorized to delete this review.');
         }
+
         $movieId = $review->movie_id;
         $review->delete();
+
         // Update movie average rating
-        $this->updateMovieAverageRating($movieId);
-        return redirect()->route('user.reviews')->with('success', 'Review deleted successfully.');
+        $movie = Movie::find($movieId);
+        $movie->updateAverageRating();
+
+        return redirect()->back()->with('success', 'Review deleted successfully.');
     }
-    // private function to recalculate and update movie average rating
-    private function updateMovieRating($movieId)
+
+    /**
+     * Check if user can review a specific movie
+     */
+    public function canReview($movieId)
     {
-        $movie = Movie::findOrFail($movieId);
-        $avgRating = Review::where('movie_id', $movieId)->avg('rating');
-        $movie->update(['rating_avg' => round ($avgRating, 1)]);
+        if (!Auth::check()) {
+            return false;
+        }
+
+        $userId = Auth::id();
+
+        // Check if already reviewed
+        $hasReviewed = Review::where('user_id', $userId)
+            ->where('movie_id', $movieId)
+            ->exists();
+
+        if ($hasReviewed) {
+            return false;
+        }
+
+        // Check if user has watched this movie
+        $hasWatched = \DB::table('booking_seats')
+            ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
+            ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
+            ->where('bookings.user_id', $userId)
+            ->where('showtimes.movie_id', $movieId)
+            ->where('bookings.payment_status', 'paid')
+            ->where(function($query) {
+                $query->where('showtimes.show_date', '<', now()->toDateString())
+                    ->orWhere(function($q) {
+                        $q->where('showtimes.show_date', '=', now()->toDateString())
+                          ->where('showtimes.show_time', '<', now()->toTimeString());
+                    });
+            })
+            ->exists();
+
+        return $hasWatched;
     }
 }

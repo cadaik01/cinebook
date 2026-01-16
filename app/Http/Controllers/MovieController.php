@@ -54,14 +54,41 @@ class MovieController extends Controller
     public function show($id)
     {
         // Use Eloquent Model instead of DB::table to enable relationships
-        $movie = Movie::with('genres','reviews')->findOrFail($id);
-        
+        $movie = Movie::with('genres','reviews.user')->findOrFail($id);
+
         // Get genres for this movie using relationships
         if ($movie) {
             $movie->genres = $movie->genres->pluck('name')->toArray();
         }
-        
-        return view('movie_details', compact('movie'));
+
+        // Check if user can review this movie
+        $canReview = false;
+        if (auth()->check()) {
+            $userId = auth()->id();
+
+            // Check if user has watched this movie (showtime must be in the past)
+            $hasWatched = \DB::table('booking_seats')
+                ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
+                ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
+                ->where('bookings.user_id', $userId)
+                ->where('showtimes.movie_id', $id)
+                ->where('bookings.payment_status', 'paid')
+                ->where(function($query) {
+                    $query->where('showtimes.show_date', '<', now()->toDateString())
+                        ->orWhere(function($q) {
+                            $q->where('showtimes.show_date', '=', now()->toDateString())
+                              ->where('showtimes.show_time', '<', now()->toTimeString());
+                        });
+                })
+                ->exists();
+
+            // Check if user has already reviewed
+            $hasReviewed = $movie->reviews->where('user_id', $userId)->isNotEmpty();
+
+            $canReview = $hasWatched && !$hasReviewed;
+        }
+
+        return view('movie_details', compact('movie', 'canReview'));
     }
     //2. upcomingMovies function to fetch upcoming movies from the database and return to upcoming_movies view
     public function upcomingMovies()
