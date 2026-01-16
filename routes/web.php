@@ -1,5 +1,11 @@
 <?php
 
+
+use App\Http\Controllers\SearchController;
+
+// Search Route
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\LoginController;

@@ -37,7 +37,16 @@
             <div class="movie-info">
                 <h3 class="movie-title">{{ $movie->title }}</h3>
                 <div class="movie-meta">
-                    <span class="genre">{{ $movie->genre ?? 'Drama' }}</span>
+                    <span class="genre">
+                        @if(isset($movie->genres) && is_array($movie->genres) && count($movie->genres) > 0)
+                        {{ implode(', ', $movie->genres) }}
+                        @elseif(method_exists($movie, 'getGenresStringAttribute') && $movie->genres &&
+                        count($movie->genres) > 0)
+                        {{ $movie->genres_string }}
+                        @else
+                        Unknown
+                        @endif
+                    </span>
                     <span class="duration">⏱️ {{ $movie->duration ?? '120' }} min</span>
                 </div>
 

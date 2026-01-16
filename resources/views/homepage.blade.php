@@ -11,6 +11,11 @@
 <div class="hero-section">
     <h1>Welcome to TCA Cine</h1>
     <p>Experience the Wonderful World of Cinema</p>
+    <form action="{{ route('search') }}" method="get" class="search-form">
+        <input type="text" name="q" class="search-input" placeholder="Search by title, genre, director, language..."
+            required>
+        <button type="submit" class="search-btn">Search</button>
+    </form>
     <a href="{{ route('now_showing') }}" class="btn-cta btn-cta-primary btn-lg">Book Tickets Now</a>
 </div>
 
