@@ -91,6 +91,65 @@
     @endif
 </div>
 
+<!-- Cinema Corner Section -->
+<div class="cinema-corner-section">
+    <div class="cinema-corner-header">
+        <span class="corner-title-bar"></span>
+        <span class="corner-title">CINEMA CORNER</span>
+        <span class="corner-tab active">Movie Reviews</span>
+        <span class="corner-tab">Cinema Blog</span>
+    </div>
+    <div class="cinema-corner-content">
+        <div class="corner-main-article">
+            <img src="https://i.postimg.cc/jdBWvdWn/avengers-endgame-final-battle-all-heroes.avif"
+                alt="Avengers: Endgame" class="corner-main-img">
+            <div class="corner-main-title">[Review] Avengers: Endgame – The Epic Conclusion to the Infinity Saga</div>
+            <div class="corner-main-meta">
+                <span class="corner-like-btn">👍 Like</span>
+                <span class="corner-view"><i class="fa fa-eye"></i> 1205</span>
+            </div>
+        </div>
+        <div class="corner-side-articles">
+            <div class="corner-side-article">
+                <img src="https://i.postimg.cc/cJP0GrSm/johnwick.jpg" alt="John Wick: Chapter 4"
+                    class="corner-side-img">
+                <div class="corner-side-info">
+                    <div class="corner-side-title">[Review] John Wick: Chapter 4 – Relentless Action and Deeper
+                        Mythology</div>
+                    <div class="corner-side-meta">
+                        <span class="corner-like-btn">👍 Like</span>
+                        <span class="corner-view"><i class="fa fa-eye"></i> 980</span>
+                    </div>
+                </div>
+            </div>
+            <div class="corner-side-article">
+                <img src="https://i.postimg.cc/rwbvK3P8/the-kim-family-woo-sik-choi-kang-ho-song-hye-jin-jang-so-dam-park-in-parasite-courtesy-of-neon.avif"
+                    alt="Parasite" class="corner-side-img">
+                <div class="corner-side-info">
+                    <div class="corner-side-title">[Review] Parasite – A Masterpiece of Social Satire and Suspense</div>
+                    <div class="corner-side-meta">
+                        <span class="corner-like-btn">👍 Like</span>
+                        <span class="corner-view"><i class="fa fa-eye"></i> 1502</span>
+                    </div>
+                </div>
+            </div>
+            <div class="corner-side-article">
+                <img src="https://i.postimg.cc/Pr764Zzx/02ri78xl7t.jpg" alt="Avatar" class="corner-side-img">
+                <div class="corner-side-info">
+                    <div class="corner-side-title">[Review] Avatar – Visual Brilliance and Environmental Message</div>
+                    <div class="corner-side-meta">
+                        <span class="corner-like-btn">👍 Like</span>
+                        <span class="corner-view"><i class="fa fa-eye"></i> 2103</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="corner-more-btn-container">
+        <a href="#" class="corner-more-btn">See more <span>&rarr;</span></a>
+    </div>
+</div>
+
 <!-- Call to Action Section -->
 <div class="cta-section">
     <h2>Ready to Watch?</h2>
