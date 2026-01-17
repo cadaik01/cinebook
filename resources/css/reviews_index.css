@@ -92,7 +92,7 @@
     font-style: italic;
     width: 100%;
 }
-}
+
 
 .review-card:hover {
     transform: translateY(-5px);
@@ -202,7 +202,7 @@
         margin-top: var(--space-2);
     }
 }
-}
+
 
 .reviewer-info {
     display: flex;
