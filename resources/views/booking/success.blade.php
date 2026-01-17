@@ -75,4 +75,9 @@
     <div style="margin-top: 30px;">
         <a href="{{ route('homepage') }}">Back to Homepage</a>
 </div>
+
+<script>
+    // Clear booking countdown from localStorage
+    localStorage.removeItem('booking_expiry_time');
+</script>
 @endsection

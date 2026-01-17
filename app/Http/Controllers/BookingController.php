@@ -136,7 +136,7 @@ class BookingController extends Controller
         //8. Get Movie info using relationship
         $movie = $showtime->movie;
         //9. Redirect to confirmation page with booking details
-        return view('booking.confirm', compact('movie', 'showtime', 'seatDetails', 'totalPrice', 'showtime_id'));
+        return view('booking.confirm', compact('movie', 'showtime', 'room', 'seatDetails', 'totalPrice', 'showtime_id'));
     }
     
     /**

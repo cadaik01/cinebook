@@ -83,10 +83,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function selectSeat(button, seatId, seatCode, seatType) {
-        // Store original color for deselection
-        if (!button.getAttribute('data-original-color')) {
-            button.setAttribute('data-original-color', button.style.backgroundColor);
-        }
+        // Add selected class instead of inline styles
+        button.classList.add('selected');
         
         // Add to selected seats array
         selectedSeats.push({
@@ -95,34 +93,14 @@ document.addEventListener('DOMContentLoaded', function() {
             type: seatType,
             estimatedPrice: ESTIMATED_PRICES[seatType] || ESTIMATED_PRICES[1]
         });
-        
-        // Update visual appearance
-        button.style.backgroundColor = '#3498db';
-        button.style.border = '2px solid #2980b9';
     }
     
     function deselectSeat(button, seatId) {
         // Remove from selected seats array
         selectedSeats = selectedSeats.filter(seat => seat.id !== seatId);
         
-        // Restore original appearance
-        const originalColor = button.getAttribute('data-original-color');
-        if (originalColor) {
-            button.style.backgroundColor = originalColor;
-        } else {
-            // Fallback to default colors based on seat type
-            const seatType = parseInt(button.getAttribute('data-seat-type'));
-            button.style.backgroundColor = getSeatTypeColor(seatType);
-        }
-        button.style.border = '2px solid transparent';
-    }
-    
-    function getSeatTypeColor(seatType) {
-        switch(seatType) {
-            case 2: return '#f1c40f'; // VIP
-            case 3: return '#e84393'; // Couple
-            default: return '#2ecc71'; // Standard
-        }
+        // Remove selected class
+        button.classList.remove('selected');
     }
     
     function updateSelectedSeatsDisplay() {

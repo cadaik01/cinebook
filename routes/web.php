@@ -3,8 +3,6 @@
 
 use App\Http\Controllers\SearchController;
 
-// Search Route
-Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
@@ -134,3 +132,6 @@ Route::prefix('admin')->group(function () {
     Route::get('reviews', [\App\Http\Controllers\Admin\AdminReviewController::class, 'index'])->name('admin.reviews.index');
     Route::delete('reviews/{id}', [\App\Http\Controllers\Admin\AdminReviewController::class, 'destroy'])->name('admin.reviews.destroy');
 });
+
+// Search Route
+Route::get('/search', [SearchController::class, 'search'])->name('search');

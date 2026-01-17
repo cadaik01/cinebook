@@ -6,6 +6,13 @@
 <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
     <h2>💳 Online Payment</h2>
     
+    <!-- Countdown Timer -->
+    <div style="background: #ff6b6b; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+        <h3 style="margin: 0;">⏰ Time Remaining</h3>
+        <div id="countdown" style="font-size: 32px; font-weight: bold; margin-top: 10px;">10:00</div>
+        <p style="margin: 5px 0 0 0; font-size: 14px;">Complete payment before time expires</p>
+    </div>
+    
     <!-- Payment Method Info -->
     <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
         <h3 style="margin-top: 0;">
@@ -65,11 +72,17 @@
     </div>
 </div>
 
-<!-- Auto-submit Script -->
+<!-- Load Countdown Script -->
+<script src="{{ asset('js/booking-countdown.js') }}"></script>
+
+<!-- Auto-submit Script (as fallback) -->
 <script>
-    // Auto-submit the payment form after 10 seconds
+    // Fallback: Auto-submit if countdown not initialized
     setTimeout(function() {
-        document.getElementById('paymentForm').submit();
-    }, 10000);
+        const countdown = document.getElementById('countdown');
+        if (countdown && countdown.textContent === '00:00') {
+            document.getElementById('paymentForm').submit();
+        }
+    }, 610000); // 10 minutes + 10 seconds buffer
 </script>
 @endsection
