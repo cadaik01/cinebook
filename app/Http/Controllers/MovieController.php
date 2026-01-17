@@ -64,28 +64,32 @@ class MovieController extends Controller
         // Check if user can review this movie
         $canReview = false;
         if (auth()->check()) {
-            $userId = auth()->id();
+            $user = auth()->user();
+            if ($user->role === 'admin') {
+                $canReview = true;
+            } else {
+                $userId = $user->id;
+                // Check if user has watched this movie (showtime must be in the past)
+                $hasWatched = \DB::table('booking_seats')
+                    ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
+                    ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
+                    ->where('bookings.user_id', $userId)
+                    ->where('showtimes.movie_id', $id)
+                    ->where('bookings.payment_status', 'paid')
+                    ->where(function($query) {
+                        $query->where('showtimes.show_date', '<', now()->toDateString())
+                            ->orWhere(function($q) {
+                                $q->where('showtimes.show_date', '=', now()->toDateString())
+                                  ->where('showtimes.show_time', '<', now()->toTimeString());
+                            });
+                    })
+                    ->exists();
 
-            // Check if user has watched this movie (showtime must be in the past)
-            $hasWatched = \DB::table('booking_seats')
-                ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
-                ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
-                ->where('bookings.user_id', $userId)
-                ->where('showtimes.movie_id', $id)
-                ->where('bookings.payment_status', 'paid')
-                ->where(function($query) {
-                    $query->where('showtimes.show_date', '<', now()->toDateString())
-                        ->orWhere(function($q) {
-                            $q->where('showtimes.show_date', '=', now()->toDateString())
-                              ->where('showtimes.show_time', '<', now()->toTimeString());
-                        });
-                })
-                ->exists();
+                // Check if user has already reviewed
+                $hasReviewed = $movie->reviews->where('user_id', $userId)->isNotEmpty();
 
-            // Check if user has already reviewed
-            $hasReviewed = $movie->reviews->where('user_id', $userId)->isNotEmpty();
-
-            $canReview = $hasWatched && !$hasReviewed;
+                $canReview = $hasWatched && !$hasReviewed;
+            }
         }
 
         return view('movie_details', compact('movie', 'canReview'));

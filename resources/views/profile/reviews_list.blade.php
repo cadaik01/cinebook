@@ -51,15 +51,23 @@
                     </div>
                     <div class="col-md-4 d-flex align-items-center justify-content-end">
                         <div class="btn-group-vertical" role="group">
-                            <a href="{{ route('reviews.edit', $review->id) }}" class="btn btn-sm btn-outline-primary mb-2">
-                                <i class="fas fa-edit"></i> Edit Review
+                            <a href="{{ route('reviews.edit', $review->id) }}" class="btn btn-sm btn-primary mb-2 w-100">
+                                <i class="fas fa-edit"></i> Edit
                             </a>
                             <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this review? This action cannot be undone.');">
                                 @csrf
-                                <button type="submit" class="btn btn-sm btn-outline-danger w-100">
-                                    <i class="fas fa-trash"></i> Delete Review
+                                <button type="submit" class="btn btn-sm btn-danger w-100">
+                                    <i class="fas fa-trash"></i> Delete
                                 </button>
                             </form>
+                            @if(Auth::check() && Auth::user()->role === 'admin')
+                            <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this review as admin? This action cannot be undone.');">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-danger w-100 mt-2">
+                                    <i class="fas fa-user-shield"></i> Admin Delete
+                                </button>
+                            </form>
+                            @endif
                         </div>
                     </div>
                 </div>
