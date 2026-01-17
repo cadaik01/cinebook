@@ -3,7 +3,7 @@
 @section('title', 'TCA Cine - Home')
 
 @push('styles')
-    @vite(['resources/css/homepage.css'])
+@vite(['resources/css/homepage.css'])
 @endpush
 
 @section('content')
@@ -11,6 +11,12 @@
 <div class="hero-section">
     <h1>Welcome to TCA Cine</h1>
     <p>Experience the Wonderful World of Cinema</p>
+    <form action="{{ route('search') }}" method="get" class="search-form">
+        <input type="text" name="q" class="search-input" placeholder="Search by title, genre, director, language..."
+            required>
+        <button type="submit" class="search-btn">Search</button>
+    </form>
+    <a href="{{ route('now_showing') }}" class="btn-cta btn-cta-primary btn-lg">Book Tickets Now</a>
 </div>
 
 <!-- Featured Movies -->
@@ -18,41 +24,59 @@
     <h2 class="section-title">🎬 Featured Movies</h2>
 
     @if(isset($movies) && count($movies) > 0)
-    <div class="movies-grid">
-        @foreach($movies as $movie)
-        <div class="movie-card">
-            @if(isset($movie->poster_url) && $movie->poster_url)
-            <img src="{{ strpos($movie->poster_url, 'http') === 0 ? $movie->poster_url : asset('images/' . $movie->poster_url) }}"
-                alt="{{ $movie->title }}" class="movie-poster">
-            @else
-            <div class="movie-poster"
-                style="display: flex; align-items: center; justify-content: center; background-color: #e9ecef; color: #999;">
-                <span>No Image</span>
-            </div>
-            @endif
+    <div class="movies-container">
+        <div class="movies-grid">
+            @foreach($movies as $movie)
+            <div class="movie-card">
+                <div class="movie-poster-wrapper">
+                    @if(isset($movie->poster_url) && $movie->poster_url)
+                    <img src="{{ strpos($movie->poster_url, 'http') === 0 ? $movie->poster_url : asset('images/' . $movie->poster_url) }}"
+                        alt="{{ $movie->title }}" class="movie-poster">
+                    @else
+                    <div class="movie-poster-placeholder">
+                        <span>No Poster</span>
+                    </div>
+                    @endif
 
-            <div class="movie-info">
-                <h3 class="movie-title">{{ $movie->title }}</h3>
-                
-                <!-- Display Genres -->
-                @if(isset($movie->genres) && count($movie->genres) > 0)
-                    <p class="movie-genre">
-                        @foreach($movie->genres as $index => $genre)
-                            <span class="genre-tag">{{ $genre }}</span>{{ $index < count($movie->genres) - 1 ? ', ' : '' }}
-                        @endforeach
+                    <div
+                        class="movie-badge {{ ($movie->status ?? '') === 'coming_soon' ? 'coming-soon' : 'now-showing' }}">
+                        {{ ($movie->status ?? '') === 'coming_soon' ? 'Coming Soon' : 'Now Showing' }}
+                    </div>
+                </div>
+
+                <div class="movie-info">
+                    <h3 class="movie-title">{{ $movie->title }}</h3>
+
+                    <div class="movie-meta">
+                        <span class="genre">
+                            @if(isset($movie->genres) && count($movie->genres) > 0)
+                            {{ implode(', ', $movie->genres) }}
+                            @else
+                            Unknown
+                            @endif
+                        </span>
+                        <span class="duration">⏱️ {{ $movie->duration ?? '120' }} min</span>
+                    </div>
+
+                    @if(isset($movie->rating_avg) && $movie->rating_avg > 0)
+                    <div class="movie-rating">
+                        <span class="rating-value">⭐ {{ $movie->rating_avg }}/5</span>
+                    </div>
+                    @endif
+
+                    <p class="movie-description">
+                        {{ Str::limit($movie->description ?? 'Experience this amazing film in theaters now.', 110) }}
                     </p>
-                @else
-                    <p class="movie-genre">Unknown</p>
-                @endif
-                
-                <p class="movie-duration">⏱️ {{ $movie->duration ?? '120' }} min</p>
 
-                <a href="/movies/{{ $movie->id }}" class="btn-detail">
-                    View Details
-                </a>
+                    <div class="movie-actions">
+                        <a href="/movies/{{ $movie->id }}" class="btn btn-detail">View Details</a>
+                        <a href="{{ route('movies.showtimes', ['id' => $movie->id]) }}" class="btn btn-secondary">Book
+                            Now</a>
+                    </div>
+                </div>
             </div>
+            @endforeach
         </div>
-        @endforeach
     </div>
 
     <div class="btn-view-all-container">
@@ -65,6 +89,65 @@
         <p>No movies available at the moment. Please check back later!</p>
     </div>
     @endif
+</div>
+
+<!-- Cinema Corner Section -->
+<div class="cinema-corner-section">
+    <div class="cinema-corner-header">
+        <span class="corner-title-bar"></span>
+        <span class="corner-title">CINEMA CORNER</span>
+        <span class="corner-tab active">Movie Reviews</span>
+        <span class="corner-tab">Cinema Blog</span>
+    </div>
+    <div class="cinema-corner-content">
+        <div class="corner-main-article">
+            <img src="https://i.postimg.cc/jdBWvdWn/avengers-endgame-final-battle-all-heroes.avif"
+                alt="Avengers: Endgame" class="corner-main-img">
+            <div class="corner-main-title">[Review] Avengers: Endgame – The Epic Conclusion to the Infinity Saga</div>
+            <div class="corner-main-meta">
+                <span class="corner-like-btn">👍 Like</span>
+                <span class="corner-view"><i class="fa fa-eye"></i> 1205</span>
+            </div>
+        </div>
+        <div class="corner-side-articles">
+            <div class="corner-side-article">
+                <img src="https://i.postimg.cc/cJP0GrSm/johnwick.jpg" alt="John Wick: Chapter 4"
+                    class="corner-side-img">
+                <div class="corner-side-info">
+                    <div class="corner-side-title">[Review] John Wick: Chapter 4 – Relentless Action and Deeper
+                        Mythology</div>
+                    <div class="corner-side-meta">
+                        <span class="corner-like-btn">👍 Like</span>
+                        <span class="corner-view"><i class="fa fa-eye"></i> 980</span>
+                    </div>
+                </div>
+            </div>
+            <div class="corner-side-article">
+                <img src="https://i.postimg.cc/rwbvK3P8/the-kim-family-woo-sik-choi-kang-ho-song-hye-jin-jang-so-dam-park-in-parasite-courtesy-of-neon.avif"
+                    alt="Parasite" class="corner-side-img">
+                <div class="corner-side-info">
+                    <div class="corner-side-title">[Review] Parasite – A Masterpiece of Social Satire and Suspense</div>
+                    <div class="corner-side-meta">
+                        <span class="corner-like-btn">👍 Like</span>
+                        <span class="corner-view"><i class="fa fa-eye"></i> 1502</span>
+                    </div>
+                </div>
+            </div>
+            <div class="corner-side-article">
+                <img src="https://i.postimg.cc/Pr764Zzx/02ri78xl7t.jpg" alt="Avatar" class="corner-side-img">
+                <div class="corner-side-info">
+                    <div class="corner-side-title">[Review] Avatar – Visual Brilliance and Environmental Message</div>
+                    <div class="corner-side-meta">
+                        <span class="corner-like-btn">👍 Like</span>
+                        <span class="corner-view"><i class="fa fa-eye"></i> 2103</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="corner-more-btn-container">
+        <a href="#" class="corner-more-btn">See more <span>&rarr;</span></a>
+    </div>
 </div>
 
 <!-- Call to Action Section -->

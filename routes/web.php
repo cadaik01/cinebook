@@ -1,5 +1,11 @@
 <?php
 
+
+use App\Http\Controllers\SearchController;
+
+// Search Route
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\LoginController;
@@ -29,12 +35,12 @@ Route::get('/now-showing', [MovieController::class, 'nowShowing'])->name('now_sh
 // Upcoming Movies Route
 Route::get('/upcoming-movies', [MovieController::class, 'upcomingMovies'])->name('upcoming_movies');
 
-//**Login Controller */
 // Login Routes
 Route::get('/login', [LoginController::class, 'showLoginForm']);
 Route::post('/login',[LoginController::class, 'login'])->name('login');
 // Logout Route
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+ 
 // Register Routes
 Route::get('register',[LoginController::class, 'showRegisterForm']);
 Route::post('register',[LoginController::class, 'register'])->name('register');
@@ -80,6 +86,10 @@ Route::middleware('auth')->group(function () {
 });
 
     //Review Routes
+// Public reviews page
+Route::get('/reviews', [\App\Http\Controllers\ReviewController::class, 'index'])->name('reviews.index');
+
+// Protected review routes (require authentication)
 Route::middleware('auth')->group(function () {
     Route::post('/movies/{movie_id}/reviews', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
     Route::get('/reviews/{id}/edit', [\App\Http\Controllers\ReviewController::class, 'edit'])->name('reviews.edit');
@@ -119,4 +129,8 @@ Route::prefix('admin')->group(function () {
     Route::get('qr-checkin', [QRCheckInController::class, 'index'])->name('admin.qr.index');
     Route::post('qr-checkin/check', [QRCheckInController::class, 'checkIn'])->name('admin.qr.checkin');
     Route::post('qr-checkin/preview', [QRCheckInController::class, 'preview'])->name('admin.qr.preview');
+
+    // Reviews Management
+    Route::get('reviews', [\App\Http\Controllers\Admin\AdminReviewController::class, 'index'])->name('admin.reviews.index');
+    Route::delete('reviews/{id}', [\App\Http\Controllers\Admin\AdminReviewController::class, 'destroy'])->name('admin.reviews.destroy');
 });

@@ -1,34 +1,47 @@
 @extends('layouts.main')
 
-@section('title', 'TCA Cine - Homepage')
+@section('title', 'TCA Cine - Login')
 
 @section('content')
+<div class="auth-container">
+    <div class="auth-wrapper">
+        <div class="auth-form">
+            @if(session('error'))
+            <div class="error-alert">
+                {{ session('error') }}
+            </div>
+            @endif
 
-<h1>Login</h1>
-<form method="POST" action="/login">
-    @csrf
-    <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-    </div>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-    </div>
-    <button type="submit">Login</button>
-    <a href="{{ route('register') }}" class="btn btn-link">Register</a>
-</form>
+            @if(session('success'))
+            <div class="success-alert">
+                {{ session('success') }}
+            </div>
+            @endif
 
-@if(session('error'))
-    <div class="error-message">
-        {{ session('error') }}
-    </div>
-@endif
+            <h1>Login</h1>
+            <p class="subtitle">Welcome back! Please login to your account</p>
 
-@if (session('success'))
-    <div class="success-message">
-        {{ session('success') }}
-    </div>
-@endif
+            <form method="POST" action="/login">
+                @csrf
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email">
+                </div>
 
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+
+            <div class="auth-link">
+                Don't have an account? <a href="{{ route('register') }}">Register here</a>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

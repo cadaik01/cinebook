@@ -2,7 +2,7 @@
 
 /* Page Header */
 .page-header {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, var(--color-dark-bg) 0%, var(--color-dark-bg-secondary) 100%);
     padding: 60px 20px;
     text-align: center;
     margin-bottom: 40px;
@@ -24,7 +24,7 @@
 
 /* Movies Container */
 .movies-container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px 60px;
 }
@@ -39,11 +39,12 @@
 
 /* Movie Card */
 .movie-card {
-    background: #1e1e1e;
+    background: var(--color-overlay-dark);
     border-radius: 12px;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
+
 }
 
 .movie-card:hover {
@@ -57,7 +58,7 @@
     width: 100%;
     height: 400px;
     overflow: hidden;
-    background: #2a2a2a;
+    background: var(--color-card-bg);
 }
 
 .movie-poster {
@@ -77,7 +78,7 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    background: linear-gradient(135deg, var(--color-card-bg) 0%, var(--color-card-dark) 100%);
     color: #666;
     font-size: 1.2rem;
 }
@@ -96,7 +97,7 @@
 }
 
 .movie-badge.now-showing {
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    background: linear-gradient(135deg, var(--color-badge-now-showing) 0%, var(--color-badge-now-dark) 100%);
     color: #fff;
     box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
 }
@@ -133,7 +134,7 @@
     background: rgba(255, 255, 255, 0.1);
     padding: 4px 10px;
     border-radius: 12px;
-    color: #ffd700;
+    color: var(--color-accent-gold);
 }
 
 .movie-rating {
@@ -141,7 +142,7 @@
 }
 
 .rating-value {
-    color: #ffd700;
+    color: var(--color-accent-gold);
     font-size: 0.95rem;
     font-weight: 600;
 }
@@ -173,12 +174,12 @@
 }
 
 .movie-btn-primary {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    background: linear-gradient(135deg, var(--color-btn-now-showing) 0%, var(--color-btn-now-showing-dark) 100%);
     color: #fff;
 }
 
 .movie-btn-primary:hover {
-    background: linear-gradient(135deg, #2980b9 0%, #2471a3 100%);
+    background: linear-gradient(135deg, var(--color-btn-now-showing-dark) 0%, #2471a3 100%);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
 }

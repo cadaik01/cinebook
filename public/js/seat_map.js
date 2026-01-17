@@ -130,17 +130,15 @@ document.addEventListener('DOMContentLoaded', function() {
             seatList.textContent = 'None';
             selectedSeatIds.value = '';
             bookBtn.disabled = true;
-            bookBtn.style.backgroundColor = '#6c757d';
         } else {
             const seatCodes = selectedSeats.map(seat => seat.code).join(', ');
             seatList.textContent = seatCodes;
-            
+
             // Send only seat IDs to server
             const seatIds = selectedSeats.map(seat => seat.id);
             selectedSeatIds.value = JSON.stringify(seatIds);
-            
+
             bookBtn.disabled = false;
-            bookBtn.style.backgroundColor = '#28a745';
         }
     }
 });

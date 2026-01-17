@@ -42,4 +42,15 @@ class Movie extends Model
     {
         return $this->hasMany(Review::class);
     }
+
+    /**
+     * Update the average rating for this movie
+     */
+    public function updateAverageRating()
+    {
+        $avgRating = $this->reviews()->avg('rating');
+        $this->update([
+            'rating_avg' => $avgRating ? round($avgRating, 2) : 0
+        ]);
+    }
 }

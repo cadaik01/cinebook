@@ -29,4 +29,22 @@ class Review extends Model
     {
         return $this->belongsTo(Movie::class);
     }
+
+    // ==================== SCOPES ====================
+
+    /**
+     * Scope to get reviews sorted by latest
+     */
+    public function scopeLatest($query)
+    {
+        return $query->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Scope to get reviews sorted by highest rating
+     */
+    public function scopeHighestRated($query)
+    {
+        return $query->orderBy('rating', 'desc')->orderBy('created_at', 'desc');
+    }
 }
