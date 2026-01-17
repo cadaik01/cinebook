@@ -503,12 +503,12 @@
 
 /* Hover effect cho sao */
 .star-rating-input label:hover,
-.star-rating-input label:hover ~ label {
+.star-rating-input label:hover~label {
     color: #ffc107;
 }
 
 /* Sao được chọn */
-.star-rating-input input[type="radio"]:checked ~ label {
+.star-rating-input input[type="radio"]:checked~label {
     color: #ffc107;
 }
 
@@ -518,6 +518,9 @@
     border-radius: 8px;
     padding: 12px;
     font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
 }
 
 .form-control:focus {

@@ -35,18 +35,18 @@
         <div class="movie-info">
             <div class="info-section">
                 <h3>Movie Information</h3>
-                
+
                 <!-- Display Genres -->
-                <p><strong>Genres:</strong> 
+                <p><strong>Genres:</strong>
                     @if(isset($movie->genres) && count($movie->genres) > 0)
-                        @foreach($movie->genres as $index => $genre)
-                            <span class="genre-badge">{{ $genre }}</span>{{ $index < count($movie->genres) - 1 ? ' ' : '' }}
-                        @endforeach
+                    @foreach($movie->genres as $index => $genre)
+                    <span class="genre-badge">{{ $genre }}</span>{{ $index < count($movie->genres) - 1 ? ' ' : '' }}
+                    @endforeach
                     @else
-                        <span class="genre-badge">Unknown</span>
+                    <span class="genre-badge">Unknown</span>
                     @endif
                 </p>
-                
+
                 <p><strong>Language:</strong> {{ $movie->language }}</p>
                 <p><strong>Duration:</strong> {{ $movie->duration }} minutes</p>
                 <p><strong>Director:</strong> {{ $movie->director }}</p>
@@ -72,195 +72,192 @@
                 <p>{{ $movie->description }}</p>
             </div>
             <div class="info-section">
-    <h3>Reviews ({{ $movie->reviews->count() }})</h3>
-    
-    @auth
-        @if($canReview)
-            <!-- Form to add a new review -->
-            <div class="review-form-container mb-4">
-                <h5>Write a Review</h5>
-                <form action="{{ route('reviews.store', $movie->id) }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="movie_id" value="{{ $movie->id }}">
+                <h3>Reviews ({{ $movie->reviews->count() }})</h3>
 
-                    <!-- Star Rating Section -->
-                    <div class="mb-3">
-                        <label class="form-label">Your Rating</label>
-                        <div class="star-rating-input">
-                            <input type="radio" name="rating" value="5" id="star5" required>
-                            <label for="star5" title="5 stars">★</label>
+                @auth
+                @if($canReview)
+                <!-- Form to add a new review -->
+                <div class="review-form-container mb-4">
+                    <h5>Write a Review</h5>
+                    <form action="{{ route('reviews.store', $movie->id) }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="movie_id" value="{{ $movie->id }}">
 
-                            <input type="radio" name="rating" value="4" id="star4">
-                            <label for="star4" title="4 stars">★</label>
+                        <!-- Star Rating Section -->
+                        <div class="mb-3">
+                            <label class="form-label">Your Rating</label>
+                            <div class="star-rating-input">
+                                <input type="radio" name="rating" value="5" id="star5" required>
+                                <label for="star5" title="5 stars">★</label>
 
-                            <input type="radio" name="rating" value="3" id="star3">
-                            <label for="star3" title="3 stars">★</label>
+                                <input type="radio" name="rating" value="4" id="star4">
+                                <label for="star4" title="4 stars">★</label>
 
-                            <input type="radio" name="rating" value="2" id="star2">
-                            <label for="star2" title="2 stars">★</label>
+                                <input type="radio" name="rating" value="3" id="star3">
+                                <label for="star3" title="3 stars">★</label>
 
-                            <input type="radio" name="rating" value="1" id="star1">
-                            <label for="star1" title="1 star">★</label>
+                                <input type="radio" name="rating" value="2" id="star2">
+                                <label for="star2" title="2 stars">★</label>
+
+                                <input type="radio" name="rating" value="1" id="star1">
+                                <label for="star1" title="1 star">★</label>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Comment Section -->
-                    <div class="mb-3">
-                        <label for="comment" class="form-label">Your Comment</label>
-                        <textarea
-                            name="comment"
-                            id="comment"
-                            class="form-control"
-                            rows="4"
-                            placeholder="Share your thoughts about this movie..."
-                            maxlength="1000">{{ old('comment') }}</textarea>
-                        <small class="text-muted">Maximum 1000 characters</small>
-                    </div>
+                        <!-- Comment Section -->
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">Your Comment</label>
+                            <textarea name="comment" id="comment" class="form-control" rows="4"
+                                placeholder="Share your thoughts about this movie..."
+                                maxlength="1000">{{ old('comment') }}</textarea>
+                            <small class="text-muted">Maximum 1000 characters</small>
+                        </div>
 
-                    <button type="submit" class="detail-btn detail-btn-primary">Submit Review</button>
-                </form>
-            </div>
-        @else
-            @php
+                        <button type="submit" class="detail-btn detail-btn-primary">Submit Review</button>
+                    </form>
+                </div>
+                @else
+                @php
                 $userReview = $movie->reviews->where('user_id', Auth::id())->first();
-            @endphp
-            @if($userReview)
+                @endphp
+                @if($userReview)
                 <div class="alert alert-info">
                     You have already reviewed this movie.
                 </div>
-            @else
+                @else
                 <div class="alert alert-warning">
                     You can only review movies you have watched. Book a ticket and watch the movie first!
                 </div>
-            @endif
-        @endif
-    @else
-        <!-- User not logged in -->
-        <div class="alert alert-warning">
-            Please <a href="{{ route('login') }}" class="alert-link">login</a> to write a review.
-        </div>
-    @endauth
+                @endif
+                @endif
+                @else
+                <!-- User not logged in -->
+                <div class="alert alert-warning">
+                    Please <a href="{{ route('login') }}" class="alert-link">login</a> to write a review.
+                </div>
+                @endauth
 
-    <!-- List of all reviews -->
-    <div class="reviews-list mt-4">
-        <h5 class="mb-3">All Reviews</h5>
-        
-        @forelse($movie->reviews->sortByDesc('created_at') as $review)
-            <div class="review-item">
-                <!-- User and time information -->
-                <div class="review-header">
-                    <div class="review-user-info">
-                        <strong class="review-username">{{ $review->user->name }}</strong>
-                        
-                        <!-- Display star rating -->
-                        <div class="review-stars">
-                            @for($i = 1; $i <= 5; $i++)
-                                @if($i <= $review->rating)
-                                    <span class="star-filled">★</span>
-                                @else
-                                    <span class="star-empty">★</span>
-                                @endif
-                            @endfor
-                            <span class="rating-number">({{ $review->rating }}/5)</span>
+                <!-- List of all reviews -->
+                <div class="reviews-list mt-4">
+                    <h5 class="mb-3">All Reviews</h5>
+                    @forelse($movie->reviews->sortByDesc('created_at') as $review)
+                    <div class="review-item">
+                        <!-- User and time information -->
+                        <div class="review-header">
+                            <div class="review-user-info">
+                                <strong class="review-username">{{ $review->user->name }}</strong>
+                                <!-- Display star rating -->
+                                <div class="review-stars">
+                                    @for($i = 1; $i <= 5; $i++) @if($i <=$review->rating)
+                                        <span class="star-filled">★</span>
+                                        @else
+                                        <span class="star-empty">★</span>
+                                        @endif
+                                        @endfor
+                                        <span class="rating-number">({{ $review->rating }}/5)</span>
+                                </div>
+                            </div>
+                            <small class="review-time">{{ $review->created_at->diffForHumans() }}</small>
                         </div>
-                    </div>
-                    
-                    <small class="review-time">{{ $review->created_at->diffForHumans() }}</small>
-                </div>
-                
-                <!-- Review Content -->
-                <div class="review-content">
-                    <p>{{ $review->comment }}</p>
-                </div>
-                
-                <!-- Edit/Delete Buttons (only visible if it's the user's own review) -->
-                @auth
-                    @if($review->user_id === Auth::id())
+                        <!-- Review Content -->
+                        <div class="review-content">
+                            <p>{{ $review->comment }}</p>
+                        </div>
+                        <!-- Edit/Delete Buttons (user or admin) -->
+                        @auth
+                        @if($review->user_id === Auth::id() || (Auth::user() && Auth::user()->role === 'admin'))
                         <div class="review-actions">
-                            <a href="{{ route('reviews.edit', $review->id) }}" class="btn-edit">
+                            <a href="{{ route('reviews.edit', $review->id) }}"
+                                style="color: #1976d2; font-weight: 500; margin-right: 12px; text-decoration: underline;">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
-                            
-                            <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" style="display: inline;">
+                            <form action="{{ route('reviews.destroy', $review->id) }}" method="POST"
+                                style="display: inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this review?')">
+                                <button type="submit"
+                                    style="color: #c0392b; background: none; border: none; padding: 0; font-weight: 500; text-decoration: underline; cursor: pointer;"
+                                    onclick="return confirm('Are you sure you want to delete this review?')">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
                             </form>
                         </div>
-                    @endif
-                @endauth
+                        @endif
+                        @endauth
+                    </div>
+                    @empty
+                    <div class="no-reviews">
+                        <p>No reviews yet. Be the first to review this movie!</p>
+                    </div>
+                    @endforelse
+                </div>
             </div>
-        @empty
-            <div class="no-reviews">
-                <p>No reviews yet. Be the first to review this movie!</p>
-            </div>
-        @endforelse
-    </div>
-</div>
 
-    <div class="back-button">
-        @if($movie->status == 'now_showing')
-        <a href="{{ route('now_showing') }}" class="detail-btn detail-btn-secondary">Back to Now Showing</a>
-        @else
-        <a href="{{ route('upcoming_movies') }}" class="detail-btn detail-btn-secondary">Back to Upcoming</a>
-        @endif
-    </div>
-
-    <!-- Trailer Modal -->
-    @if($movie->trailer_url)
-    <div id="trailerModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeTrailerModal()">&times;</button>
-            <div class="modal-body">
-                @php
-                // Extract YouTube video ID from URL
-                preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/', $movie->trailer_url, $matches);
-                $videoId = $matches[1] ?? '';
-                @endphp
-                @if($videoId)
-                <iframe width="100%" height="600" src="https://www.youtube.com/embed/{{ $videoId }}"
-                    title="{{ $movie->title }} Trailer" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen>
-                </iframe>
+            <div class="back-button">
+                @if($movie->status == 'now_showing')
+                <a href="{{ route('now_showing') }}" class="detail-btn detail-btn-secondary">Back to Now
+                    Showing</a>
                 @else
-                <p><a href="{{ $movie->trailer_url }}" target="_blank">Watch Trailer</a></p>
+                <a href="{{ route('upcoming_movies') }}" class="detail-btn detail-btn-secondary">Back to
+                    Upcoming</a>
                 @endif
             </div>
+
+            <!-- Trailer Modal -->
+            @if($movie->trailer_url)
+            <div id="trailerModal" class="modal">
+                <div class="modal-content">
+                    <button class="modal-close" onclick="closeTrailerModal()">&times;</button>
+                    <div class="modal-body">
+                        @php
+                        // Extract YouTube video ID from URL
+                        preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/',
+                        $movie->trailer_url,
+                        $matches);
+                        $videoId = $matches[1] ?? '';
+                        @endphp
+                        @if($videoId)
+                        <iframe width="100%" height="600" src="https://www.youtube.com/embed/{{ $videoId }}"
+                            title="{{ $movie->title }} Trailer" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
+                        </iframe>
+                        @else
+                        <p><a href="{{ $movie->trailer_url }}" target="_blank">Watch Trailer</a></p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            @endif
         </div>
-    </div>
-    @endif
-</div>
 
-<script>
-function openTrailerModal() {
-    document.getElementById('trailerModal').style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-}
-
-function closeTrailerModal() {
-    document.getElementById('trailerModal').style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
-// Close modal when clicking outside of it
-window.onclick = function(event) {
-    const modal = document.getElementById('trailerModal');
-    if (modal && event.target == modal) {
-        closeTrailerModal();
-    }
-}
-
-// Close modal when pressing Escape
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        const modal = document.getElementById('trailerModal');
-        if (modal && modal.style.display === 'flex') {
-            closeTrailerModal();
+        <script>
+        function openTrailerModal() {
+            document.getElementById('trailerModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
-    }
-});
-</script>
-@endsection
+
+        function closeTrailerModal() {
+            document.getElementById('trailerModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('trailerModal');
+            if (modal && event.target == modal) {
+                closeTrailerModal();
+            }
+        }
+
+        // Close modal when pressing Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('trailerModal');
+                if (modal && modal.style.display === 'flex') {
+                    closeTrailerModal();
+                }
+            }
+        });
+        </script>
+        @endsection
