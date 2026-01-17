@@ -60,6 +60,14 @@
                                     <i class="fas fa-trash"></i> Delete Review
                                 </button>
                             </form>
+                            @if(Auth::check() && Auth::user()->role === 'admin')
+                            <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this review as admin? This action cannot be undone.');">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-danger w-100 mt-2">
+                                    <i class="fas fa-user-shield"></i> Admin Delete
+                                </button>
+                            </form>
+                            @endif
                         </div>
                     </div>
                 </div>

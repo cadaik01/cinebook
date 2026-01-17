@@ -10,6 +10,10 @@ INSERT INTO seat_types (id, name, base_price, description) VALUES
 (2, 'vip', 10000, 'VIP seat'),
 (3, 'couple', 20000, 'Couple seat');
 
+UPDATE seat_types SET base_price = 80000 WHERE id = 1;
+UPDATE seat_types SET base_price = 120000 WHERE id = 2;
+UPDATE seat_types SET base_price = 120000 WHERE id = 3;
+
 -- rooms
 INSERT INTO rooms (id, name, total_rows, seats_per_row, screen_type_id) VALUES
 (1, 'Room 1', 8, 18, 1), -- 2D
@@ -88,6 +92,35 @@ INSERT INTO movies (id, title, language, director, cast, duration, release_date,
 (32, 'The Nun II', 'English', 'Michael Chaves', 'Taissa Farmiga, Jonas Bloquet, Storm Reid, Anna Popplewell, Bonnie Aarons', 110, '2023-09-08', 'T18', 'ended', 'https://i.postimg.cc/MTnNxcXz/The_Nun_II.jpg', 'https://www.youtube.com/watch?v=QF-oyCwaArU', 'A new chapter in the Conjuring Universe follows Sister Irene as she confronts a demonic entity terrorizing Europe. Dark, atmospheric, and suspenseful, the film expands the mythology of Valak with chilling consequences.', 4.0);
 
 -- seats
+-- reviews for ended movies
+INSERT INTO reviews (user_id, movie_id, rating, comment, created_at, updated_at) VALUES
+(2, 26, 5, 'A timeless masterpiece. The emotions are overwhelming.', NOW(), NOW()),
+(3, 26, 4, 'Great story and acting. Truly iconic.', NOW(), NOW()),
+(7, 26, 5, 'I cried watching this film.', NOW(), NOW()),
+
+(2, 27, 5, 'Forrest Gump is truly inspirational.', NOW(), NOW()),
+(8, 27, 4, 'Very meaningful and touching.', NOW(), NOW()),
+(9, 27, 5, 'Tom Hanks delivers a top performance.', NOW(), NOW()),
+
+(3, 28, 5, 'One of the best movies ever made.', NOW(), NOW()),
+(7, 28, 5, 'A story of hope and freedom.', NOW(), NOW()),
+(8, 28, 4, 'Excellent acting, deep content.', NOW(), NOW()),
+
+(2, 29, 4, 'Impressive psychological horror.', NOW(), NOW()),
+(3, 29, 5, 'Unexpected and gripping plot.', NOW(), NOW()),
+(9, 29, 4, 'The atmosphere is haunting.', NOW(), NOW()),
+
+(7, 30, 5, 'A beautiful and sad love story.', NOW(), NOW()),
+(8, 30, 4, 'Stunning Italian scenery.', NOW(), NOW()),
+(9, 30, 5, 'Very touching and delicate.', NOW(), NOW()),
+
+(2, 31, 4, 'Amazing music and visuals.', NOW(), NOW()),
+(3, 31, 5, 'A moving story about youth.', NOW(), NOW()),
+(7, 31, 4, 'Outstanding animation.', NOW(), NOW()),
+
+(8, 32, 3, 'Decent horror, lots of jump scares.', NOW(), NOW()),
+(9, 32, 4, 'Dark atmosphere, good acting.', NOW(), NOW()),
+(2, 32, 3, 'Storyline is not very original.', NOW(), NOW());
 -- first 4 rooms, rows A-H, seats 1-18
 INSERT INTO seats (room_id, seat_row, seat_number, seat_code, seat_type_id)
 SELECT
@@ -219,3 +252,15 @@ VALUES
 (15, 1, '2025-01-10', '10:30:00'),
 (15, 2, '2025-01-11', '17:30:00'),
 (15, 1, '2025-01-12', '16:30:00');
+
+INSERT INTO bookings (user_id, showtime_id, status, payment_status, total_price, created_at, updated_at) VALUES
+(2, 1, 'confirmed', 'paid', 240000, NOW(), NOW()),
+(3, 2, 'pending', 'pending', 160000, NOW(), NOW()),
+(7, 3, 'cancelled', 'pending', 120000, NOW(), NOW()),
+(8, 4, 'confirmed', 'paid', 320000, NOW(), NOW()),
+(9, 5, 'confirmed', 'paid', 160000, NOW(), NOW()),
+(2, 6, 'pending', 'pending', 240000, NOW(), NOW()),
+(3, 7, 'confirmed', 'paid', 360000, NOW(), NOW()),
+(7, 8, 'cancelled', 'pending', 120000, NOW(), NOW()),
+(8, 9, 'confirmed', 'paid', 200000, NOW(), NOW()),
+(9, 10, 'pending', 'pending', 280000, NOW(), NOW());

@@ -45,22 +45,20 @@
     </div>
 </div>
     <!-- Payment form could go here -->
-    <form method="POST" action="{{ route('booking.process', ['showtime_id' => $showtime_id]) }}">
+    <form method="POST" action="{{ route('booking.process', ['showtime_id' => $showtime_id]) }}" style="display: flex; flex-direction: column; align-items: center;">
         @csrf
         <input type="hidden" name="showtime_id" value="{{ $showtime_id }}">
         <input type="hidden" name="seats" value="{{ json_encode(array_column($seatDetails, 'id')) }}">
         <input type="hidden" name="total_price" value="{{ $totalPrice }}">
-        
-        <h3>Payment method</h3>
-        <select name="payment_method" required>
+        <h3 style="text-align: center;">Payment method</h3>
+        <select name="payment_method" required style="width: 300px; margin-bottom: 16px; text-align: center;">
             <option value="">Select Payment Method</option>
             <option value="vnpay">VNPay</option>
             <option value="momo">Momo</option>
         </select>
-
-        <div>
-            <button type="submit">Confirm and Pay</button>
-            <a href="{{ route('booking.seatmap', ['showtime_id' => $showtime_id]) }}">Back to Seat Selection</a>
+        <div style="display: flex; gap: 16px; justify-content: center;">
+            <button type="submit" style="padding: 10px 24px; background: #4b6e57; color: white; border: none; border-radius: 6px; font-size: 16px;">Confirm and Pay</button>
+            <a href="{{ route('booking.seatmap', ['showtime_id' => $showtime_id]) }}" style="padding: 10px 24px; background: #e0e0e0; color: #333; border-radius: 6px; text-decoration: none; font-size: 16px;">Back to Seat Selection</a>
         </div>
     </form>
     <script src="{{ asset('js/booking-countdown.js') }}"></script>

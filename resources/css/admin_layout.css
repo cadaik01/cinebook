@@ -1,14 +1,5 @@
-/* Palette & base (from ADMIN_PANEL_CSS.md) */
-:root {
-    --deep-teal: #496F5B;
-    --prussian-blue: #031D44;
-    --tan: #DAB785;
-    --deep-space-blue: #04395E;
-    --burnt-peach: #D5896F;
-    --white: #ffffff;
-    --light-gray: #f8f9fa;
-    --dark-gray: #6c757d;
-}
+@import './root.css';
+/* Palette & base variables are now only in root.css */
 
 /* ===== RESET & GENERAL ===== */
 * {
@@ -222,8 +213,8 @@ body {
 }
 
 .btn-primary-cinebook:hover {
-    background-color: #3a5847;
-    border-color: #3a5847;
+    background-color: var(--deep-teal);
+    border-color: var(--deep-teal);
 }
 
 .btn-secondary-cinebook {
@@ -233,8 +224,8 @@ body {
 }
 
 .btn-secondary-cinebook:hover {
-    background-color: #c07760;
-    border-color: #c07760;
+    background-color: var(--burnt-peach);
+    border-color: var(--burnt-peach);
 }
 
 .btn-outline-cinebook {
@@ -442,5 +433,5 @@ body {
 }
 
 .admin-layout-sidebar::-webkit-scrollbar-thumb:hover {
-    background: #3a5847;
+    background: var(--deep-teal);
 }

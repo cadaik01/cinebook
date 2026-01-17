@@ -25,42 +25,54 @@
     @else
     <div class="reviews-grid">
         @foreach($reviews as $review)
-        <div class="review-card">
-            <div class="review-card-header">
-                <div class="movie-info">
-                    <h3 class="movie-title">
-                        <i class="fas fa-film"></i> {{ $review->movie->title ?? 'N/A' }}
-                    </h3>
-                    <div class="rating-display">
-                        @for ($i = 1; $i <= 5; $i++)
-                            @if ($i <= $review->rating)
+        <a href="/movies/{{ $review->movie_id }}" class="review-card-link"
+            style="text-decoration:none;color:inherit;display:block;width:100%">
+            <div class="review-card">
+                <div class="review-card-header">
+                    <div class="movie-info">
+                        <h3 class="movie-title">
+                            <i class="fas fa-film"></i> {{ $review->movie->title ?? 'N/A' }}
+                        </h3>
+                        <div class="rating-display">
+                            @for ($i = 1; $i <= 5; $i++) @if ($i <=$review->rating)
                                 <span class="star-filled">★</span>
-                            @else
+                                @else
                                 <span class="star-empty">★</span>
-                            @endif
-                        @endfor
-                        <span class="rating-badge">{{ $review->rating }}/5</span>
+                                @endif
+                                @endfor
+                                <span class="rating-badge">{{ $review->rating }}/5</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="review-card-body">
-                <p class="review-comment">
-                    <i class="fas fa-quote-left quote-icon"></i>
-                    {{ $review->comment ?? 'No comment provided' }}
-                    <i class="fas fa-quote-right quote-icon"></i>
-                </p>
-            </div>
-            <div class="review-card-footer">
-                <div class="reviewer-info">
-                    <i class="fas fa-user-circle"></i>
-                    <span class="reviewer-name">{{ $review->user->name ?? 'Anonymous' }}</span>
+                <div class="review-card-body">
+                    <p class="review-comment">
+                        <i class="fas fa-quote-left quote-icon"></i>
+                        {{ $review->comment ?? 'No comment provided' }}
+                        <i class="fas fa-quote-right quote-icon"></i>
+                    </p>
                 </div>
-                <div class="review-date">
-                    <i class="fas fa-clock"></i>
-                    <span>{{ $review->created_at->diffForHumans() }}</span>
+                <div class="review-card-footer">
+                    <div class="reviewer-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="reviewer-name">{{ $review->user->name ?? 'Anonymous' }}</span>
+                    </div>
+                    <div class="review-date">
+                        <i class="fas fa-clock"></i>
+                        <span>{{ $review->created_at->diffForHumans() }}</span>
+                    </div>
+                    @if(Auth::check() && Auth::user()->role === 'admin')
+                    <form action="{{ route('reviews.destroy', $review->id) }}" method="POST"
+                        onsubmit="return confirm('Are you sure you want to delete this review as admin? This action cannot be undone.');"
+                        style="margin-top:8px;">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="event.stopPropagation();">
+                            <i class="fas fa-user-shield"></i> Delete
+                        </button>
+                    </form>
+                    @endif
                 </div>
             </div>
-        </div>
+        </a>
         @endforeach
     </div>
 
