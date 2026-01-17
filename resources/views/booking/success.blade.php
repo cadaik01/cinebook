@@ -27,24 +27,48 @@
             <li><strong>Total:</strong> {{ $booking->total_price }}</li>
         </ul>
 </div>
-    <!-- Seat details -->
+    <!-- Seat details with QR Codes -->
     <div style="margin-top: 30px; text-align: left;">
-        <h2 style="font-size: 24px; margin-bottom: 15px;">Seat Details:</h2>
-        <div style="list-style-type: none; padding: 0; font-size: 18px;">
+        <h2 style="font-size: 24px; margin-bottom: 15px;">Seat Details & QR Codes:</h2>
+        <p style="color: #666; margin-bottom: 20px;">Mỗi ghế hoặc cặp ghế couple có 1 mã QR riêng. Vui lòng xuất trình tại rạp để check-in.</p>
+        
+        @php
+            $displayedQRs = []; // Track displayed QR codes to avoid duplicates
+        @endphp
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
             @foreach ($seats as $bookingSeat)
-                <p>Seat: {{ $bookingSeat->seat->seat_code }}</p>
-                <p>Type: {{ $bookingSeat->seat->seatType->name }}</p>
-                <p>Price: {{ number_format($bookingSeat->price) }} VND</p>
-                <hr style="border: 1px solid #ddd; margin: 10px 0;">
+                @if (!in_array($bookingSeat->qr_code, $displayedQRs))
+                    @php
+                        // Get all seats with same QR code (couple seats)
+                        $seatsWithSameQR = $seats->where('qr_code', $bookingSeat->qr_code);
+                        $displayedQRs[] = $bookingSeat->qr_code;
+                    @endphp
+                    
+                    <div style="border: 2px solid #ddd; padding: 15px; border-radius: 8px; text-align: center; background: #f9f9f9;">
+                        <!-- QR Code -->
+                        <div style="background: white; padding: 10px; margin-bottom: 10px;">
+                            {!! QrCode::size(150)->generate($bookingSeat->qr_code) !!}
+                        </div>
+                        
+                        <!-- Seat Info -->
+                        <div style="text-align: left; font-size: 14px;">
+                            <p><strong>Ghế:</strong> 
+                                {{ $seatsWithSameQR->pluck('seat.seat_code')->join(', ') }}
+                            </p>
+                            <p><strong>Loại:</strong> {{ $bookingSeat->seat->seatType->name }}</p>
+                            <p><strong>Giá:</strong> 
+                                {{ number_format($seatsWithSameQR->sum('price')) }} VND
+                            </p>
+                            <p style="color: #4CAF50; font-weight: bold;">
+                                <span style="display: inline-block; width: 10px; height: 10px; background: #4CAF50; border-radius: 50%; margin-right: 5px;"></span>
+                                {{ $bookingSeat->qr_status === 'active' ? 'Chưa check-in' : 'Đã check-in' }}
+                            </p>
+                        </div>
+                    </div>
+                @endif
             @endforeach
         </div>
-    </div>
-
-    <!-- QR Code section -->
-    <div>
-        <h3>QR Code:</h3>
-        <div>{!! QrCode::size(200)->generate($booking->qr_code) !!}</div>
-        <p>Show this QR code at the entrance for verification.</p>
     </div>
 
     <!-- Action buttons -->

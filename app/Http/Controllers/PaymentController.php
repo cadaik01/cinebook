@@ -86,9 +86,7 @@ class PaymentController extends Controller
                 }
             }
             
-            //c. Create booking record
-            $qrCode = 'BOOKING-' . time() . '-' . $user_id;
-            
+            //c. Create booking record (không cần qr_code nữa)
             $bookingId = DB::table('bookings')->insertGetId([
                 'user_id' => $user_id,
                 'showtime_id' => $showtime_id,
@@ -96,7 +94,6 @@ class PaymentController extends Controller
                 'status' => 'pending',
                 'payment_method' => $payment_method,
                 'payment_status' => 'pending',
-                'qr_code' => $qrCode,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -104,7 +101,9 @@ class PaymentController extends Controller
             //d. Get showtime with room and screen type for pricing
             $showtime = Showtime::with(['room.screenType'])->find($showtime_id);
             
-            //e. Insert into booking_seats table with pricing for each seat
+            //e. Insert into booking_seats table with pricing and QR code for each seat
+            $coupleSeatsProcessed = []; // Track couple seats to avoid duplicate QR
+            
             foreach ($selectedSeats as $seat_id) {
                 // Get seat with seat type using Eloquent
                 $seat = Seat::with('seatType')->find($seat_id);
@@ -112,10 +111,35 @@ class PaymentController extends Controller
                 if ($seat && $showtime && $showtime->room && $showtime->room->screenType) {
                     $seatPrice = ($seat->seatType->base_price ?? 0) + ($showtime->room->screenType->price ?? 0);
                     
+                    // Check if this is a couple seat
+                    $isCouple = ($seat->seatType->name === 'Couple' || $seat->seat_type_id == 3);
+                    $qrCode = null;
+                    
+                    if ($isCouple) {
+                        // Get couple pair key (A1-A2)
+                        $pairKey = $this->getCouplePairKey($seat->seat_code);
+                        
+                        // If this couple pair not processed yet, generate QR for both seats
+                        if (!isset($coupleSeatsProcessed[$pairKey])) {
+                            // Generate QR for couple pair
+                            $qrCode = \App\Models\BookingSeat::generateQRCode($bookingId, $pairKey);
+                            $coupleSeatsProcessed[$pairKey] = $qrCode;
+                        } else {
+                            // Use existing QR from the pair
+                            $qrCode = $coupleSeatsProcessed[$pairKey];
+                        }
+                    } else {
+                        // Regular seat: generate unique QR
+                        $qrCode = \App\Models\BookingSeat::generateQRCode($bookingId, $seat->seat_code);
+                    }
+                    
                     DB::table('booking_seats')->insert([
                         'booking_id' => $bookingId,
+                        'showtime_id' => $showtime_id,
                         'seat_id' => $seat_id,
                         'price' => $seatPrice,
+                        'qr_code' => $qrCode,
+                        'qr_status' => 'active',
                     ]);
                 }
             }
@@ -190,5 +214,16 @@ class PaymentController extends Controller
             return redirect()->route('homepage')
                            ->with('error', 'Payment confirmation failed: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Helper: Generate couple seat pair key (e.g., "A1-A2")
+     */
+    private function getCouplePairKey($seatCode)
+    {
+        $rowLetter = substr($seatCode, 0, 1);
+        $seatNumber = (int)substr($seatCode, 1);
+        $lowerNumber = ($seatNumber % 2 === 1) ? $seatNumber : $seatNumber - 1;
+        return $rowLetter . $lowerNumber . '-' . ($lowerNumber + 1);
     }
 }

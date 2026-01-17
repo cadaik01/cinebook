@@ -1,0 +1,82 @@
+@extends('layouts.admin')
+
+@section('title', 'QR Check-in')
+
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/qr_checkin.css') }}">
+@endpush
+
+@section('content')
+<div class="container py-4">
+    <h1 class="mb-4">
+        <i class="bi bi-qr-code-scan"></i> QR Code Check-in
+    </h1>
+
+    <div class="row">
+        <!-- Scanner Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card qr-scanner-card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-upc-scan"></i> Quét mã QR</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Manual Input -->
+                    <div class="mb-3">
+                        <label for="qrInput" class="form-label">Nhập mã QR:</label>
+                        <input type="text" id="qrInput" class="form-control form-control-lg" 
+                               placeholder="Nhập hoặc quét mã QR..." autofocus>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button id="previewBtn" class="btn btn-info btn-lg">
+                            <i class="bi bi-eye"></i> Xem trước
+                        </button>
+                        <button id="checkInBtn" class="btn btn-success btn-lg">
+                            <i class="bi bi-check-circle"></i> Check-in
+                        </button>
+                    </div>
+
+                    <!-- Status Message -->
+                    <div id="statusMessage" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card qr-result-card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> Thông tin đặt vé</h5>
+                </div>
+                <div class="card-body" id="resultSection">
+                    <p class="text-muted text-center">Quét mã QR để xem thông tin</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Check-ins -->
+    <div class="card mt-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0"><i class="bi bi-clock-history"></i> Lịch sử check-in gần đây</h5>
+        </div>
+        <div class="card-body p-0">
+            <div id="recentCheckIns">
+                <p class="text-muted p-3">Chưa có check-in nào</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Pass routes to JS
+    window.qrRoutes = {
+        preview: '{{ route("admin.qr.preview") }}',
+        checkIn: '{{ route("admin.qr.checkin") }}'
+    };
+</script>
+@endsection
+
+@push('scripts')
+<script src="{{ asset('js/qr_checkin.js') }}"></script>
+@endpush

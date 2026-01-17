@@ -55,6 +55,12 @@
                             <span>Bookings</span>
                         </a>
                     </li>
+                    <li class="admin-layout-sidebar-item {{ request()->routeIs('admin.qr.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.qr.index') }}" class="admin-layout-sidebar-link">
+                            <i class="bi bi-qr-code-scan"></i>
+                            <span>QR Check-in</span>
+                        </a>
+                    </li>
                     <li class="admin-layout-sidebar-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                         <a href="{{ route('admin.users.index') }}" class="admin-layout-sidebar-link">
                             <i class="bi bi-people"></i>

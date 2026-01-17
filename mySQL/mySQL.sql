@@ -148,7 +148,6 @@ CREATE TABLE bookings (
     status ENUM('pending','confirmed','cancelled','expired') DEFAULT 'pending',
     payment_method ENUM('momo','vnpay'),
     payment_status ENUM('pending','paid','refunded') DEFAULT 'pending',
-    qr_code VARCHAR(255),
     expired_at TIMESTAMP NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

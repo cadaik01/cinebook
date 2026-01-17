@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminRoomController;
 use App\Http\Controllers\Admin\AdminShowtimeController;
 use App\Http\Controllers\Admin\AdminBookingController;
+use App\Http\Controllers\Admin\QRCheckInController;
 use App\Http\Controllers\User\ProfileController;
 
 //***Movie Controller */
@@ -113,4 +114,9 @@ Route::prefix('admin')->group(function () {
     Route::get('bookings', [AdminBookingController::class, 'index'])->name('admin.bookings.index');
     Route::get('bookings/{booking}', [AdminBookingController::class, 'show'])->name('admin.bookings.show');
     Route::post('bookings/{booking}/cancel', [AdminBookingController::class, 'cancel'])->name('admin.bookings.cancel');
+
+    // QR Check-in Management
+    Route::get('qr-checkin', [QRCheckInController::class, 'index'])->name('admin.qr.index');
+    Route::post('qr-checkin/check', [QRCheckInController::class, 'checkIn'])->name('admin.qr.checkin');
+    Route::post('qr-checkin/preview', [QRCheckInController::class, 'preview'])->name('admin.qr.preview');
 });
