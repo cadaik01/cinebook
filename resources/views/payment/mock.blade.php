@@ -65,24 +65,25 @@
     </form>
         
         <!-- Cancel Button -->
-        <a href="{{ route('booking.seatmap', ['showtime_id' => $booking->showtime_id]) }}" 
-           style="width: 100%; background: #6c757d; color: white; padding: 15px; border: none; border-radius: 8px; text-align: center; text-decoration: none; display: block; font-size: 16px; font-weight: bold;">
+        <button type="button" onclick="cancelBookingHandler()" 
+           style="width: 100%; background: #6c757d; color: white; padding: 15px; border: none; border-radius: 8px; text-align: center; text-decoration: none; display: block; font-size: 16px; font-weight: bold; cursor: pointer;">
             ❌ Cancel Booking
-        </a>
+        </button>
     </div>
 </div>
 
-<!-- Load Countdown Script -->
+<!-- Load Scripts -->
 <script src="{{ asset('js/booking-countdown.js') }}"></script>
-
-<!-- Auto-submit Script (as fallback) -->
+<script src="{{ asset('js/payment-mock.js') }}"></script>
 <script>
-    // Fallback: Auto-submit if countdown not initialized
-    setTimeout(function() {
-        const countdown = document.getElementById('countdown');
-        if (countdown && countdown.textContent === '00:00') {
-            document.getElementById('paymentForm').submit();
-        }
-    }, 610000); // 10 minutes + 10 seconds buffer
+    // Initialize payment mock page
+    initPaymentMock({
+        formId: 'paymentForm',
+        autoSubmitDelay: 10000, // 10 seconds
+        bookingId: {{ $booking->id }},
+        cancelRoute: '{{ route('booking.cancel') }}',
+        csrfToken: '{{ csrf_token() }}',
+        homeRoute: '{{ route('homepage') }}'
+    });
 </script>
 @endsection

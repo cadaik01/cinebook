@@ -248,4 +248,79 @@ class BookingController extends Controller
         //Return success view with data
         return view('booking.success', compact('booking', 'seats', 'qrData'));
     }
+
+    /**
+     * Cancel reserved seats for a showtime (called when user goes back or timeout)
+     */
+    public function cancelReservedSeats(Request $request)
+    {
+        $showtime_id = $request->input('showtime_id');
+        $seats = $request->input('seats', []);
+        
+        if (empty($seats) || !is_array($seats)) {
+            return response()->json(['success' => false, 'message' => 'No seats provided']);
+        }
+        
+        // Delete reserved seats from showtime_seats table
+        DB::table('showtime_seats')
+            ->where('showtime_id', $showtime_id)
+            ->whereIn('seat_id', $seats)
+            ->where('status', 'reserved')
+            ->delete();
+        
+        return response()->json(['success' => true, 'message' => 'Reserved seats released']);
+    }
+
+    /**
+     * Cancel entire booking (delete booking and release seats)
+     */
+    public function cancelBooking(Request $request)
+    {
+        $booking_id = $request->input('booking_id');
+        
+        if (!$booking_id) {
+            return response()->json(['success' => false, 'message' => 'Booking ID required']);
+        }
+        
+        // Check if booking exists and belongs to user
+        $user_id = Session::get('user_id');
+        $booking = Booking::where('id', $booking_id)
+            ->where('user_id', $user_id)
+            ->where('status', 'pending')
+            ->first();
+            
+        if (!$booking) {
+            return response()->json(['success' => false, 'message' => 'Booking not found or already confirmed']);
+        }
+        
+        DB::beginTransaction();
+        try {
+            // Get seat IDs from booking_seats
+            $seatIds = DB::table('booking_seats')
+                ->where('booking_id', $booking_id)
+                ->pluck('seat_id')
+                ->toArray();
+            
+            // Delete from showtime_seats (release seats)
+            DB::table('showtime_seats')
+                ->where('showtime_id', $booking->showtime_id)
+                ->whereIn('seat_id', $seatIds)
+                ->delete();
+            
+            // Delete booking_seats
+            DB::table('booking_seats')
+                ->where('booking_id', $booking_id)
+                ->delete();
+            
+            // Delete booking
+            $booking->delete();
+            
+            DB::commit();
+            return response()->json(['success' => true, 'message' => 'Booking cancelled successfully']);
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['success' => false, 'message' => 'Error canceling booking: ' . $e->getMessage()]);
+        }
+    }
 }

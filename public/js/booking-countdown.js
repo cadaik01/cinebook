@@ -104,14 +104,22 @@ class BookingCountDown{
         // Clear storage
         localStorage.removeItem(this.storageKey);
         
-        // Auto-submit payment form if exists
-        if (this.paymentForm) {
-            const paymentMethod = this.paymentForm.querySelector('select[name="payment_method"]');
-            if (paymentMethod && !paymentMethod.value) {
-                alert('Vui lòng chọn phương thức thanh toán!');
-                return;
-            }
-            this.paymentForm.submit();
+        // Cancel reserved seats before redirecting
+        if (typeof bookingData !== 'undefined') {
+            fetch('/booking/cancel-reserved', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                },
+                body: JSON.stringify(bookingData)
+            }).finally(() => {
+                // Always redirect after canceling (or trying to)
+                alert('Booking time has expired. Reserved seats released.');
+                setTimeout(() => {
+                    window.location.href = this.redirectUrl;
+                }, 2000);
+            });
         } else {
             alert('Booking time has expired. You will be redirected.');
             setTimeout(() => {

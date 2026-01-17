@@ -2,7 +2,7 @@
 .footer {
     background-color: var(--prussian-blue);
     color: white;
-    margin-top: 60px;
+    margin-top: 40px;
     border-top: 3px solid var(--tan);
     width: 100%;
 }
@@ -10,7 +10,7 @@
 .footer>div {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 30px 20px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 30px;

@@ -45,7 +45,7 @@
     </div>
 </div>
     <!-- Payment form could go here -->
-    <form method="POST" action="{{ route('booking.process', ['showtime_id' => $showtime_id]) }}">
+    <form method="POST" action="{{ route('booking.process', ['showtime_id' => $showtime_id]) }}" id="payment-form">
         @csrf
         <input type="hidden" name="showtime_id" value="{{ $showtime_id }}">
         <input type="hidden" name="seats" value="{{ json_encode(array_column($seatDetails, 'id')) }}">
@@ -60,8 +60,23 @@
 
         <div>
             <button type="submit">Confirm and Pay</button>
-            <a href="{{ route('booking.seatmap', ['showtime_id' => $showtime_id]) }}">Back to Seat Selection</a>
+            <button type="button" id="cancel-btn" onclick="cancelAndGoBackHandler()">Back to Seat Selection</button>
         </div>
     </form>
+
+    <!-- Load Scripts -->
     <script src="{{ asset('js/booking-countdown.js') }}"></script>
+    <script src="{{ asset('js/booking-confirm.js') }}"></script>
+    <script>
+        // Initialize booking confirmation page
+        initBookingConfirm({
+            bookingData: {
+                showtime_id: {{ $showtime_id }},
+                seats: {!! json_encode(array_column($seatDetails, 'id')) !!}
+            },
+            cancelRoute: '{{ route('booking.cancel-reserved') }}',
+            csrfToken: '{{ csrf_token() }}',
+            seatMapRoute: '{{ route('booking.seatmap', ['showtime_id' => $showtime_id]) }}'
+        });
+    </script>
 @endsection

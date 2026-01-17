@@ -72,5 +72,6 @@ button:disabled {
 }
 
 main {
-    min-height: calc(100vh - 200px);
+    min-height: auto;
+    padding-bottom: 20px;
 }

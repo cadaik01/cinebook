@@ -52,6 +52,10 @@ Route::get('/movies/{id}/showtimes', [ShowtimeController::class, 'showtimes'])->
 Route::get('/showtimes/{showtime_id}/seats', [BookingController::class, 'seatMap'])->name('booking.seatmap');
 // Book Seats Page
 Route::post('/showtimes/{showtime_id}/book', [BookingController::class, 'bookSeats'])->name('booking.book');
+// Cancel Reserved Seats
+Route::post('/booking/cancel-reserved', [BookingController::class, 'cancelReservedSeats'])->name('booking.cancel-reserved');
+// Cancel Entire Booking
+Route::post('/booking/cancel', [BookingController::class, 'cancelBooking'])->name('booking.cancel');
 // Select Seats Page
 Route::post('/showtimes/{showtime_id}/seats/select', [ShowtimeController::class, 'selectSeats'])->name('movies.selectseats');
 // Confirm Booking
