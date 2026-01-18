@@ -123,7 +123,7 @@ class ReviewController extends Controller
         $movie = Movie::find($review->movie_id);
         $movie->updateAverageRating();
 
-        return redirect()->back()->with('success', 'Review updated successfully.');
+        return redirect()->route('user.reviews.list')->with('success', 'Review updated successfully.');
     }
     /**
      * Delete a review (User can delete own review)
@@ -144,7 +144,7 @@ class ReviewController extends Controller
         $movie = Movie::find($movieId);
         $movie->updateAverageRating();
 
-        return redirect()->back()->with('success', 'Review deleted successfully.');
+        return redirect()->route('user.reviews.list')->with('success', 'Review deleted successfully.');
     }
 
     /**

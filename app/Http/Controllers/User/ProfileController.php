@@ -81,7 +81,7 @@ class ProfileController extends Controller
         $user->city = $validated['city'] ?? $user->city;
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $avatarPath;
+            $user->avatar_url = $avatarPath;
         }
         $user->save();
                 
@@ -106,11 +106,28 @@ class ProfileController extends Controller
         ]);
 
         // Check if current password matches
-        if (!Hash::check($validated['current_password'], $user->password)) {
+        // Handle both hashed and plain text passwords (for legacy data)
+        $passwordMatches = false;
+        
+        if (Hash::needsRehash($user->password)) {
+            // Password might be plain text or old hash - check both ways
+            if ($user->password === $validated['current_password']) {
+                $passwordMatches = true;
+                // Automatically rehash the password
+                $user->password = Hash::make($validated['current_password']);
+                $user->save();
+            }
+        } else {
+            // Normal bcrypt check
+            $passwordMatches = Hash::check($validated['current_password'], $user->password);
+        }
+        
+        if (!$passwordMatches) {
             return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.']);
         }
+        
         //check new password is different from current password
-        if (Hash::check($validated['new_password'], $user->password)) {
+        if ($validated['new_password'] === $validated['current_password']) {
             return redirect()->back()->withErrors(['new_password' => 'New password must be different from the current password.']);
         }
         
@@ -118,6 +135,6 @@ class ProfileController extends Controller
         $user->password = Hash::make($validated['new_password']);
         $user->save();
 
-        return redirect()->back()->with('success', 'Password changed successfully.');
+        return redirect()->route('user.profile')->with('success', 'Password changed successfully.');
     }
 }
