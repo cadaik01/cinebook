@@ -9,7 +9,13 @@
         <div>
             <h3>{{ $movie->title }}</h3>
             <a href="/movies/{{ $movie->id }}">more details</a>
-            <p>Genre: {{ $movie->genre }}</p>
+            <p>Genre: 
+                @if(isset($movie->genres) && is_array($movie->genres) && count($movie->genres) > 0)
+                    {{ implode(', ', $movie->genres) }}
+                @else
+                    Unknown
+                @endif
+            </p>
             <p>Language: {{ $movie->language }}</p>
             <p>Duration: {{ $movie->duration }}</p>
             <p>Release Date: {{ $movie->release_date }}</p>

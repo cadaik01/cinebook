@@ -424,6 +424,20 @@
     font-weight: 600;
 }
 
+.movie-meta .age-rating {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9em;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 2px 6px rgba(255, 107, 107, 0.3);
+    letter-spacing: 0.5px;
+}
+
 .movie-meta .duration {
     display: inline-flex;
     align-items: center;

@@ -26,7 +26,7 @@ class LoginController extends Controller
         //2. find user in database with email
         $user = User::where('email', $email)->first();
         //3. check if user exists and password matches
-        if ($user && $password === $user->password) {
+        if ($user && Hash::check($password, $user->password)) {
             //4. log the user in using Laravel Auth
             Auth::login($user);
             // Also keep session for backward compatibility with existing code
