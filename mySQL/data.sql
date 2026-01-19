@@ -122,6 +122,11 @@ INSERT INTO reviews (user_id, movie_id, rating, comment, created_at, updated_at)
 (9, 32, 4, 'Dark atmosphere, good acting.', NOW(), NOW()),
 (2, 32, 3, 'Storyline is not very original.', NOW(), NOW());
 -- first 4 rooms, rows A-H, seats 1-18
+-- Xóa dữ liệu seats trước khi insert lại để tránh lỗi duplicate
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM seats;
+SET FOREIGN_KEY_CHECKS = 1;
+
 INSERT INTO seats (room_id, seat_row, seat_number, seat_code, seat_type_id)
 SELECT
     r.id,
@@ -157,11 +162,15 @@ WHERE seat_row IN ('C','D','E')
   AND seat_number BETWEEN 7 AND 12;
 
 
--- then update some seats to couple
+
+-- Set couple cho các cặp ghế liền kề ở hàng H (chỉ set nếu seat_number chẵn)
+UPDATE seats
+SET seat_type_id = 3
+WHERE seat_row = 'H' AND seat_number % 2 = 1 AND seat_number + 1 <= 18;
 
 UPDATE seats
 SET seat_type_id = 3
-WHERE seat_row = 'H';
+WHERE seat_row = 'H' AND seat_number % 2 = 0 AND seat_number - 1 >= 1;
 
 
 

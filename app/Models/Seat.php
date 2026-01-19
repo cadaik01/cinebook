@@ -9,6 +9,8 @@ class Seat extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'room_id', 'seat_row', 'seat_number', 'seat_code', 'seat_type_id'
     ];

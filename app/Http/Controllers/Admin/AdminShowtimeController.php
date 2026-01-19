@@ -89,7 +89,7 @@ class AdminShowtimeController extends Controller
                 ShowtimePrice::create([
                     'showtime_id' => $showtime->id,
                     'seat_type_id' => $seatTypeId,
-                    'peak_hour_price' => $price,
+                    'price' => $price,
                 ]);
             }
 
@@ -164,7 +164,7 @@ class AdminShowtimeController extends Controller
                         'showtime_id' => $showtime->id,
                         'seat_type_id' => $seatTypeId,
                     ],
-                    ['peak_hour_price' => $price]
+                    ['price' => $price]
                 );
             }
 

@@ -4,118 +4,81 @@
  * Price calculation is for display purposes only (not trusted by server)
  */
 
-document.addEventListener('DOMContentLoaded', function() {
-    const seatButtons = document.querySelectorAll('.seat-btn.available');
-    const selectedSeatIds = document.getElementById('selectedSeatIds');
-    const seatList = document.getElementById('seatList');
-    const bookBtn = document.getElementById('bookBtn');
-    
+document.addEventListener("DOMContentLoaded", function () {
+    const seatButtons = document.querySelectorAll(".seat-btn.available");
+    const selectedSeatIds = document.getElementById("selectedSeatIds");
+    const seatList = document.getElementById("seatList");
+    const bookBtn = document.getElementById("bookBtn");
     let selectedSeats = [];
-    
-    // Define estimated prices for UI display (not used for actual billing)
     const ESTIMATED_PRICES = {
-        1: 50000,   // Standard - estimated
-        2: 60000,   // VIP - estimated  
-        3: 80000    // Couple - estimated
+        1: 50000,
+        2: 60000,
+        3: 80000,
     };
-    
-    seatButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const seatId = this.getAttribute('data-seat-id');
-            const seatCode = this.getAttribute('data-seat-code');
-            const seatType = parseInt(this.getAttribute('data-seat-type'));
-            
-            const rowLetter = seatCode.match(/^[A-Z]+/)[0];
-            
-            if (rowLetter === 'H') {
-                handleCoupleSeatLogic(this, seatId, seatCode, seatType);
+    seatButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+            const seatType = parseInt(this.getAttribute("data-seat-type"));
+            if (seatType === 3) {
+                handleCoupleSeatButton(this);
             } else {
-                handleRegularSeatLogic(this, seatId, seatCode, seatType);
+                handleRegularSeatButton(this);
             }
-            
             updateSelectedSeatsDisplay();
         });
     });
-    
-    function handleCoupleSeatLogic(button, seatId, seatCode, seatType) {
-        // Handle couple seat logic (H1-2, H3-4, H5-6, ...)
-        const seatNumber = parseInt(seatCode.match(/\d+$/)[0]);
-        const rowLetter = seatCode.match(/^[A-Z]+/)[0];
-        
-        let pairSeatNumber;
-        if (seatNumber % 2 === 1) {
-            pairSeatNumber = seatNumber + 1;
+    function handleCoupleSeatButton(button) {
+        const seatId1 = button.getAttribute("data-seat-id");
+        const seatId2 = button.getAttribute("data-seat-id2");
+        const seatCode1 = button.getAttribute("data-seat-code");
+        const seatCode2 = button.getAttribute("data-seat-code2");
+        // Nếu đã chọn thì bỏ chọn cả cặp
+        if (
+            selectedSeats.find((seat) => seat.id === seatId1) &&
+            selectedSeats.find((seat) => seat.id === seatId2)
+        ) {
+            deselectSeat(button, seatId1);
+            deselectSeat(button, seatId2);
         } else {
-            pairSeatNumber = seatNumber - 1;
-        }
-        const pairSeatCode = rowLetter + pairSeatNumber;
-        const pairSeatButton = document.querySelector(`[data-seat-code="${pairSeatCode}"]`);
-        
-        if (selectedSeats.find(seat => seat.id === seatId)) {
-            // Deselect both seats in the pair
-            deselectSeat(button, seatId);
-            
-            if (pairSeatButton) {
-                const pairSeatId = pairSeatButton.getAttribute('data-seat-id');
-                deselectSeat(pairSeatButton, pairSeatId);
-            }
-        } else {
-            // Select both seats in the pair
-            if (pairSeatButton && pairSeatButton.classList.contains('available')) {
-                const pairSeatId = pairSeatButton.getAttribute('data-seat-id');
-                const pairSeatType = parseInt(pairSeatButton.getAttribute('data-seat-type'));
-                
-                selectSeat(button, seatId, seatCode, seatType);
-                selectSeat(pairSeatButton, pairSeatId, pairSeatCode, pairSeatType);
-            } else {
-                alert('Couple seat selection failed.');
-                return;
-            }
+            selectSeat(button, seatId1, seatCode1, 3);
+            selectSeat(button, seatId2, seatCode2, 3);
         }
     }
-    
-    function handleRegularSeatLogic(button, seatId, seatCode, seatType) {
-        if (selectedSeats.find(seat => seat.id === seatId)) {
+    function handleRegularSeatButton(button) {
+        const seatId = button.getAttribute("data-seat-id");
+        const seatCode = button.getAttribute("data-seat-code");
+        const seatType = parseInt(button.getAttribute("data-seat-type"));
+        if (selectedSeats.find((seat) => seat.id === seatId)) {
             deselectSeat(button, seatId);
         } else {
             selectSeat(button, seatId, seatCode, seatType);
         }
     }
-    
     function selectSeat(button, seatId, seatCode, seatType) {
-        // Add selected class instead of inline styles
-        button.classList.add('selected');
-        
-        // Add to selected seats array
-        selectedSeats.push({
-            id: seatId,
-            code: seatCode,
-            type: seatType,
-            estimatedPrice: ESTIMATED_PRICES[seatType] || ESTIMATED_PRICES[1]
-        });
+        button.classList.add("selected");
+        if (!selectedSeats.find((seat) => seat.id === seatId)) {
+            selectedSeats.push({
+                id: seatId,
+                code: seatCode,
+                type: seatType,
+                estimatedPrice:
+                    ESTIMATED_PRICES[seatType] || ESTIMATED_PRICES[1],
+            });
+        }
     }
-    
     function deselectSeat(button, seatId) {
-        // Remove from selected seats array
-        selectedSeats = selectedSeats.filter(seat => seat.id !== seatId);
-        
-        // Remove selected class
-        button.classList.remove('selected');
+        selectedSeats = selectedSeats.filter((seat) => seat.id !== seatId);
+        button.classList.remove("selected");
     }
-    
     function updateSelectedSeatsDisplay() {
         if (selectedSeats.length === 0) {
-            seatList.textContent = 'None';
-            selectedSeatIds.value = '';
+            seatList.textContent = "None";
+            selectedSeatIds.value = "";
             bookBtn.disabled = true;
         } else {
-            const seatCodes = selectedSeats.map(seat => seat.code).join(', ');
+            const seatCodes = selectedSeats.map((seat) => seat.code).join(", ");
             seatList.textContent = seatCodes;
-
-            // Send only seat IDs to server
-            const seatIds = selectedSeats.map(seat => seat.id);
+            const seatIds = selectedSeats.map((seat) => seat.id);
             selectedSeatIds.value = JSON.stringify(seatIds);
-
             bookBtn.disabled = false;
         }
     }

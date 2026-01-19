@@ -9,6 +9,8 @@ class ShowtimeSeat extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = ['showtime_id', 'seat_id', 'status'];
 
     public function seat()

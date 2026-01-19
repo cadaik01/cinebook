@@ -86,52 +86,51 @@ class BookingController extends Controller
         //5. Collect seat information for confirmation and pricing
         $seatDetails = [];
         $totalPrice = 0;
-        $validatedCouplePairs = []; // Track validated couple pairs to avoid duplicate validation
+        $validatedCouplePairs = [];
         foreach ($selectedSeats as $seat_id) {
-            //Get seat info with pricing using relationships
             $seat = Seat::with('seatType')->find($seat_id);
-            //check if seat exists
             if (!$seat) {
-            return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                           ->with('error', 'Invalid seat selected.');
+                return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                    ->with('error', 'Invalid seat selected.');
             }
-             //check if seat is already booked or reserved
             $existingBooking = DB::table('showtime_seats')
                 ->where('showtime_id', $showtime_id)
                 ->where('seat_id', $seat_id)
                 ->whereIn('status', ['booked', 'reserved'])
                 ->first();
-            //if booked or reserved, redirect back with error
             if ($existingBooking) {
                 return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                               ->with('error', 'Seat ' . $seat->seat_code . ' is already booked.');
+                    ->with('error', 'Seat ' . $seat->seat_code . ' is already booked.');
             }
-            
-            // If seat is couple type, validate pair seat
-            if ($seat->seat_type_id === '3') {
+            if ($seat->seat_type_id == 3) {
                 $pairKey = $this->getCouplePairKey($seat->seat_code);
-                // Only validate if this couple pair hasn't been validated yet
                 if (!in_array($pairKey, $validatedCouplePairs)) {
                     $validation = $this->validateCoupleSeat($seat, $selectedSeats, $showtime_id);
                     if (!$validation['valid']) {
                         return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                                       ->with('error', $validation['message']);
+                            ->with('error', $validation['message']);
                     }
-                    $validatedCouplePairs[] = $pairKey; // Mark this pair as validated
+                    // Tính tiền 1 lần cho cả cặp
+                    $seatPrice = ($room->screenType->price ?? 0) + ($seat->seatType->base_price ?? 0);
+                    $totalPrice += $seatPrice;
+                    $seatDetails[] = [
+                        'id' => $seat->id,
+                        'seat_code' => $seat->seat_code . ' + ' . $this->getCouplePairCode($seat->seat_code),
+                        'seat_type' => $seat->seatType->name ?? 'Unknown',
+                        'price' => $seatPrice,
+                    ];
+                    $validatedCouplePairs[] = $pairKey;
                 }
+            } else {
+                $seatPrice = ($room->screenType->price ?? 0) + ($seat->seatType->base_price ?? 0);
+                $totalPrice += $seatPrice;
+                $seatDetails[] = [
+                    'id' => $seat->id,
+                    'seat_code' => $seat->seat_code,
+                    'seat_type' => $seat->seatType->name ?? 'Unknown',
+                    'price' => $seatPrice,
+                ];
             }
-            
-        //6. Calculate real price from database
-            $seatPrice = ($room->screenType->price ?? 0) + ($seat->seatType->base_price ?? 0);
-            $totalPrice += $seatPrice;
-
-        //7. Store seat details for confirmation
-            $seatDetails[] = [
-                'id' => $seat->id,
-                'seat_code' => $seat->seat_code,
-                'seat_type' => $seat->seatType->name ?? 'Unknown',
-                'price' => $seatPrice,
-            ];
         }
         //8. Get Movie info using relationship
         $movie = $showtime->movie;
@@ -189,6 +188,16 @@ class BookingController extends Controller
         $seatNumber = (int)substr($seatCode, 1);
         $lowerNumber = ($seatNumber % 2 === 1) ? $seatNumber : $seatNumber - 1;
         return $rowLetter . $lowerNumber . '-' . ($lowerNumber + 1);
+    }
+    /**
+     * Get the code of the pair seat in a couple
+     */
+    private function getCouplePairCode($seatCode)
+    {
+        $rowLetter = substr($seatCode, 0, 1);
+        $seatNumber = (int)substr($seatCode, 1);
+        $pairSeatNumber = ($seatNumber % 2 === 1) ? $seatNumber + 1 : $seatNumber - 1;
+        return $rowLetter . $pairSeatNumber;
     }
     /**
      * Display booking confirmation page

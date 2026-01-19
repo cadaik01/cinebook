@@ -9,7 +9,7 @@
             <h2><i class="bi bi-door-open"></i> Manage Rooms</h2>
             <p class="text-muted mb-0">Total: {{ $rooms->count() }} rooms</p>
         </div>
-        <a href="{}" class="btn btn-primary-cinebook">
+        <a href="{{ route('admin.rooms.create') }}" class="btn btn-primary-cinebook">
             <i class="bi bi-plus-circle"></i> Add New Room
         </a>
     </div>
@@ -49,7 +49,7 @@
                     </div>
 
                     <div class="d-flex gap-2">
-                        <a href="" class="btn btn-sm btn-primary-cinebook flex-fill">
+                        <a href="{{ route('admin.rooms.edit', $room) }}" class="btn btn-sm btn-primary-cinebook flex-fill">
                             <i class="bi bi-pencil"></i> Edit Seats
                         </a>
                         <form action="{{ route('admin.rooms.destroy', $room) }}" method="POST"
