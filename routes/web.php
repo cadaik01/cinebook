@@ -99,8 +99,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/reviews/{id}/delete', [\App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
 
-//Admin Routes - Grouped with 'admin' prefix
-Route::prefix('admin')->group(function () {
+//Admin Routes - Grouped with 'admin' prefix, protected by auth & role:admin
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     // Dashboard
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 

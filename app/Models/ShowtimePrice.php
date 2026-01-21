@@ -9,5 +9,7 @@ class ShowtimePrice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['showtime_id', 'seat_type_id', 'peak_hour_price'];
+    public $timestamps = false;
+
+    protected $fillable = ['showtime_id', 'seat_type_id', 'price'];
 }

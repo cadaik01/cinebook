@@ -1,3 +1,13 @@
+/* Couple seat button: rộng gấp đôi ghế đơn */
+.seat-btn.couple {
+    width: 95px;
+    min-width: 90px;
+    max-width: 120px;
+    text-align: center;
+    font-size: 1em;
+    letter-spacing: 1px;
+}
+
 /* ==================== Seat Map Page Styles ==================== */
 /*
  * TABLE OF CONTENTS:

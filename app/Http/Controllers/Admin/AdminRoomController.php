@@ -29,14 +29,23 @@ class AdminRoomController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'total_rows' => 'required|integer|min:1|max:20',
+            'total_rows' => 'required|integer|min:1|max:26',
             'seats_per_row' => 'required|integer|min:1|max:30',
             'screen_type_id' => 'required|exists:screen_types,id',
+            'seat_configs' => 'nullable|array',
+            'seat_configs.*.row' => 'required_with:seat_configs|string|max:1',
+            'seat_configs.*.number' => 'required_with:seat_configs|integer|min:1',
+            'seat_configs.*.type' => 'required_with:seat_configs|integer|in:1,2,3',
         ]);
 
         DB::beginTransaction();
         try {
-            $room = Room::create($validated);
+            $room = Room::create([
+                'name' => $validated['name'],
+                'total_rows' => $validated['total_rows'],
+                'seats_per_row' => $validated['seats_per_row'],
+                'screen_type_id' => $validated['screen_type_id'],
+            ]);
 
             // Get default seat type (standard)
             $defaultSeatType = SeatType::where('name', 'Standard')->first();
@@ -44,17 +53,31 @@ class AdminRoomController extends Controller
                 $defaultSeatType = SeatType::first();
             }
 
-            // Generate seats automatically
-            $rowLabels = range('A', 'Z');
-            for ($row = 0; $row < $validated['total_rows']; $row++) {
-                for ($seat = 1; $seat <= $validated['seats_per_row']; $seat++) {
+            // Check if seat_configs is provided (from preview)
+            if (!empty($validated['seat_configs'])) {
+                // Create seats with custom types from preview
+                foreach ($validated['seat_configs'] as $config) {
                     Seat::create([
                         'room_id' => $room->id,
-                        'seat_row' => $rowLabels[$row],
-                        'seat_number' => $seat,
-                        'seat_code' => $rowLabels[$row] . $seat,
-                        'seat_type_id' => $defaultSeatType->id,
+                        'seat_row' => $config['row'],
+                        'seat_number' => $config['number'],
+                        'seat_code' => $config['row'] . $config['number'],
+                        'seat_type_id' => $config['type'],
                     ]);
+                }
+            } else {
+                // Generate seats automatically with default type
+                $rowLabels = range('A', 'Z');
+                for ($row = 0; $row < $validated['total_rows']; $row++) {
+                    for ($seat = 1; $seat <= $validated['seats_per_row']; $seat++) {
+                        Seat::create([
+                            'room_id' => $room->id,
+                            'seat_row' => $rowLabels[$row],
+                            'seat_number' => $seat,
+                            'seat_code' => $rowLabels[$row] . $seat,
+                            'seat_type_id' => $defaultSeatType->id,
+                        ]);
+                    }
                 }
             }
 
@@ -74,8 +97,11 @@ class AdminRoomController extends Controller
         $screenTypes = ScreenType::all();
         $seatTypes = SeatType::all();
 
-        // Group seats by row
-        $seatsByRow = $room->seats->groupBy('seat_row');
+        // Group seats by row and sort by seat_number within each row
+        $seatsByRow = $room->seats
+            ->sortBy('seat_number')
+            ->groupBy('seat_row')
+            ->sortKeys(); // Sort rows alphabetically (A, B, C, ...)
 
         return view('admin.rooms.edit', compact('room', 'screenTypes', 'seatTypes', 'seatsByRow'));
     }
@@ -104,8 +130,19 @@ class AdminRoomController extends Controller
         DB::beginTransaction();
         try {
             foreach ($validated['seats'] as $seatData) {
-                Seat::where('id', $seatData['seat_id'])
-                    ->update(['seat_type_id' => $seatData['seat_type_id']]);
+                $seat = Seat::find($seatData['seat_id']);
+                $newTypeId = $seatData['seat_type_id'];
+                if ($newTypeId == 3) { // Couple
+                    // Set ghế này và ghế liền kề cùng là couple
+                    $seat->update(['seat_type_id' => $newTypeId]);
+                    $nextSeat = Seat::where('room_id', $seat->room_id)
+                        ->where('seat_row', $seat->seat_row)
+                        ->where('seat_number', $seat->seat_number + 1)
+                        ->first();
+                    if ($nextSeat) $nextSeat->update(['seat_type_id' => $newTypeId]);
+                } else {
+                    $seat->update(['seat_type_id' => $newTypeId]);
+                }
             }
 
             DB::commit();

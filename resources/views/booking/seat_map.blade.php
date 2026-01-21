@@ -8,20 +8,21 @@
 <div class="seat-map-container">
     <div class="seat-map-header">
         <h2>Select Seats</h2>
-        <p class="showtime-info">{{ $showtime->movie->title }} - {{ $showtime->show_date->format('d/m/Y') }} at {{ $showtime->show_time->format('H:i') }}</p>
+        <p class="showtime-info">{{ $showtime->movie->title }} - {{ $showtime->show_date->format('d/m/Y') }} at
+            {{ $showtime->show_time->format('H:i') }}</p>
     </div>
 
     <!-- Success/Error Messages -->
     @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
     @endif
 
     @if(session('error'))
-        <div class="alert alert-error">
-            {{ session('error') }}
-        </div>
+    <div class="alert alert-error">
+        {{ session('error') }}
+    </div>
     @endif
 
     <!-- Legend for Seat Types -->
@@ -62,28 +63,41 @@
             @csrf
             <div id="seatMap">
                 @php
-                    $grouped = $seats->groupBy('seat_row');
+                $grouped = $seats->groupBy('seat_row');
                 @endphp
                 @foreach($grouped as $row => $seatsInRow)
-                    <div class="seat-row">
-                        <div class="seat-row-label">Row {{ $row }}:</div>
-                        <div class="seats-container">
-                            @foreach($seatsInRow as $seat)
-                                @php
-                                    $isBooked = in_array($seat->id, $bookedSeats);
-                                @endphp
-                                <button
-                                    type="button"
-                                    class="seat-btn {{ $isBooked ? 'booked' : 'available' }}"
-                                    data-seat-id="{{ $seat->id }}"
-                                    data-seat-code="{{ $seat->seat_code }}"
-                                    data-seat-type="{{ $seat->seat_type_id }}"
-                                    {{ $isBooked ? 'disabled' : '' }}>
-                                    {{ $seat->seat_number }}
-                                </button>
-                            @endforeach
-                        </div>
+                <div class="seat-row">
+                    <div class="seat-row-label">Row {{ $row }}:</div>
+                    <div class="seats-container">
+                        @php $i = 0; @endphp
+                        @while($i < count($seatsInRow)) @php $seat=$seatsInRow[$i]; $isBooked=in_array($seat->id,
+                            $bookedSeats);
+                            @endphp
+                            @if($seat->seat_type_id == 3 && isset($seatsInRow[$i+1]) && $seatsInRow[$i+1]->seat_type_id
+                            == 3)
+                            @php
+                            $seat2 = $seatsInRow[$i+1];
+                            $isBooked2 = in_array($seat2->id, $bookedSeats);
+                            $isCoupleBooked = $isBooked || $isBooked2;
+                            @endphp
+                            <button type="button" class="seat-btn couple {{ $isCoupleBooked ? 'booked' : 'available' }}"
+                                data-seat-id="{{ $seat->id }}" data-seat-id2="{{ $seat2->id }}"
+                                data-seat-code="{{ $seat->seat_code }}" data-seat-code2="{{ $seat2->seat_code }}"
+                                data-seat-type="3" {{ $isCoupleBooked ? 'disabled' : '' }}>
+                                {{ $seat->seat_number }}-{{ $seat2->seat_number }}
+                            </button>
+                            @php $i += 2; @endphp
+                            @else
+                            <button type="button" class="seat-btn {{ $isBooked ? 'booked' : 'available' }}"
+                                data-seat-id="{{ $seat->id }}" data-seat-code="{{ $seat->seat_code }}"
+                                data-seat-type="{{ $seat->seat_type_id }}" {{ $isBooked ? 'disabled' : '' }}>
+                                {{ $seat->seat_number }}
+                            </button>
+                            @php $i++; @endphp
+                            @endif
+                            @endwhile
                     </div>
+                </div>
                 @endforeach
             </div>
         </form>

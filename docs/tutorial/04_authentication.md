@@ -3,6 +3,7 @@
 ## 🎯 Mục tiêu bài học
 
 Sau bài học này, bạn sẽ có:
+
 - ✅ Hệ thống đăng ký tài khoản
 - ✅ Hệ thống đăng nhập/đăng xuất
 - ✅ Middleware bảo vệ routes
@@ -34,6 +35,10 @@ php artisan make:controller LoginController
 **File**: `app/Http/Controllers/LoginController.php`
 
 ```php
+// ================== GIẢI THÍCH CHI TIẾT ==================
+// Đây là controller xử lý toàn bộ logic xác thực (authentication) cho hệ thống.
+// Sử dụng các Facade mạnh mẽ của Laravel: Auth, Hash, Session.
+// Nên tách riêng controller này để dễ bảo trì, mở rộng (ví dụ thêm Google/Facebook login).
 <?php
 
 namespace App\Http\Controllers;
@@ -52,10 +57,11 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         // Nếu đã đăng nhập, redirect về home
+        // Tối ưu: Có thể truyền thêm thông báo "Bạn đã đăng nhập rồi!"
         if (Auth::check()) {
-            return redirect()->route('home');
+            return redirect()->route('home')->with('info', 'Bạn đã đăng nhập!');
         }
-
+        // Trả về view login
         return view('login.login');
     }
 
@@ -77,6 +83,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         // Validate input
+        // Gợi ý tối ưu: Có thể tách validate thành FormRequest riêng để tái sử dụng và dễ test hơn
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:6',
@@ -88,12 +95,14 @@ class LoginController extends Controller
         ]);
 
         // Attempt login
+        // Gợi ý tối ưu: Có thể giới hạn số lần login sai bằng Laravel Throttle (để chống brute-force)
         if (Auth::attempt($credentials, $request->filled('remember'))) {
-            // Regenerate session để prevent session fixation
+            // Regenerate session để chống session fixation attack
             $request->session()->regenerate();
 
             // Check user role and redirect accordingly
-            if (Auth::user()->isAdmin()) {
+            // Gợi ý tối ưu: Nên dùng policy/gate cho phân quyền phức tạp
+            if (method_exists(Auth::user(), 'isAdmin') && Auth::user()->isAdmin()) {
                 return redirect()->intended(route('admin.dashboard'))
                     ->with('success', 'Chào mừng Admin ' . Auth::user()->name);
             }
@@ -103,6 +112,7 @@ class LoginController extends Controller
         }
 
         // Login failed
+        // Gợi ý tối ưu: Có thể log lại các lần đăng nhập thất bại để phát hiện tấn công
         return back()
             ->withErrors(['email' => 'Email hoặc mật khẩu không đúng'])
             ->withInput($request->only('email'));
@@ -114,6 +124,7 @@ class LoginController extends Controller
     public function register(Request $request)
     {
         // Validate input
+        // Gợi ý tối ưu: Có thể tách validate thành FormRequest riêng, hoặc dùng Rule::unique để custom message tốt hơn
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -131,6 +142,7 @@ class LoginController extends Controller
         ]);
 
         // Create user
+        // Gợi ý tối ưu: Có thể dùng sự kiện (event) để gửi email chào mừng hoặc xác thực email
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -152,10 +164,12 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        // Đăng xuất user
         Auth::logout();
 
-        // Invalidate session
+        // Invalidate session để xóa toàn bộ session data
         $request->session()->invalidate();
+        // Regenerate CSRF token để tránh tấn công CSRF sau logout
         $request->session()->regenerateToken();
 
         return redirect()->route('login')
@@ -167,6 +181,7 @@ class LoginController extends Controller
      */
     public function checkLoginStatus()
     {
+        // API kiểm tra trạng thái đăng nhập, có thể dùng cho frontend SPA hoặc AJAX
         return response()->json([
             'logged_in' => Auth::check(),
             'user' => Auth::check() ? [
@@ -297,12 +312,14 @@ Route::middleware('guest')->group(function () {
         ->name('login.submit');
     Route::post('/register', [LoginController::class, 'register'])
         ->name('register.submit');
+    // Gợi ý tối ưu: Có thể thêm route xác thực email, quên mật khẩu ở đây
 });
 
 // Authenticated routes (cần đăng nhập)
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])
         ->name('logout');
+    // Gợi ý tối ưu: Có thể thêm route đổi mật khẩu, cập nhật thông tin cá nhân ở đây
 });
 
 // AJAX route (check login status)
@@ -339,7 +356,11 @@ Route::get('/', function () {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-dark-secondary) 100%);
+    background: linear-gradient(
+        135deg,
+        var(--bg-dark) 0%,
+        var(--bg-dark-secondary) 100%
+    );
     padding: var(--spacing-lg);
 }
 
@@ -500,7 +521,7 @@ Route::get('/', function () {
 Thêm dòng:
 
 ```css
-@import './login.css';
+@import "./login.css";
 ```
 
 ### 4.3. Tạo Login View
@@ -765,6 +786,10 @@ Thêm dòng:
 Đảm bảo password được hash tự động:
 
 ```php
+// ================== GIẢI THÍCH MODEL ==================
+// $fillable: Cho phép gán hàng loạt các trường này khi tạo user
+// $hidden: Ẩn password khi trả về JSON (bảo mật)
+// $casts: Tự động chuyển kiểu dữ liệu khi lấy từ DB
 protected $fillable = [
     'name',
     'email',
@@ -783,6 +808,12 @@ protected $casts = [
     'created_at' => 'datetime',
     'updated_at' => 'datetime',
 ];
+
+// Gợi ý tối ưu: Có thể thêm mutator để tự động hash password khi set
+// public function setPasswordAttribute($value) {
+//     $this->attributes['password'] = Hash::make($value);
+// }
+// => Khi đó chỉ cần $user->password = '123456'; sẽ tự hash, không lo quên hash khi tạo user thủ công
 ```
 
 ---
@@ -794,10 +825,10 @@ protected $casts = [
 1. Start server: `php artisan serve` và `npm run dev`
 2. Truy cập: `http://localhost:8000/register`
 3. Điền form đăng ký:
-   - Họ tên: Test User
-   - Email: test@example.com
-   - Mật khẩu: 123456
-   - Xác nhận mật khẩu: 123456
+    - Họ tên: Test User
+    - Email: test@example.com
+    - Mật khẩu: 123456
+    - Xác nhận mật khẩu: 123456
 4. Click "Đăng ký"
 
 ✅ **Kết quả**: Redirect về trang chủ với message "Đăng ký thành công!"
@@ -806,8 +837,8 @@ protected $casts = [
 
 1. Truy cập: `http://localhost:8000/login`
 2. Điền:
-   - Email: test@example.com
-   - Mật khẩu: 123456
+    - Email: test@example.com
+    - Mật khẩu: 123456
 3. Click "Đăng nhập"
 
 ✅ **Kết quả**: Đăng nhập thành công, redirect về home
@@ -833,12 +864,15 @@ SELECT * FROM users ORDER BY id DESC LIMIT 5;
 ## 🎯 THỰC HÀNH
 
 ### Bài tập 1: Thêm "Forgot Password" link
+
 Thêm link "Quên mật khẩu?" vào trang login (chỉ UI, chưa cần chức năng)
 
 ### Bài tập 2: Custom validation messages
+
 Thử sửa các validation messages thành tiếng Việt đẹp hơn
 
 ### Bài tập 3: Test với Tinker
+
 ```bash
 php artisan tinker
 
@@ -859,17 +893,22 @@ Hash::check('admin123', $user->password); // true
 ## 🐛 TROUBLESHOOTING
 
 ### Lỗi 1: "Class 'Hash' not found"
+
 **Giải pháp**: Thêm `use Illuminate\Support\Facades\Hash;`
 
 ### Lỗi 2: Validation errors không hiển thị
+
 **Giải pháp**: Kiểm tra `@error` directive và `$errors` variable
 
 ### Lỗi 3: Session không lưu sau login
+
 **Giải pháp**:
+
 - Kiểm tra `SESSION_DRIVER` trong `.env` (phải là `file` hoặc `database`)
 - Chạy: `php artisan session:table` và `php artisan migrate`
 
 ### Lỗi 4: Redirect loop
+
 **Giải pháp**: Kiểm tra middleware `guest` và `auth` đã đúng chưa
 
 ---
@@ -910,6 +949,7 @@ resources/
 **Bài tiếp**: [05. Frontend Basics →](05_frontend_basics.md)
 
 Trong bài tiếp theo, bạn sẽ tạo:
+
 1. Layout chính (header, footer)
 2. Trang chủ với phim nổi bật
 3. Navigation menu
