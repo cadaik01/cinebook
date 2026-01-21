@@ -20,11 +20,11 @@ class CheckRole
     {
         // Kiểm tra đã đăng nhập chưa
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để tiếp tục');
+            return redirect()->route('login')->with('error', 'You need to log in to continue');
         }
         // Kiểm tra đúng role chưa
         if (Auth::user()->role !== $role) {
-            abort(403, 'Bạn không có quyền truy cập trang này');
+            abort(403, 'You do not have permission to access this page');
         }
         return $next($request);
     }
