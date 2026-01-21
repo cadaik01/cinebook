@@ -57,3 +57,5 @@
 .recent-checkin-item:hover {
     background-color: #f8f9fa;
 }
+
+#reader { width: 100%; border-radius: 4px; overflow: hidden; } #reader__scan_region { background: white; }

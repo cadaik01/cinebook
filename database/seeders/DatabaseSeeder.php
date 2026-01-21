@@ -15,11 +15,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Gọi các Seeder theo thứ tự logic
+        $this->call([
+            UserSeeder::class,
+            GenreSeeder::class,
+            // MovieSeeder::class, // Cần tạo file này hoặc import SQL trước
+            // MovieGenreSeeder::class, // Chỉ chạy được khi đã có Movies
         ]);
     }
 }

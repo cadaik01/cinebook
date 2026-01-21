@@ -20,7 +20,7 @@
                 </div>
                 <div class="card-body text-center d-flex flex-column justify-content-center">
                     <div class="mb-3">
-                        <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('images/default-avatar.png') }}" 
+                        <img src="{{ $user->avatar_url ? asset('storage/' . $user->avatar_url) : asset('images/default-avatar.png') }}" 
                              alt="Profile Picture" 
                              class="rounded-circle" 
                              style="width: 200px; height: 200px; object-fit: cover; border: 5px solid var(--deep-teal);">

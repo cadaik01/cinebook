@@ -149,4 +149,35 @@
             </div>
         `).join('');
     }
+
+    // Initialize QR Code Scanner
+    if (document.getElementById('reader')) {
+        function onScanSuccess(decodedText, decodedResult) {
+            // console.log(`Code matched = ${decodedText}`, decodedResult);
+            
+            if(qrInput && qrInput.value !== decodedText) {
+                qrInput.value = decodedText;
+                
+                // Play a beep sound if desired, or just trigger preview
+                if(previewBtn) {
+                    previewBtn.click();
+                }
+            }
+        }
+
+        function onScanFailure(error) {
+            // console.warn(`Code scan error = ${error}`);
+        }
+
+        // Check if library is loaded
+        if (typeof Html5QrcodeScanner !== 'undefined') {
+            let html5QrcodeScanner = new Html5QrcodeScanner(
+                "reader",
+                { fps: 10, qrbox: {width: 250, height: 250} },
+                /* verbose= */ false);
+            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        } else {
+            console.error('Html5QrcodeScanner library not found');
+        }
+    }
 })();
