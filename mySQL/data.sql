@@ -21,6 +21,23 @@ INSERT INTO rooms (id, name, total_rows, seats_per_row, screen_type_id) VALUES
 (3, 'Room 3', 8, 18, 2), -- 3D
 (4, 'Room 4', 8, 18, 3); -- IMAX 4D
 
+-- genres
+INSERT INTO genres (id, name) VALUES
+(1, 'Action'),
+(2, 'Adventure'),
+(3, 'Animation'),
+(4, 'Comedy'),
+(5, 'Crime'),
+(6, 'Drama'),
+(7, 'Family'),
+(8, 'Fantasy'),
+(9, 'Horror'),
+(10, 'Romance'),
+(11, 'Sci-Fi'),
+(12, 'Thriller'),
+(13, 'War'),
+(14, 'Mystery');
+
 -- movies
 INSERT INTO movies (id, title, language, director, cast, duration, release_date, age_rating, status, poster_url, trailer_url, description, rating_avg) VALUES
 
@@ -90,6 +107,73 @@ INSERT INTO movies (id, title, language, director, cast, duration, release_date,
 (31, 'Belle', 'Japanese', 'Mamoru Hosoda', 'Kaho Nakamura, Takeru Satoh, Koji Yakusho, Ikura, Ryō Narita', 121, '2021-07-16', 'P', 'ended', 'https://i.postimg.cc/tRKQqzhW/Belle.jpg', 'https://www.youtube.com/watch?v=izIycj3j4Ow', 'A shy teenage girl discovers a massive virtual world where she can reinvent herself as a global icon. Through music and digital identity, she confronts personal trauma and finds the courage to connect with others in real life.', 4.4),
 
 (32, 'The Nun II', 'English', 'Michael Chaves', 'Taissa Farmiga, Jonas Bloquet, Storm Reid, Anna Popplewell, Bonnie Aarons', 110, '2023-09-08', 'T18', 'ended', 'https://i.postimg.cc/MTnNxcXz/The_Nun_II.jpg', 'https://www.youtube.com/watch?v=QF-oyCwaArU', 'A new chapter in the Conjuring Universe follows Sister Irene as she confronts a demonic entity terrorizing Europe. Dark, atmospheric, and suspenseful, the film expands the mythology of Valak with chilling consequences.', 4.0);
+
+-- movie_genre (liên kết phim với thể loại)
+INSERT INTO movie_genre (movie_id, genre_id) VALUES
+-- Avengers: Endgame (1) - Action, Adventure, Sci-Fi
+(1, 1), (1, 2), (1, 11),
+-- John Wick: Chapter 4 (2) - Action, Crime, Thriller
+(2, 1), (2, 5), (2, 12),
+-- Parasite (3) - Drama, Thriller, Comedy
+(3, 6), (3, 12), (3, 4),
+-- Train to Busan (4) - Action, Horror, Thriller
+(4, 1), (4, 9), (4, 12),
+-- The Dark Knight (5) - Action, Crime, Drama
+(5, 1), (5, 5), (5, 6),
+-- Avatar (6) - Action, Adventure, Sci-Fi, Fantasy
+(6, 1), (6, 2), (6, 11), (6, 8),
+-- La La Land (7) - Romance, Drama, Comedy
+(7, 10), (7, 6), (7, 4),
+-- Your Name (8) - Animation, Romance, Fantasy
+(8, 3), (8, 10), (8, 8),
+-- Spirited Away (9) - Animation, Adventure, Family, Fantasy
+(9, 3), (9, 2), (9, 7), (9, 8),
+-- Intouchables (10) - Drama, Comedy
+(10, 6), (10, 4),
+-- Toy Story (11) - Animation, Adventure, Family, Comedy
+(11, 3), (11, 2), (11, 7), (11, 4),
+-- The Conjuring (12) - Horror, Mystery, Thriller
+(12, 9), (12, 14), (12, 12),
+-- Furie (13) - Action, Crime, Thriller
+(13, 1), (13, 5), (13, 12),
+-- Forrest Gump (14) - Drama, Romance
+(14, 6), (14, 10),
+-- Train to Busan (15) - Action, Horror, Thriller
+(15, 1), (15, 9), (15, 12),
+-- Dune: Part Two (16) - Action, Adventure, Sci-Fi
+(16, 1), (16, 2), (16, 11),
+-- Oppenheimer (17) - Drama, Thriller, War
+(17, 6), (17, 12), (17, 13),
+-- Weathering With You (18) - Animation, Romance, Fantasy
+(18, 3), (18, 10), (18, 8),
+-- Finding Nemo (19) - Animation, Adventure, Family, Comedy
+(19, 3), (19, 2), (19, 7), (19, 4),
+-- Decision to Leave (20) - Romance, Mystery, Thriller
+(20, 10), (20, 14), (20, 12),
+-- Paddington (21) - Adventure, Comedy, Family
+(21, 2), (21, 4), (21, 7),
+-- Rurouni Kenshin (22) - Action, Adventure, Drama
+(22, 1), (22, 2), (22, 6),
+-- Blue Is the Warmest Color (23) - Drama, Romance
+(23, 6), (23, 10),
+-- Intimate Strangers (24) - Drama, Comedy, Thriller
+(24, 6), (24, 4), (24, 12),
+-- The Medium (25) - Horror, Mystery
+(25, 9), (25, 14),
+-- Titanic (26) - Drama, Romance
+(26, 6), (26, 10),
+-- Forrest Gump (27) - Drama, Romance
+(27, 6), (27, 10),
+-- The Shawshank Redemption (28) - Drama, Crime
+(28, 6), (28, 5),
+-- The Wailing (29) - Horror, Mystery, Thriller
+(29, 9), (29, 14), (29, 12),
+-- Call Me by Your Name (30) - Drama, Romance
+(30, 6), (30, 10),
+-- Belle (31) - Animation, Drama, Fantasy
+(31, 3), (31, 6), (31, 8),
+-- The Nun II (32) - Horror, Mystery, Thriller
+(32, 9), (32, 14), (32, 12);
 
 -- seats
 -- reviews for ended movies
