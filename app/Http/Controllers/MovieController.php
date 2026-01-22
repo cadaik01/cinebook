@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Movie;
 use App\Models\Genre;
 
@@ -93,14 +94,14 @@ class MovieController extends Controller
 
         // Check if user can review this movie
         $canReview = false;
-        if (auth()->check()) {
-            $user = auth()->user();
+        if (Auth::check()) {
+            $user = Auth::user();
             if ($user->role === 'admin') {
                 $canReview = true;
             } else {
                 $userId = $user->id;
                 // Check if user has watched this movie (showtime must be in the past)
-                $hasWatched = \DB::table('booking_seats')
+                $hasWatched = DB::table('booking_seats')
                     ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
                     ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
                     ->where('bookings.user_id', $userId)

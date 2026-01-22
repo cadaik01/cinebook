@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Review;
 use App\Models\Movie;
 use App\Models\ReviewHelpful;
@@ -106,7 +107,7 @@ class ReviewController extends Controller
         }
 
         // Check if user has watched this movie (showtime must be in the past)
-        $hasWatched = \DB::table('booking_seats')
+        $hasWatched = DB::table('booking_seats')
             ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
             ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
             ->where('bookings.user_id', $userId)
@@ -226,7 +227,7 @@ class ReviewController extends Controller
         }
 
         // Check if user has watched this movie
-        $hasWatched = \DB::table('booking_seats')
+        $hasWatched = DB::table('booking_seats')
             ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
             ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
             ->where('bookings.user_id', $userId)
