@@ -5,19 +5,77 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Review;
 use App\Models\Movie;
+use App\Models\ReviewHelpful;
 
 class ReviewController extends Controller
 {
     /**
-     * Display all public reviews
+     * Display all public reviews with filtering, sorting, and stats
      */
-    public function index()
+    public function index(Request $request)
     {
-        $reviews = Review::with(['user', 'movie'])
-            ->latest()
-            ->paginate(20);
+        // Build query with filters
+        $query = Review::with(['user', 'movie', 'helpfuls']);
 
-        return view('reviews.index', compact('reviews'));
+        // Filter by movie
+        if ($request->filled('movie_id')) {
+            $query->byMovie($request->movie_id);
+        }
+
+        // Filter by rating
+        if ($request->filled('rating')) {
+            $query->byRating($request->rating);
+        }
+
+        // Sorting
+        $sort = $request->get('sort', 'newest');
+        switch ($sort) {
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'highest':
+                $query->highestRated();
+                break;
+            case 'lowest':
+                $query->lowestRated();
+                break;
+            case 'helpful':
+                $query->mostHelpful();
+                break;
+            default: // newest
+                $query->latest();
+                break;
+        }
+
+        $reviews = $query->paginate(12)->withQueryString();
+
+        // Get stats
+        $stats = [
+            'total_reviews' => Review::count(),
+            'average_rating' => round(Review::avg('rating'), 1) ?: 0,
+            'total_reviewers' => Review::distinct('user_id')->count('user_id'),
+            'top_movie' => Movie::withCount('reviews')
+                ->having('reviews_count', '>', 0)
+                ->orderBy('reviews_count', 'desc')
+                ->first()
+        ];
+
+        // Get rating distribution
+        $ratingDistribution = [];
+        for ($i = 5; $i >= 1; $i--) {
+            $count = Review::where('rating', $i)->count();
+            $ratingDistribution[$i] = [
+                'count' => $count,
+                'percentage' => $stats['total_reviews'] > 0
+                    ? round(($count / $stats['total_reviews']) * 100)
+                    : 0
+            ];
+        }
+
+        // Get all movies for filter dropdown
+        $movies = Movie::whereHas('reviews')->orderBy('title')->get();
+
+        return view('reviews.index', compact('reviews', 'stats', 'ratingDistribution', 'movies'));
     }
 
     /**
@@ -184,5 +242,51 @@ class ReviewController extends Controller
             ->exists();
 
         return $hasWatched;
+    }
+
+    /**
+     * Toggle helpful mark on a review
+     */
+    public function toggleHelpful(Request $request, $reviewId)
+    {
+        if (!Auth::check()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You must be logged in to mark reviews as helpful.'
+            ], 401);
+        }
+
+        $review = Review::findOrFail($reviewId);
+        $userId = Auth::id();
+
+        // Users cannot mark their own reviews as helpful
+        if ($review->user_id === $userId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You cannot mark your own review as helpful.'
+            ], 403);
+        }
+
+        // Toggle helpful mark
+        $existing = ReviewHelpful::where('review_id', $reviewId)
+            ->where('user_id', $userId)
+            ->first();
+
+        if ($existing) {
+            $existing->delete();
+            $isHelpful = false;
+        } else {
+            ReviewHelpful::create([
+                'review_id' => $reviewId,
+                'user_id' => $userId
+            ]);
+            $isHelpful = true;
+        }
+
+        return response()->json([
+            'success' => true,
+            'is_helpful' => $isHelpful,
+            'helpful_count' => $review->helpfuls()->count()
+        ]);
     }
 }

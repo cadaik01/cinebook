@@ -97,6 +97,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reviews/{id}/edit', [\App\Http\Controllers\ReviewController::class, 'edit'])->name('reviews.edit');
     Route::post('/reviews/{id}/update', [\App\Http\Controllers\ReviewController::class, 'update'])->name('reviews.update');
     Route::post('/reviews/{id}/delete', [\App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
+    Route::post('/reviews/{id}/helpful', [\App\Http\Controllers\ReviewController::class, 'toggleHelpful'])->name('reviews.helpful');
 });
 
 //Admin Routes - Grouped with 'admin' prefix, protected by auth & role:admin
