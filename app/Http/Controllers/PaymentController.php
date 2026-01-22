@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Showtime;
 use App\Models\Seat;
 use App\Models\Booking;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BookingConfirmationMail;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
@@ -206,6 +209,19 @@ class PaymentController extends Controller
             
             DB::commit();
             
+            // Send Booking Confirmation Email
+            try {
+                // Load additional relationships for the email
+                $booking->load(['user', 'bookingSeats.seat']);
+                
+                if ($booking->user && $booking->user->email) {
+                    Mail::to($booking->user->email)->send(new BookingConfirmationMail($booking));
+                }
+            } catch (\Exception $e) {
+                // Log the error but don't stop the flow
+                Log::error("Failed to send booking confirmation email for booking #{$booking_id}: " . $e->getMessage());
+            }
+
             //4. Redirect to success page
             return redirect()->route('booking.success', ['booking_id' => $booking_id]);
             
