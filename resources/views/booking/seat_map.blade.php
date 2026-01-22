@@ -46,6 +46,10 @@
                 <span>Booked</span>
             </div>
             <div class="legend-item">
+                <span class="legend-color reserved"></span>
+                <span>Reserved</span>
+            </div>
+            <div class="legend-item">
                 <span class="legend-color selected"></span>
                 <span>Selected</span>
             </div>
