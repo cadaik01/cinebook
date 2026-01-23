@@ -163,18 +163,13 @@
                         <div class="review-content">
                             <p>{{ $review->comment }}</p>
                         </div>
-                        <!-- Edit/Delete Buttons (user or admin) -->
+                        <!-- Delete Button (user or admin) -->
                         @auth
                         @if($review->user_id === Auth::id() || (Auth::user() && Auth::user()->role === 'admin'))
                         <div class="review-actions">
-                            <a href="{{ route('reviews.edit', $review->id) }}"
-                                style="color: #1976d2; font-weight: 500; margin-right: 12px; text-decoration: underline;">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
                             <form action="{{ route('reviews.destroy', $review->id) }}" method="POST"
                                 style="display: inline;">
                                 @csrf
-                                @method('DELETE')
                                 <button type="submit"
                                     style="color: #c0392b; background: none; border: none; padding: 0; font-weight: 500; text-decoration: underline; cursor: pointer;"
                                     onclick="return confirm('Are you sure you want to delete this review?')">

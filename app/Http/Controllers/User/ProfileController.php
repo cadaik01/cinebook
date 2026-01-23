@@ -42,18 +42,6 @@ class ProfileController extends Controller
         return view('profile.bookings_list', compact('upcomingBookings', 'pastBookings'));
     }
 
-    /**
-     * Show user's reviews list
-     */
-    public function reviewsList()
-    {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();//Authenticated user who is logged in (1: admin, 2: regular user, 3: guest)
-        $reviews = $user->reviews()->with('movie')->orderBy('created_at', 'desc')->get();
-
-        return view('profile.reviews_list', compact('reviews'));
-    }
-
     //CRUD user profile
     /**
      * Update user profile

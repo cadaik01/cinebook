@@ -45,14 +45,6 @@
                             <span>Booking History</span>
                         </a>
                     </li>
-
-                    {{-- Menu Item 3: Reviews --}}
-                    <li class="admin-layout-sidebar-item {{ request()->routeIs('user.reviews.*') ? 'active' : '' }}">
-                        <a href="{{ route('user.reviews.list') }}" class="admin-layout-sidebar-link">
-                            <i class="fas fa-star"></i>
-                            <span>Your Reviews</span>
-                        </a>
-                    </li>
                 </ul>
             </nav>
         </aside>
@@ -98,12 +90,6 @@
                                     <a class="dropdown-item" href="{{ route('user.bookings.list') }}">
                                         <i class="fas fa-history me-2"></i>
                                         Booking History
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('user.reviews.list') }}">
-                                        <i class="fas fa-star me-2"></i>
-                                        Your Reviews
                                     </a>
                                 </li>
                                 <li>

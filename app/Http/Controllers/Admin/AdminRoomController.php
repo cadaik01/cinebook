@@ -154,6 +154,8 @@ class AdminRoomController extends Controller
         }
     }
 
+    // Đã chuyển quản lý giá ghế sang SeatTypeController
+
     public function destroy(Room $room)
     {
         try {

@@ -18,11 +18,11 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, string $role)
     {
-        // Kiểm tra đã đăng nhập chưa
+        // Check if user is logged in
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'You need to log in to continue');
         }
-        // Kiểm tra đúng role chưa
+        // check user role
         if (Auth::user()->role !== $role) {
             abort(403, 'You do not have permission to access this page');
         }

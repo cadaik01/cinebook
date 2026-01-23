@@ -28,12 +28,6 @@
                             Upcoming Movies
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('reviews.index') }}" class="nav-link">
-                            <i class="fas fa-star"></i>
-                            Reviews
-                        </a>
-                    </li>
                 </ul>
             </div>
 

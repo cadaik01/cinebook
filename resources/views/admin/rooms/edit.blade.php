@@ -568,6 +568,8 @@
         </form>
     </div>
 
+    <!-- Seat Prices Section đã được chuyển thành section chung toàn hệ thống -->
+
     <!-- Seat Map Section -->
     <div class="seat-map-section">
         <h4><i class="bi bi-grid-3x3 me-2"></i>Seat Map Configuration</h4>
@@ -966,6 +968,53 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedSeats.length > 0) {
             openSidebar();
         }
+    });
+
+    // ========== Seat Prices AJAX Form ==========
+    const seatPricesForm = document.getElementById('seatPricesForm');
+    const savePricesBtn = document.getElementById('savePricesBtn');
+    const pricesSaveStatus = document.getElementById('pricesSaveStatus');
+
+    seatPricesForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Disable button and show loading
+        savePricesBtn.disabled = true;
+        savePricesBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Saving...';
+        pricesSaveStatus.innerHTML = '';
+
+        const formData = new FormData(seatPricesForm);
+
+        fetch('{{ route("admin.rooms.update-prices", $room->id) }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                pricesSaveStatus.innerHTML = '<span class="text-success"><i class="bi bi-check-circle me-1"></i>' + data.message + '</span>';
+            } else {
+                pricesSaveStatus.innerHTML = '<span class="text-danger"><i class="bi bi-x-circle me-1"></i>' + data.message + '</span>';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            pricesSaveStatus.innerHTML = '<span class="text-danger"><i class="bi bi-x-circle me-1"></i>Failed to save prices</span>';
+        })
+        .finally(() => {
+            // Re-enable button
+            savePricesBtn.disabled = false;
+            savePricesBtn.innerHTML = '<i class="bi bi-save me-2"></i>Save Prices';
+
+            // Clear status after 3 seconds
+            setTimeout(() => {
+                pricesSaveStatus.innerHTML = '';
+            }, 3000);
+        });
     });
 });
 </script>

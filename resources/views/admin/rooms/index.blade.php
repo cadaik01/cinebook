@@ -2,6 +2,68 @@
 
 @section('title', 'Manage Rooms')
 
+@push('styles')
+<style>
+.price-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    margin-bottom: 24px;
+}
+.price-card .card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 12px 12px 0 0;
+    padding: 16px 20px;
+}
+.price-card .card-header h5 {
+    margin: 0;
+    font-weight: 600;
+}
+.price-table {
+    margin: 0;
+}
+.price-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+}
+.price-table td, .price-table th {
+    vertical-align: middle;
+    padding: 12px 16px;
+}
+.price-input {
+    width: 120px;
+    text-align: right;
+}
+.seat-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.85em;
+}
+.seat-type-badge.standard {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    color: white;
+}
+.seat-type-badge.vip {
+    background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%);
+    color: white;
+}
+.seat-type-badge.couple {
+    background: linear-gradient(135deg, #e84393 0%, #d63384 100%);
+    color: white;
+}
+.save-status {
+    font-size: 0.85em;
+    margin-left: 8px;
+}
+</style>
+@endpush
+
 @section('content')
 <div class="admin-header">
     <div class="d-flex justify-content-between align-items-center">
@@ -16,6 +78,43 @@
 </div>
 
 <div class="container-fluid">
+    <!-- Seat Type Prices Section (hiển thị trực tiếp) -->
+    <div class="mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-currency-dollar me-2"></i>Set Seat Type Prices</h4>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('admin.seat_types.update_prices') }}" method="POST">
+                    @csrf
+                    <div class="row">
+                        @php $seatTypes = \App\Models\SeatType::all(); @endphp
+                        @foreach($seatTypes as $seatType)
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">
+                                <span class="legend-color {{ strtolower($seatType->name) }} me-2" style="width: 20px; height: 20px; display: inline-block; border-radius: 4px;"></span>
+                                {{ ucfirst($seatType->name) }} Price (VND)
+                            </label>
+                            <input type="number" class="form-control" name="prices[{{ $seatType->id }}]" value="{{ $seatType->base_price }}" min="0" step="1000" required>
+                        </div>
+                        @endforeach
+                    </div>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-save me-2"></i>Save All Prices
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    @push('styles')
+    <style>
+    .legend-color.standard { background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); }
+    .legend-color.vip { background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%); }
+    .legend-color.couple { background: linear-gradient(135deg, #e84393 0%, #d63384 100%); }
+    </style>
+    @endpush
+
+    <!-- Rooms List -->
     <div class="row">
         @forelse($rooms as $room)
         <div class="col-md-4 mb-4">
