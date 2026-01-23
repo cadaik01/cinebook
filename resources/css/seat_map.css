@@ -1,4 +1,4 @@
-/* Couple seat button: rộng gấp đôi ghế đơn */
+/* Couple seat button */
 .seat-btn.couple {
     width: 95px;
     min-width: 90px;
@@ -236,37 +236,16 @@
     box-shadow: none !important;
 }
 
-/* Reserved seats - gray color */
-.seat-btn.reserved,
-.seat-btn.reserved[data-seat-type="1"],
-.seat-btn.reserved[data-seat-type="2"],
-.seat-btn.reserved[data-seat-type="3"] {
-    cursor: not-allowed !important;
-    opacity: 0.7 !important;
-    background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%) !important;
-    background-color: #bdc3c7 !important;
-    color: #555 !important;
-    text-shadow: none !important;
-}
-
-.seat-btn.reserved:hover {
-    transform: none !important;
-    box-shadow: none !important;
-}
-
-.legend-color.reserved {
-    background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
-}
-
 /* Seat type colors */
+/* Standard Seat */
 .seat-btn[data-seat-type="1"] {
     background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
 }
-
+/* VIP Seat */
 .seat-btn[data-seat-type="2"] {
     background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%);
 }
-
+/* Couple Seat */
 .seat-btn[data-seat-type="3"] {
     background: linear-gradient(135deg, #e84393 0%, #d63384 100%);
 }

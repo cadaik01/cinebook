@@ -14,7 +14,7 @@ class BookingCountDown{
         this.storageKey = options.storageKey || 'booking_expiry_time';
         
         // Get or set expiry time
-        this.expiryTime = this.getOrSetExpiryTime(options.timeleft || 600);
+        this.expiryTime = this.getOrSetExpiryTime(options.timeLeft || 120);
         
         //Validate elements
         if (!this.countdownElement) {
@@ -134,19 +134,32 @@ class BookingCountDown{
     }
 }
 
-// Auto-initialize on DOM load
+//Auto init on DOM load
 document.addEventListener('DOMContentLoaded', () => {
     const countdown = document.getElementById('countdown');
-    const paymentForm = document.querySelector('form[action*="booking.process"]');
-    
-    if (countdown){
+    const paymentForm = document.getElementById('payment-form');
+
+    if (countdown) {
+        //Read atrributes for customization
+        //Read showtime ID if needed
+        const showtimeId = countdown.getAttribute('data-showtime-id');
+        //Read seats ID
+        const seatsId = countdown.getAttribute('data-seats-id');
+        //Read countdown time if specified, if not default 120 seconds
+        const timeLeft = parseInt(countdown.getAttribute('data-timeleft')) || 120;
+
+        //Create unique key for storage 
+        let storageKey = 'booking_expiry_time';
+        if (showtimeId && seatsId) {
+            storageKey = `booking_expiry_time_${showtimeId}_${seatsId}`;
+        }
         new BookingCountDown({
-            timeleft: 600, // 10 minutes
             elementId: 'countdown',
             paymentForm: paymentForm,
+            timeLeft: timeLeft,
+            storageKey: storageKey,
             redirectUrl: '/',
-            warningThreshold: 60,
-            storageKey: 'booking_expiry_time'
+            warningThreshold: 30
         });
     }
 });

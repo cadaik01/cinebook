@@ -46,10 +46,6 @@
                 <span>Booked</span>
             </div>
             <div class="legend-item">
-                <span class="legend-color reserved"></span>
-                <span>Reserved</span>
-            </div>
-            <div class="legend-item">
                 <span class="legend-color selected"></span>
                 <span>Selected</span>
             </div>
@@ -92,11 +88,8 @@
                                     // Determine couple seat status
                                     $coupleStatus = 'available';
                                     $coupleDisabled = false;
-                                    if ($isCoupleBooked) {
+                                    if ($isCoupleBooked || $isCoupleReserved) {
                                         $coupleStatus = 'booked';
-                                        $coupleDisabled = true;
-                                    } elseif ($isCoupleReserved) {
-                                        $coupleStatus = 'reserved';
                                         $coupleDisabled = true;
                                     }
                                 @endphp
@@ -111,11 +104,8 @@
                                 @php
                                     $seatStatus = 'available';
                                     $seatDisabled = false;
-                                    if ($isBooked) {
+                                    if ($isBooked || $isReserved) {
                                         $seatStatus = 'booked';
-                                        $seatDisabled = true;
-                                    } elseif ($isReserved) {
-                                        $seatStatus = 'reserved';
                                         $seatDisabled = true;
                                     }
                                 @endphp
