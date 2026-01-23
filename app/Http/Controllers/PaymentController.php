@@ -205,6 +205,8 @@ class PaymentController extends Controller
                 ->where('showtime_seats.status', 'reserved')
                 ->update([
                     'showtime_seats.status' => 'booked',
+                    'showtime_seats.reserved_until' => null,
+                    'showtime_seats.reserved_by_user_id' => null,
                 ]);
             
             DB::commit();

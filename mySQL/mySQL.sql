@@ -132,10 +132,14 @@ CREATE TABLE showtime_seats (
     showtime_id INT NOT NULL,
     seat_id INT NOT NULL,
     status ENUM('available','booked','reserved','locked') DEFAULT 'available',
+    reserved_until TIMESTAMP NULL DEFAULT NULL,
+    reserved_by_user_id INT UNSIGNED NULL DEFAULT NULL,
     UNIQUE (showtime_id, seat_id),
     INDEX idx_showtime_status (showtime_id, status),
+    INDEX idx_reserved_until (reserved_until),
     FOREIGN KEY (showtime_id) REFERENCES showtimes(id) ON DELETE CASCADE,
-    FOREIGN KEY (seat_id) REFERENCES seats(id)
+    FOREIGN KEY (seat_id) REFERENCES seats(id),
+    FOREIGN KEY (reserved_by_user_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
 -- BOOKINGS

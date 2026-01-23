@@ -34,6 +34,16 @@ class BookingController extends Controller
             ->orderBy('seat_number', 'asc')
             ->get();
         
+        // Auto-clean expired reserved seats (không cần scheduler!)
+        DB::table('showtime_seats')
+            ->where('status', 'reserved')
+            ->where('reserved_until', '<', now())
+            ->update([
+                'status' => 'available',
+                'reserved_until' => null,
+                'reserved_by_user_id' => null,
+            ]);
+        
         // Get booked seats (confirmed bookings only)
         $bookedSeats = DB::table('showtime_seats')
             ->where('showtime_id', $showtime_id)
@@ -42,9 +52,15 @@ class BookingController extends Controller
             ->toArray();
         
         // Get reserved seats (temporarily held by other users)
+        $user_id = Session::get('user_id');
         $reservedSeats = DB::table('showtime_seats')
             ->where('showtime_id', $showtime_id)
             ->where('status', 'reserved')
+            ->where('reserved_until', '>', now())
+            ->when($user_id, function ($query) use ($user_id) {
+                // Exclude seats reserved by current user
+                return $query->where('reserved_by_user_id', '!=', $user_id);
+            })
             ->pluck('seat_id')
             ->toArray();
             
@@ -115,14 +131,35 @@ class BookingController extends Controller
                 ->whereIn('seat_id', $selectedSeats)
                 ->whereIn('status', ['booked', 'reserved'])
                 ->lockForUpdate() // Also lock showtime_seats rows
-                ->pluck('seat_id')
+                ->pluck('seat_id') //pluck only seat_ids
                 ->toArray();
             
             if (!empty($bookedSeatIds)) {
                 DB::rollBack();
                 $bookedCodes = $lockedSeats->whereIn('id', $bookedSeatIds)->pluck('seat_code')->implode(', ');
                 return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                    ->with('error', "Seats {$bookedCodes} are no longer available.");
+                    ->with('error', "Seats {$bookedCodes} are already booked or reserved.");
+            }
+            //STEP 3.5: check if any seats are reserved by others (not the current user)
+            foreach($selectedSeats as $seat_id){
+                $reservedSeat = DB::table('showtime_seats')
+                    ->where('showtime_id', $showtime_id)
+                    ->where('seat_id', $seat_id)
+                    ->where('status', 'reserved')
+                    ->where('reserved_until', '>', now())
+                    ->where('reserved_by_user_id', '!=', $user_id)
+                    ->lockForUpdate()
+                    ->first();
+                if ($reservedSeat) {
+                    //if reserved by others, rollback
+                    if ($reservedSeat->reserved_by_user_id != $user_id) {
+                        DB::rollBack();
+                        $seatCode = $lockedSeats->get($seat_id)->seat_code ?? $seat_id;
+                        return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                            ->with('error', "Seat {$seatCode} is temporarily reserved by another user.");
+                    }
+                    //if reserved by current user, allow to proceed
+                }
             }
             
             // STEP 4: Collect seat information for pricing (seats are now safely locked)
@@ -143,7 +180,7 @@ class BookingController extends Controller
                         return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
                             ->with('error', $validation['message']);
                     }
-                    // Tính tiền 1 lần cho cả cặp
+                    // Logic to calculate price for couple seats
                     $seatPrice = ($room->screenType->price ?? 0) + ($seat->seatType->base_price ?? 0);
                     $totalPrice += $seatPrice;
                     $seatDetails[] = [
@@ -165,7 +202,36 @@ class BookingController extends Controller
                 ];
             }
         }
-        
+        //STEP 4.5: Reserve seat 120 seconds
+        foreach ($selectedSeats as $seat_id) {
+            //check if already reserved (should not happen due to locks, but double-check)
+            $existingSeat = DB::table('showtime_seats')
+                ->where('showtime_id', $showtime_id)
+                ->where('seat_id', $seat_id)
+                ->first();
+            $reserveData = [
+                'status' => 'reserved',
+                'reserved_until'=> now()->addSeconds(120),
+                'reserved_by_user_id'=> $user_id,
+            ];
+            if ($existingSeat) {
+                //update existing record
+                DB::table('showtime_seats')
+                    ->where('showtime_id', $showtime_id)
+                    ->where('seat_id', $seat_id)
+                    ->update($reserveData);
+            } else {
+                //insert new record
+                DB::table('showtime_seats')
+                    ->insert(array_merge($reserveData, [
+                        'showtime_id' => $showtime_id,
+                        'seat_id' => $seat_id,
+                        'status' => 'reserved',
+                        'reserved_until'=> now()->addSeconds(120),
+                        'reserved_by_user_id'=> $user_id
+                    ]));
+        }
+
         // STEP 5: Commit transaction (releases all locks)
         DB::commit();
         
