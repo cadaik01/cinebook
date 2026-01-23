@@ -125,40 +125,41 @@ class BookingController extends Controller
                     ->with('error', 'Some selected seats are invalid.');
             }
             
-            // STEP 3: Check if any locked seats are already booked/reserved
+            // STEP 3: Check if any locked seats are already BOOKED (confirmed)
             $bookedSeatIds = DB::table('showtime_seats')
                 ->where('showtime_id', $showtime_id)
                 ->whereIn('seat_id', $selectedSeats)
-                ->whereIn('status', ['booked', 'reserved'])
-                ->lockForUpdate() // Also lock showtime_seats rows
-                ->pluck('seat_id') //pluck only seat_ids
+                ->where('status', 'booked') // Only check booked, not reserved
+                ->lockForUpdate()
+                ->pluck('seat_id')
                 ->toArray();
             
             if (!empty($bookedSeatIds)) {
                 DB::rollBack();
                 $bookedCodes = $lockedSeats->whereIn('id', $bookedSeatIds)->pluck('seat_code')->implode(', ');
                 return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                    ->with('error', "Seats {$bookedCodes} are already booked or reserved.");
+                    ->with('error', "Seats {$bookedCodes} are already booked.");
             }
-            //STEP 3.5: check if any seats are reserved by others (not the current user)
-            foreach($selectedSeats as $seat_id){
+            
+            // STEP 3.5: Check if any seats are RESERVED by OTHER users (have not expired)
+            foreach ($selectedSeats as $seat_id) {
                 $reservedSeat = DB::table('showtime_seats')
                     ->where('showtime_id', $showtime_id)
                     ->where('seat_id', $seat_id)
                     ->where('status', 'reserved')
-                    ->where('reserved_until', '>', now())
-                    ->where('reserved_by_user_id', '!=', $user_id)
+                    ->where('reserved_until', '>', now()) // have not expired
                     ->lockForUpdate()
                     ->first();
+                
                 if ($reservedSeat) {
-                    //if reserved by others, rollback
+                    // IF reserved by DIFFERENT user → ERROR
                     if ($reservedSeat->reserved_by_user_id != $user_id) {
                         DB::rollBack();
                         $seatCode = $lockedSeats->get($seat_id)->seat_code ?? $seat_id;
                         return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                            ->with('error', "Seat {$seatCode} is temporarily reserved by another user.");
+                            ->with('error', "Seat {$seatCode} is temporarily reserved by another user. Please select different seats.");
                     }
-                    //if reserved by current user, allow to proceed
+                    // IF reserved by SAME user → OK, proceed
                 }
             }
             
@@ -230,6 +231,7 @@ class BookingController extends Controller
                         'reserved_until'=> now()->addSeconds(120),
                         'reserved_by_user_id'=> $user_id
                     ]));
+            }
         }
 
         // STEP 5: Commit transaction (releases all locks)

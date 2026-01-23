@@ -30,12 +30,30 @@ class BookingCountDown{
     getOrSetExpiryTime(defaultSeconds) {
         const stored = localStorage.getItem(this.storageKey);
         
+        console.log('🔍 Storage Key:', this.storageKey);
+        console.log('🔍 Stored Value:', stored);
+        console.log('🔍 Default Seconds:', defaultSeconds);
+        
         if (stored) {
             // Use existing expiry time
-            return parseInt(stored);
+            const expiryTime = parseInt(stored);
+            const timeLeft = Math.floor((expiryTime - Date.now()) / 1000);
+            console.log('⏰ Time left from storage:', timeLeft, 'seconds');
+            
+            // Nếu đã hết hạn, tạo mới
+            if (timeLeft <= 0) {
+                console.warn('⚠️ Stored time expired, creating new countdown');
+                localStorage.removeItem(this.storageKey);
+                const newExpiryTime = Date.now() + (defaultSeconds * 1000);
+                localStorage.setItem(this.storageKey, newExpiryTime);
+                return newExpiryTime;
+            }
+            
+            return expiryTime;
         } else {
             // Set new expiry time (current time + duration)
             const expiryTime = Date.now() + (defaultSeconds * 1000);
+            console.log('✅ Creating new countdown:', defaultSeconds, 'seconds');
             localStorage.setItem(this.storageKey, expiryTime);
             return expiryTime;
         }
