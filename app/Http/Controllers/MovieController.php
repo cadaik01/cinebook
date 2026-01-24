@@ -95,24 +95,160 @@ class MovieController extends Controller
         return view('movie_details', compact('movie', 'canReview'));
     }
     //2. upcomingMovies function to fetch upcoming movies from the database and return to upcoming_movies view
-    public function upcomingMovies()
+    public function upcomingMovies(Request $request)
     {
-        $movies = DB::table('movies')->where('status', 'coming_soon')->get();
-        
-        // Attach genres using helper function
+        $query = DB::table('movies')->where('status', 'coming_soon');
+
+        // Filter: Genre
+        $genreId = $request->input('genre');
+        if ($genreId) {
+            $movieIds = DB::table('movie_genres')->where('genre_id', $genreId)->pluck('movie_id');
+            $query->whereIn('id', $movieIds);
+        }
+
+        // Filter: Language
+        $language = $request->input('language');
+        if ($language) {
+            $query->where('language', $language);
+        }
+
+        // Filter: Duration (min, max)
+        $durationMin = $request->input('duration_min');
+        $durationMax = $request->input('duration_max');
+        if ($durationMin) {
+            $query->where('duration', '>=', $durationMin);
+        }
+        if ($durationMax) {
+            $query->where('duration', '<=', $durationMax);
+        }
+
+        // Filter: Release Date (from, to)
+        $releaseFrom = $request->input('release_from');
+        $releaseTo = $request->input('release_to');
+        if ($releaseFrom) {
+            $query->where('release_date', '>=', $releaseFrom);
+        }
+        if ($releaseTo) {
+            $query->where('release_date', '<=', $releaseTo);
+        }
+
+        // Sort
+        $sort = $request->input('sort');
+        switch ($sort) {
+            case 'name_asc':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'name_desc':
+                $query->orderBy('title', 'desc');
+                break;
+            case 'release_asc':
+                $query->orderBy('release_date', 'asc');
+                break;
+            case 'release_desc':
+                $query->orderBy('release_date', 'desc');
+                break;
+            case 'rating_asc':
+                $query->orderBy('rating_avg', 'asc');
+                break;
+            case 'rating_desc':
+                $query->orderBy('rating_avg', 'desc');
+                break;
+            case 'duration_asc':
+                $query->orderBy('duration', 'asc');
+                break;
+            case 'duration_desc':
+                $query->orderBy('duration', 'desc');
+                break;
+            default:
+                $query->orderBy('release_date', 'desc');
+        }
+
+        $movies = $query->get();
         $movies = $this->attachGenresToMovies($movies);
-        
-        return view('movie.upcoming_movies', compact('movies'));
+
+        // For filter dropdowns
+        $genres = \App\Models\Genre::all();
+        $languages = DB::table('movies')->where('status', 'coming_soon')->distinct()->pluck('language');
+
+        return view('movie.upcoming_movies', compact('movies', 'genres', 'languages'));
     }
     //3. nowShowing function to fetch now showing movies from the database and return to now_showing view
-    public function nowShowing()
+    public function nowShowing(Request $request)
     {
-        $movies = DB::table('movies')->where('status', 'now_showing')->get();
-        
-        // Attach genres using helper function
+        $query = DB::table('movies')->where('status', 'now_showing');
+
+        // Filter: Genre
+        $genreId = $request->input('genre');
+        if ($genreId) {
+            $movieIds = DB::table('movie_genres')->where('genre_id', $genreId)->pluck('movie_id');
+            $query->whereIn('id', $movieIds);
+        }
+
+        // Filter: Language
+        $language = $request->input('language');
+        if ($language) {
+            $query->where('language', $language);
+        }
+
+        // Filter: Duration (min, max)
+        $durationMin = $request->input('duration_min');
+        $durationMax = $request->input('duration_max');
+        if ($durationMin) {
+            $query->where('duration', '>=', $durationMin);
+        }
+        if ($durationMax) {
+            $query->where('duration', '<=', $durationMax);
+        }
+
+        // Filter: Release Date (from, to)
+        $releaseFrom = $request->input('release_from');
+        $releaseTo = $request->input('release_to');
+        if ($releaseFrom) {
+            $query->where('release_date', '>=', $releaseFrom);
+        }
+        if ($releaseTo) {
+            $query->where('release_date', '<=', $releaseTo);
+        }
+
+        // Sort
+        $sort = $request->input('sort');
+        switch ($sort) {
+            case 'name_asc':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'name_desc':
+                $query->orderBy('title', 'desc');
+                break;
+            case 'release_asc':
+                $query->orderBy('release_date', 'asc');
+                break;
+            case 'release_desc':
+                $query->orderBy('release_date', 'desc');
+                break;
+            case 'rating_asc':
+                $query->orderBy('rating_avg', 'asc');
+                break;
+            case 'rating_desc':
+                $query->orderBy('rating_avg', 'desc');
+                break;
+            case 'duration_asc':
+                $query->orderBy('duration', 'asc');
+                break;
+            case 'duration_desc':
+                $query->orderBy('duration', 'desc');
+                break;
+            default:
+                $query->orderBy('release_date', 'desc');
+        }
+
+        $movies = $query->get();
         $movies = $this->attachGenresToMovies($movies);
-        
-        return view('movie.now_showing', compact('movies'));
+
+        // For filter dropdowns
+        $genres = \App\Models\Genre::all();
+        $languages = DB::table('movies')->where('status', 'now_showing')->distinct()->pluck('language');
+
+        return view('movie.now_showing', compact('movies', 'genres', 'languages'));
     }
     
 }
