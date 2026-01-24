@@ -17,13 +17,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
+    padding: 0 32px;
+    height: 100px;
+    width: 100%;
 }
 
 .nav-brand {
     display: flex;
     align-items: center;
     gap: 15px;
+    min-width: 180px;
 }
 
 .brand-name {
@@ -44,14 +47,25 @@
 
 .nav-menu {
     display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    min-width: 0;
+    width: 100%;
+    padding-left: 32px;
 }
 
 .nav-list {
     display: flex;
     list-style: none;
-    gap: 30px;
+    gap: 48px;
     margin: 0;
     padding: 0;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
 }
 
 .nav-item a {
@@ -68,7 +82,10 @@
 .nav-auth {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 10px;
+    height: 100%;
+    width: 100%;
 }
 
 .auth-buttons {

@@ -13,7 +13,8 @@
 <div class="page-header">
     <div class="header-content">
         <h1>Now Showing</h1>
-        <p>Discover what's currently playing in theaters</p>
+        <p>Discover what’s currently playing in theaters — before everyone spoils it for you.
+            🎬🔥</p>
         <!-- Filter & Sort Form -->
         <form method="GET" action="" class="movie-filter-form">
             <div class="filter-row">

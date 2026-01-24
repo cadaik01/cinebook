@@ -36,24 +36,27 @@ class ReviewController extends Controller
             return redirect()->back()->with('error', 'You have already reviewed this movie.');
         }
 
-        // Check if user has watched this movie (showtime must be in the past)
-        $hasWatched = \DB::table('booking_seats')
-            ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
-            ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
-            ->where('bookings.user_id', $userId)
-            ->where('showtimes.movie_id', $movieId)
-            ->where('bookings.payment_status', 'paid')
-            ->where(function($query) {
-                $query->where('showtimes.show_date', '<', now()->toDateString())
-                    ->orWhere(function($q) {
-                        $q->where('showtimes.show_date', '=', now()->toDateString())
-                          ->where('showtimes.show_time', '<', now()->toTimeString());
-                    });
-            })
-            ->exists();
+        // Nếu là admin thì bỏ qua kiểm tra đã xem phim
+        $isAdmin = Auth::user() && Auth::user()->role === 'admin';
+        if (!$isAdmin) {
+            $hasWatched = \DB::table('booking_seats')
+                ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
+                ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
+                ->where('bookings.user_id', $userId)
+                ->where('showtimes.movie_id', $movieId)
+                ->where('bookings.payment_status', 'paid')
+                ->where(function($query) {
+                    $query->where('showtimes.show_date', '<', now()->toDateString())
+                        ->orWhere(function($q) {
+                            $q->where('showtimes.show_date', '=', now()->toDateString())
+                              ->where('showtimes.show_time', '<', now()->toTimeString());
+                        });
+                })
+                ->exists();
 
-        if (!$hasWatched) {
-            return redirect()->back()->with('error', 'You can only review movies you have watched.');
+            if (!$hasWatched) {
+                return redirect()->back()->with('error', 'You can only review movies you have watched.');
+            }
         }
 
         // Create and save the review

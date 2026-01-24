@@ -145,16 +145,18 @@
                         <div class="review-sort-dropdown">
                             <label for="review_sort">Sort by:</label>
                             <select id="review_sort" onchange="sortReviews(this.value)">
-                                <option value="latest" {{ ($reviewSort ?? 'latest') == 'latest' ? 'selected' : '' }}>Latest</option>
-                                <option value="highest" {{ ($reviewSort ?? '') == 'highest' ? 'selected' : '' }}>Highest Rating</option>
+                                <option value="latest" {{ ($reviewSort ?? 'latest') == 'latest' ? 'selected' : '' }}>
+                                    Latest</option>
+                                <option value="highest" {{ ($reviewSort ?? '') == 'highest' ? 'selected' : '' }}>Highest
+                                    Rating</option>
                             </select>
                         </div>
                         @endif
                     </div>
                     @php
-                        $sortedReviews = ($reviewSort ?? 'latest') == 'highest'
-                            ? $movie->reviews->sortBy([['rating', 'desc'], ['created_at', 'desc']])
-                            : $movie->reviews->sortByDesc('created_at');
+                    $sortedReviews = ($reviewSort ?? 'latest') == 'highest'
+                    ? $movie->reviews->sortBy([['rating', 'desc'], ['created_at', 'desc']])
+                    : $movie->reviews->sortByDesc('created_at');
                     @endphp
                     @forelse($sortedReviews as $review)
                     <div class="review-item">
@@ -184,10 +186,9 @@
                         @if($review->user_id === Auth::id() || (Auth::user() && Auth::user()->role === 'admin'))
                         <div class="review-actions">
                             <form action="{{ route('reviews.destroy', $review->id) }}" method="POST"
-                                style="display: inline;">
+                                class="review-actions-inline">
                                 @csrf
-                                <button type="submit"
-                                    style="color: #c0392b; background: none; border: none; padding: 0; font-weight: 500; text-decoration: underline; cursor: pointer;"
+                                <button type="submit" class="review-delete-btn"
                                     onclick="return confirm('Are you sure you want to delete this review?')">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>

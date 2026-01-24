@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /s \"c:\\\\xampp\\\\htdocs\\\\cinebook\\\\resources\\\\views\")"
+    ]
+  }
+}

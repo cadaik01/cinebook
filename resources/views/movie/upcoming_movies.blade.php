@@ -13,7 +13,7 @@
 <div class="page-header">
     <div class="header-content">
         <h1>Upcoming Movies</h1>
-        <p>Exciting films coming soon to theaters</p>
+        <p>Exciting films coming soon to theaters — blink and you’ll miss the opening weekend. 👀🍿</p>
         <!-- Filter & Sort Form -->
         <form method="GET" action="" class="movie-filter-form">
             <div class="filter-row">
