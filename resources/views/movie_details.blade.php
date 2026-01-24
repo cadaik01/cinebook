@@ -139,8 +139,24 @@
 
                 <!-- List of all reviews -->
                 <div class="reviews-list mt-4">
-                    <h5 class="mb-3">All Reviews</h5>
-                    @forelse($movie->reviews->sortByDesc('created_at') as $review)
+                    <div class="reviews-header">
+                        <h5 class="mb-0">All Reviews</h5>
+                        @if($movie->reviews->count() > 0)
+                        <div class="review-sort-dropdown">
+                            <label for="review_sort">Sort by:</label>
+                            <select id="review_sort" onchange="sortReviews(this.value)">
+                                <option value="latest" {{ ($reviewSort ?? 'latest') == 'latest' ? 'selected' : '' }}>Latest</option>
+                                <option value="highest" {{ ($reviewSort ?? '') == 'highest' ? 'selected' : '' }}>Highest Rating</option>
+                            </select>
+                        </div>
+                        @endif
+                    </div>
+                    @php
+                        $sortedReviews = ($reviewSort ?? 'latest') == 'highest'
+                            ? $movie->reviews->sortBy([['rating', 'desc'], ['created_at', 'desc']])
+                            : $movie->reviews->sortByDesc('created_at');
+                    @endphp
+                    @forelse($sortedReviews as $review)
                     <div class="review-item">
                         <!-- User and time information -->
                         <div class="review-header">
@@ -254,5 +270,12 @@
                 }
             }
         });
+
+        // Sort reviews function
+        function sortReviews(sortValue) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('review_sort', sortValue);
+            window.location.href = url.toString();
+        }
         </script>
         @endsection

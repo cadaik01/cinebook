@@ -51,7 +51,7 @@ class MovieController extends Controller
         
         return view('index', compact('movies'));
     }
-    public function show($id)
+    public function show(Request $request, $id)
     {
         // Use Eloquent Model instead of DB::table to enable relationships
         $movie = Movie::with('genres','reviews.user')->findOrFail($id);
@@ -60,6 +60,9 @@ class MovieController extends Controller
         if ($movie) {
             $movie->genres = $movie->genres->pluck('name')->toArray();
         }
+
+        // Get review sort parameter (default: latest)
+        $reviewSort = $request->input('review_sort', 'latest');
 
         // Check if user can review this movie
         $canReview = false;
@@ -92,7 +95,7 @@ class MovieController extends Controller
             }
         }
 
-        return view('movie_details', compact('movie', 'canReview'));
+        return view('movie_details', compact('movie', 'canReview', 'reviewSort'));
     }
     //2. upcomingMovies function to fetch upcoming movies from the database and return to upcoming_movies view
     public function upcomingMovies(Request $request)
