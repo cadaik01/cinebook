@@ -9,7 +9,11 @@
     <!-- Countdown Timer -->
     <div style="background: #ff6b6b; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
         <h3 style="margin: 0;">⏰ Time Remaining</h3>
-        <div id="countdown" style="font-size: 32px; font-weight: bold; margin-top: 10px;">10:00</div>
+        <div id="countdown" 
+             data-showtime-id="{{ $booking->showtime_id }}"
+             data-seats-id="{{ $booking->bookingSeats->pluck('seat_id')->implode('_') }}"
+             data-timeleft="120"
+             style="font-size: 32px; font-weight: bold; margin-top: 10px;">02:00</div>
         <p style="margin: 5px 0 0 0; font-size: 14px;">Complete payment before time expires</p>
     </div>
     

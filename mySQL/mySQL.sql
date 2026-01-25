@@ -17,6 +17,14 @@ CREATE TABLE users (
     INDEX idx_role (role)
 );
 
+-- PASSWORD_RESET_TOKENS
+CREATE TABLE password_reset_tokens (
+    email VARCHAR(150) PRIMARY KEY,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NULL DEFAULT NULL,
+    INDEX idx_email_token (email, token)
+);
+
 -- MOVIES
 CREATE TABLE movies (
     id INT AUTO_INCREMENT PRIMARY KEY,

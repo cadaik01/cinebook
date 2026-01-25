@@ -50,46 +50,41 @@ class PaymentController extends Controller
         DB::beginTransaction();
         
         try {
-            //a. Re-check seat availability (both booked and reserved)
+            //a. Re-check seat availability
             foreach ($selectedSeats as $seat_id) {
-                $existingBooking = DB::table('showtime_seats')
-                    ->where('showtime_id', $showtime_id)
-                    ->where('seat_id', $seat_id)
-                    ->whereIn('status', ['booked', 'reserved'])
-                    ->first();
-                    
-                if ($existingBooking) {
-                    DB::rollback();
-                    return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                                   ->with('error', 'Seat already booked during your booking process. Please select different seats.');
-                }
-            }
-            
-            //b. Reserve seats in showtime_seats table (update or insert)
-            foreach ($selectedSeats as $seat_id) {
-                // Check if seat exists
-                $existingSeat = DB::table('showtime_seats')
+                $seatStatus = DB::table('showtime_seats')
                     ->where('showtime_id', $showtime_id)
                     ->where('seat_id', $seat_id)
                     ->first();
                 
-                if ($existingSeat) {
-                    // Update existing seat to reserved
-                    DB::table('showtime_seats')
-                        ->where('showtime_id', $showtime_id)
-                        ->where('seat_id', $seat_id)
-                        ->update(['status' => 'reserved']);
-                } else {
-                    // Insert new seat
-                    DB::table('showtime_seats')->insert([
-                        'showtime_id' => $showtime_id,
-                        'seat_id' => $seat_id,
-                        'status' => 'reserved',
-                    ]);
+                // If booked -> show error
+                if ($seatStatus && $seatStatus->status === 'booked') {
+                    DB::rollback();
+                    return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                        ->with('error', 'Seat already booked. Please select different seats.');
+                }
+                
+                // Cannon book if reserved by another user or reservation expired
+                if ($seatStatus && $seatStatus->status === 'reserved') {
+                    // check if reserved by current user
+                    if ($seatStatus->reserved_by_user_id != $user_id) {
+                        DB::rollback();
+                        return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                            ->with('error', 'Seat reserved by another user. Please try again.');
+                    }
+                    
+                    // Check if reservation expired 
+                    if ($seatStatus->reserved_until && now() > $seatStatus->reserved_until) {
+                        DB::rollback();
+                        return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                            ->with('error', 'Your reservation has expired. Please select seats again.');
+                    }
+                    
+                    // If reserved by current user and still valid, proceed
                 }
             }
             
-            //c. Create booking record (không cần qr_code nữa)
+            //c. Create booking record
             $bookingId = DB::table('bookings')->insertGetId([
                 'user_id' => $user_id,
                 'showtime_id' => $showtime_id,
