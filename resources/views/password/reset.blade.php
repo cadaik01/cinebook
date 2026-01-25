@@ -1,3 +1,15 @@
+{{--
+/**
+ * Password Reset Page
+ * 
+ * Password reset interface including:
+ * - New password form with confirmation
+ * - Token validation handling
+ * - Security requirements display
+ * - Form validation and error messages
+ * - Success/failure feedback
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'Reset Password')

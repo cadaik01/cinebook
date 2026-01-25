@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Rooms List
+ * 
+ * Theater room management including:
+ * - Room list with capacity info
+ * - Screen type and configuration
+ * - Seat layout management
+ * - Room status and availability
+ * - Add new room options
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Manage Rooms')

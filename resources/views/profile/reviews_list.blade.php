@@ -1,3 +1,28 @@
+{{--
+/**
+ * User Reviews List View
+ * 
+ * Displays user's movie reviews with comprehensive filtering and search functionality:
+ * - Rating-based filtering (1-5 stars)
+ * - Date range filtering with validation
+ * - Movie title search functionality  
+ * - Paginated review display with poster images
+ * - Empty state handling for no reviews
+ */
+--}}
+
+{{--
+/**
+ * User Reviews List
+ * 
+ * User review management interface including:
+ * - List of user's movie reviews
+ * - Review editing and deletion options
+ * - Rating and comment display
+ * - Review filtering and search
+ * - Review statistics
+ */
+--}}
 @extends('profile.profilepage')
 
 @section('title', 'My Reviews - TCA Cine')

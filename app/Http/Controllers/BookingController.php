@@ -10,6 +10,16 @@ use App\Models\Room;
 use App\Models\Seat;
 use App\Models\Booking;
 
+/**
+ * BookingController
+ * 
+ * Handles movie booking operations including:
+ * - Seat map display with availability status
+ * - Booking process and seat selection
+ * - Booking confirmation and validation
+ * - Session management for booking flow
+ * - Seat reservation and release logic
+ */
 class BookingController extends Controller
 {
     //Display seat map for a specific showtime

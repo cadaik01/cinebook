@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * ProfileController
+ * 
+ * Handles user profile management and related operations including:
+ * - User profile display and statistics
+ * - Booking history (upcoming and past bookings)
+ * - Profile editing and password changes
+ * - User reviews management with filtering and pagination
+ * - Date range validation for review filters
+ */
 class ProfileController extends Controller
 {
     /**

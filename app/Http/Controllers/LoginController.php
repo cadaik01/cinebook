@@ -9,6 +9,16 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
+/**
+ * LoginController
+ * 
+ * Handles user authentication operations including:
+ * - Login form display
+ * - User authentication and validation
+ * - Session management
+ * - Role-based redirects (admin/user)
+ * - Logout functionality
+ */
 class LoginController extends Controller
 {
     //Show login form

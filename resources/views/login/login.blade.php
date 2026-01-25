@@ -1,3 +1,15 @@
+{{--
+/**
+ * Login Page
+ * 
+ * User authentication interface including:
+ * - Login form with email/password fields
+ * - Remember me functionality
+ * - Forgot password link
+ * - Registration redirect link
+ * - Form validation and error display
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'TCA Cine - Login')

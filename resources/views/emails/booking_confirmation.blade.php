@@ -1,3 +1,15 @@
+{{--
+/**
+ * Booking Confirmation Email Template
+ * 
+ * Email template for booking confirmations including:
+ * - Booking details and movie information
+ * - QR code for entry
+ * - Theater and seat details
+ * - Important instructions
+ * - Contact information
+ */
+--}}
 <!DOCTYPE html>
 <html>
 <head>

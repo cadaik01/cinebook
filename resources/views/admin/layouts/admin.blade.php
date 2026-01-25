@@ -1,3 +1,16 @@
+{{--
+/**
+ * Admin Layout Template
+ * 
+ * Main layout template for admin panel including:
+ * - Fixed sidebar navigation with admin management sections
+ * - Clean navbar with page title display
+ * - Comprehensive admin menu (Dashboard, Movies, Rooms, Showtimes, etc.)
+ * - Alert system for admin notifications
+ * - Bootstrap and FontAwesome integration
+ */
+--}}
+
 <!DOCTYPE html>
 <html lang="en">
 

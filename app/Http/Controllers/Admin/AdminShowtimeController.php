@@ -13,6 +13,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+/**
+ * AdminShowtimeController
+ * 
+ * Handles admin showtime management including:
+ * - Showtime listing and filtering
+ * - Showtime creation and editing
+ * - Price and seat configuration
+ * - Schedule management and validation
+ */
 class AdminShowtimeController extends Controller
 {
     public function index(Request $request)

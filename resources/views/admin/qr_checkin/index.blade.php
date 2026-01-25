@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin QR Check-in Scanner
+ * 
+ * QR code scanning interface including:
+ * - Camera-based QR scanner
+ * - Manual booking code entry
+ * - Real-time booking validation
+ * - Check-in status updates
+ * - Attendance tracking
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'QR Check-in')

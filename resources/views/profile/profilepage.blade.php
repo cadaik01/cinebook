@@ -1,3 +1,16 @@
+{{--
+/**
+ * Profile Layout Template
+ * 
+ * Main layout template for user profile section including:
+ * - Responsive sidebar navigation with profile menu items
+ * - Clean navbar with page title display
+ * - Alert system for success/error messages
+ * - Bootstrap integration and FontAwesome icons
+ * - CSS and JavaScript asset management
+ */
+--}}
+
 <!DOCTYPE html>
 <html lang="en">
 

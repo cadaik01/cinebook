@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Booking Details
+ * 
+ * Detailed booking information including:
+ * - Complete booking information display
+ * - Customer details and contact
+ * - Seat and payment information
+ * - QR code and ticket details
+ * - Booking status management
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Booking Details')

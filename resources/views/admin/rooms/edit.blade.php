@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Room Edit
+ * 
+ * Room editing interface including:
+ * - Pre-filled room information
+ * - Seat layout modifications
+ * - Screen type updates
+ * - Capacity adjustments
+ * - Active showtime impact warnings
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Edit Room & Seats')

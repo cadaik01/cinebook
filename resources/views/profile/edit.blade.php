@@ -1,3 +1,15 @@
+{{--
+/**
+ * Profile Edit Page
+ * 
+ * User profile editing interface including:
+ * - Personal information form
+ * - Profile picture upload
+ * - Contact details management
+ * - Form validation and error handling
+ * - Save and cancel options
+ */
+--}}
 @extends('profile.profilepage')
 
 @section('title','Edit Your Profile')

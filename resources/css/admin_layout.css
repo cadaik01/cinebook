@@ -1,3 +1,16 @@
+/**
+ * Admin Layout Styles
+ * 
+ * Comprehensive styling for admin panel interface including:
+ * - Fixed sidebar navigation with gradient background
+ * - Responsive admin layout with clean navbar
+ * - Custom pagination components for admin tables
+ * - Seat management and booking visualization
+ * - Form controls and button styling
+ * - Mobile responsive breakpoints
+ * - Custom scrollbar styling for admin sections
+ */
+
 @import './root.css';
 /* Palette & base variables are now only in root.css */
 

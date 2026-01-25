@@ -1,3 +1,15 @@
+{{--
+/**
+ * Booking Confirmation Page
+ * 
+ * Final booking review and confirmation including:
+ * - Movie and showtime details summary
+ * - Selected seats and pricing breakdown
+ * - Payment method selection
+ * - Terms and conditions
+ * - Final booking submission
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'Confirm Booking')

@@ -1,3 +1,15 @@
+{{--
+/**
+ * Movie Details View
+ * 
+ * Detailed movie information page displaying:
+ * - Movie poster, title, and description
+ * - Movie metadata (duration, rating, genre)
+ * - Showtimes and booking options
+ * - User reviews and rating system
+ * - Movie trailer and additional media
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', '{{ $movie->title }} - Movie Details')

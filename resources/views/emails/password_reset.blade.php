@@ -1,3 +1,15 @@
+{{--
+/**
+ * Password Reset Email Template
+ * 
+ * Email template for password reset including:
+ * - Reset link with secure token
+ * - Security instructions
+ * - Link expiration information
+ * - Contact support details
+ * - Brand consistent styling
+ */
+--}}
 <!DOCTYPE html>
 <html>
     <head>

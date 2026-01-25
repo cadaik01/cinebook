@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Showtimes List
+ * 
+ * Showtime management interface including:
+ * - Showtimes list with filtering
+ * - Schedule overview and calendar view
+ * - Room and movie assignment
+ * - Pricing and availability management
+ * - Quick scheduling actions
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Manage Showtimes')

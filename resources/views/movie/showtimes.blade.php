@@ -1,3 +1,15 @@
+{{--
+/**
+ * Movie Showtimes Page
+ * 
+ * Showtimes listing and booking interface including:
+ * - Date and time selection
+ * - Theater room and screen type display
+ * - Seat availability indicators
+ * - Price information
+ * - Direct booking links
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'Showtimes - TCA Cine')

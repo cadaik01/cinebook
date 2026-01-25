@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Dashboard
+ * 
+ * Main admin control panel including:
+ * - Key performance metrics and statistics
+ * - Recent activity summaries
+ * - Quick action buttons
+ * - System status indicators
+ * - Data visualization charts
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Dashboard - Admin Panel')

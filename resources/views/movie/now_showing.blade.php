@@ -1,3 +1,15 @@
+{{--
+/**
+ * Now Showing Movies Page
+ * 
+ * Current movies display including:
+ * - Grid layout of currently playing movies
+ * - Movie posters and basic information
+ * - Quick booking access
+ * - Genre and rating filters
+ * - Search and sort functionality
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'Now Showing - TCA Cine')

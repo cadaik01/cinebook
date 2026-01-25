@@ -11,6 +11,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+/**
+ * AdminDashboardController
+ * 
+ * Handles admin dashboard operations including:
+ * - Statistics overview and metrics
+ * - Revenue and booking analytics
+ * - User activity tracking
+ * - System performance monitoring
+ */
 class AdminDashboardController extends Controller
 {
     public function index()

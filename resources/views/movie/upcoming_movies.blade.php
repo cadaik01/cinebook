@@ -1,3 +1,15 @@
+{{--
+/**
+ * Upcoming Movies Page
+ * 
+ * Future releases display including:
+ * - Grid layout of upcoming movies
+ * - Release date information
+ * - Pre-booking options where available
+ * - Movie trailers and teasers
+ * - Wishlist functionality
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'Upcoming Movies - TCA Cine')

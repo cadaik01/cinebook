@@ -1,3 +1,15 @@
+{{--
+/**
+ * Change Password Page
+ * 
+ * Password change interface including:
+ * - Current password verification
+ * - New password and confirmation fields
+ * - Password strength indicators
+ * - Security requirements display
+ * - Success/error feedback
+ */
+--}}
 @extends('profile.profilepage')
 
 @section('title', 'Change Password')

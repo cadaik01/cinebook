@@ -1,3 +1,15 @@
+{{--
+/**
+ * Booking Success Page
+ * 
+ * Post-booking confirmation display including:
+ * - Booking confirmation details
+ * - QR code for entry
+ * - Booking reference number
+ * - Download/email ticket options
+ * - Next steps instructions
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'Booking Success')

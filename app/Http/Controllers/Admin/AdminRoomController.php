@@ -10,6 +10,15 @@ use App\Models\Seat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * AdminRoomController
+ * 
+ * Handles admin room management including:
+ * - Room creation and editing
+ * - Seat layout configuration
+ * - Screen type assignment
+ * - Room capacity management
+ */
 class AdminRoomController extends Controller
 {
     public function index()

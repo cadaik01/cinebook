@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Users List
+ * 
+ * User management interface including:
+ * - User list with role filtering
+ * - User search and sorting
+ * - Account status management
+ * - User statistics display
+ * - Bulk user operations
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Manage Users')

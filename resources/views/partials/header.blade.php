@@ -1,3 +1,15 @@
+{{--
+/**
+ * Header Partial
+ * 
+ * Site-wide header navigation including:
+ * - Brand logo and navigation links
+ * - User authentication status display
+ * - Search functionality
+ * - Responsive mobile menu
+ * - Dynamic menu based on user role
+ */
+--}}
 <header class="header">
     <nav class="navbar">
         <div class="nav-container">

@@ -1,3 +1,15 @@
+{{--
+/**
+ * Registration Page
+ * 
+ * User registration interface including:
+ * - Registration form with required fields
+ * - Form validation and error handling
+ * - Terms and conditions acceptance
+ * - Login redirect link
+ * - Account creation processing
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'TCA Cine - Register')

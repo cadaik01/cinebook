@@ -8,6 +8,17 @@ use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * AdminMovieController
+ * 
+ * Handles admin movie management operations including:
+ * - Movie listing with genre relationships
+ * - Movie creation with genre assignment
+ * - Movie editing and updates
+ * - Movie status management (now_showing, coming_soon, ended)
+ * - Genre attachment and relationship management
+ * Note: Movie deletion disabled to protect data integrity
+ */
 class AdminMovieController extends Controller
 {
     /**

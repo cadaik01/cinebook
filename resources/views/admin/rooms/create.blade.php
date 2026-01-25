@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Room Create
+ * 
+ * Room creation interface including:
+ * - Room information form
+ * - Screen type selection
+ * - Seat layout configuration
+ * - Capacity and accessibility settings
+ * - Room equipment setup
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Add New Room')

@@ -1,3 +1,15 @@
+{{--
+/**
+ * User Bookings List
+ * 
+ * User booking history display including:
+ * - Past and upcoming bookings list
+ * - Booking details and status
+ * - QR codes for active bookings
+ * - Cancellation options where applicable
+ * - Booking search and filtering
+ */
+--}}
 @extends('profile.profilepage')
 
 @section('title','Your Bookings')

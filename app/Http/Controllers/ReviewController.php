@@ -8,6 +8,16 @@ use App\Models\Review;
 use App\Models\Movie;
 use App\Models\ReviewHelpful;
 
+/**
+ * ReviewController
+ * 
+ * Handles movie review operations including:
+ * - Review creation and validation (rating 1-5 stars)
+ * - User review restrictions (only for watched movies)
+ * - Review helpfulness voting system
+ * - Review display and aggregation
+ * - Review ownership verification
+ */
 class ReviewController extends Controller
 {
     /**

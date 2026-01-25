@@ -1,3 +1,16 @@
+{{--
+/**
+ * Alternative Admin Layout Template
+ * 
+ * Secondary admin layout with simplified structure:
+ * - Bootstrap Icons integration
+ * - User authentication display
+ * - Clean admin navigation menu
+ * - Fixed sidebar with admin functions
+ * - Responsive design without toggle functionality
+ */
+--}}
+
 <!DOCTYPE html>
 <html lang="en">
 

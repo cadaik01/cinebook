@@ -1,3 +1,15 @@
+{{--
+/**
+ * Forgot Password Page
+ * 
+ * Password reset request interface including:
+ * - Email input form
+ * - Reset instructions display
+ * - Email validation
+ * - Success message after submission
+ * - Back to login link
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'Password Recovery')

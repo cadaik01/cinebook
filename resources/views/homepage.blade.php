@@ -1,3 +1,15 @@
+{{--
+/**
+ * Homepage View
+ * 
+ * Main landing page displaying:
+ * - Hero banner with featured content
+ * - Now showing movies carousel
+ * - Upcoming movies section
+ * - Interactive movie filtering and search
+ * - Homepage-specific styling and scripts
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'TCA Cine - Home')

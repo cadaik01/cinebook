@@ -1,3 +1,15 @@
+{{--
+/**
+ * Search Results Page
+ * 
+ * Movie search results display including:
+ * - Search query summary and result count
+ * - Movie grid layout with filtering
+ * - Pagination for large result sets
+ * - No results messaging
+ * - Search refinement options
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'Search Results')

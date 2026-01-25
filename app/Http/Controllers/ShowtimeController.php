@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Showtime;
 use App\Models\Movie;
 use App\Models\Room;
+
+/**
+ * ShowtimeController
+ * 
+ * Handles movie showtime operations including:
+ * - Showtime listing for specific movies
+ * - Date and time filtering
+ * - Room and movie relationship management
+ * - Showtime availability checking
+ */
 class ShowtimeController extends Controller
 {
     //1. showtimes function to fetch showtimes for a specific movie using relationships

@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Movie Edit
+ * 
+ * Movie editing interface including:
+ * - Pre-filled movie information form
+ * - Media and poster management
+ * - Status and availability updates
+ * - Associated showtimes management
+ * - Save and cancel options
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Edit Movie')

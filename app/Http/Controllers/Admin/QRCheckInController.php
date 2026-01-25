@@ -7,6 +7,15 @@ use App\Models\BookingSeat;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 
+/**
+ * QRCheckInController
+ * 
+ * Handles QR code check-in functionality including:
+ * - QR scanner interface display
+ * - Booking validation through QR codes
+ * - Seat check-in processing
+ * - Status updates for booking confirmations
+ */
 class QRCheckInController extends Controller
 {
     /**

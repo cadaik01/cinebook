@@ -8,6 +8,17 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Movie;
 use App\Models\Genre;
 
+/**
+ * MovieController
+ * 
+ * Handles public movie display and interaction operations including:
+ * - Homepage movie listings with viral score algorithm
+ * - Movie details with reviews and recommendations
+ * - Now showing and coming soon movie pages
+ * - Genre-based movie filtering
+ * - Movie search functionality
+ * - Review aggregation and display
+ */
 class MovieController extends Controller
 {
     /**

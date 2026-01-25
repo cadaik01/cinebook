@@ -11,6 +11,15 @@ use App\Mail\PasswordResetMail;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
+/**
+ * PasswordResetController
+ * 
+ * Handles password reset functionality including:
+ * - Password reset request handling
+ * - Email token generation and sending
+ * - Token validation and verification
+ * - Password update processing
+ */
 class PasswordResetController extends Controller
 {
     //1. Show form to request password reset

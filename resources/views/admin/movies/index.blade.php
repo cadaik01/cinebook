@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Movies List
+ * 
+ * Movie management interface including:
+ * - Movies list with search and filtering
+ * - Movie status management
+ * - Bulk operations
+ * - Add new movie button
+ * - Edit and view movie options
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Manage Movies')

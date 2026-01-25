@@ -1,3 +1,15 @@
+{{--
+/**
+ * User Profile Dashboard
+ * 
+ * User profile overview page including:
+ * - Personal information display
+ * - Account statistics summary
+ * - Quick action buttons
+ * - Recent activity overview
+ * - Profile completion status
+ */
+--}}
 @extends('profile.profilepage')
 
 @section('title','User Profile - TCA Cine')
