@@ -416,6 +416,61 @@ body {
         width: 32px;
         height: 32px;
     }
+
+    /* Show sidebar when not collapsed on mobile */
+    .admin-layout-sidebar:not(.collapsed) {
+        transform: translateX(0);
+        position: fixed;
+        z-index: 1050;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* ===== SIDEBAR TOGGLE FUNCTIONALITY ===== */
+/* Desktop collapsed state */
+@media (min-width: 769px) {
+    .admin-layout-sidebar.collapsed {
+        width: 80px;
+    }
+
+    .admin-layout-sidebar.collapsed .admin-layout-sidebar-header h3 span {
+        display: none;
+    }
+
+    .admin-layout-sidebar.collapsed .admin-layout-sidebar-link span {
+        display: none;
+    }
+
+    .admin-layout-main.expanded {
+        margin-left: 80px;
+    }
+}
+
+/* Mobile: sidebar hidden by default, show when not collapsed */
+@media (max-width: 768px) {
+    .admin-layout-sidebar.collapsed {
+        transform: translateX(-100%);
+    }
+
+    .admin-layout-sidebar:not(.collapsed) {
+        transform: translateX(0);
+        position: fixed;
+        z-index: 1050;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        width: 250px;
+    }
+
+    /* Overlay when sidebar is open on mobile */
+    .admin-layout-main.expanded::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+    }
 }
 
 /* ===== SCROLLBAR CUSTOM ===== */
@@ -434,4 +489,22 @@ body {
 
 .admin-layout-sidebar::-webkit-scrollbar-thumb:hover {
     background: var(--deep-teal);
+}
+
+/* ===== ADMIN SPECIFIC STYLES ===== */
+.admin-layout-sidebar-header h3 {
+    margin: 0;
+}
+
+.admin-layout-sidebar-header a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.admin-dropdown-logout {
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
 }

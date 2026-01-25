@@ -94,9 +94,6 @@
             @endphp
             <nav class="admin-layout-navbar">
                 <div class="d-flex align-items-center justify-content-between">
-                    <button class="btn btn-link p-0" id="sidebarToggle" aria-label="Toggle sidebar">
-                        <i class="bi bi-list fs-4"></i>
-                    </button>
                     <div class="admin-layout-navbar-right">
                         <div class="admin-layout-user-info">
                             <i class="bi bi-person-circle"></i>
@@ -115,14 +112,6 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-    // Sidebar toggle
-    document.getElementById('sidebarToggle').addEventListener('click', function() {
-        document.getElementById('sidebar').classList.toggle('collapsed');
-        document.getElementById('main-content').classList.toggle('expanded');
-    });
-    </script>
 
     @stack('scripts')
 </body>
