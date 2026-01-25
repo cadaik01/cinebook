@@ -24,7 +24,7 @@ class ShowtimeController extends Controller
     public function showtimes($id)
     {
         $movie = Movie::find($id);
-        $showtimes = Showtime::with('room')
+        $showtimes = Showtime::with(['room', 'room.screenType'])
             ->where('movie_id', $id)
             ->orderBy('show_date', 'asc')
             ->orderBy('show_time', 'asc')

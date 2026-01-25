@@ -38,6 +38,7 @@
 /* ========== Showtimes Table ========== */
 .showtimes-table {
     width: 100%;
+    table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
     background: white;
@@ -45,6 +46,13 @@
     overflow: hidden;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
+}
+
+/* Equal width columns */
+.showtimes-table th,
+.showtimes-table td {
+    width: 20%;
+    /* 5 columns = 20% each */
 }
 
 /* ========== Table Header ========== */
@@ -60,6 +68,11 @@
     font-size: 1.05em;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+}
+
+/* Center align Screen Type header */
+.showtimes-table thead th:nth-child(4) {
+    text-align: center;
 }
 
 .showtimes-table thead th:first-child {
@@ -129,7 +142,45 @@
     font-weight: 600;
 }
 
+/* Screen Type Column */
+.showtime-screen-type {
+    text-align: center;
+}
+
+.screen-type-badge {
+    display: inline-block;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 0.85em;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.badge-primary {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+}
+
+.badge-success {
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+}
+
+.badge-danger {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+}
+
+.badge-secondary {
+    background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+}
+
 /* ========== Action Buttons ========== */
+.expired-showtime {
+    color: #95a5a6;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 0.9em;
+}
+
 .showtimes-select-btn {
     display: inline-block;
     background: linear-gradient(135deg, #27ae60 0%, #229954 100%);

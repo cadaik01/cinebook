@@ -71,15 +71,16 @@
                 <div class="filter-group">
                     <label for="sort">Sort by</label>
                     <select name="sort" id="sort">
+                        <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Name (A-Z)
+                        </option>
+                        <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Name (Z-A)
+                        </option>
                         <option value="release_asc"
                             {{ request('sort', 'release_asc') == 'release_asc' ? 'selected' : '' }}>Release Date
                             (Soonest)</option>
                         <option value="release_desc" {{ request('sort') == 'release_desc' ? 'selected' : '' }}>Release
                             Date (Latest)</option>
-                        <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Name (A-Z)
-                        </option>
-                        <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Name (Z-A)
-                        </option>
+
                     </select>
                 </div>
                 <div class="filter-group filter-actions">

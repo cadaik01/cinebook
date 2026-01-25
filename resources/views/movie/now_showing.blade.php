@@ -77,12 +77,6 @@
                         </option>
                         <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Name (Z-A)
                         </option>
-                        <option value="rating_desc" {{ request('sort') == 'rating_desc' ? 'selected' : '' }}>Rating
-                            (High-Low)
-                        </option>
-                        <option value="rating_asc" {{ request('sort') == 'rating_asc' ? 'selected' : '' }}>Rating
-                            (Low-High)
-                        </option>
                         <option value="release_desc" {{ request('sort') == 'release_desc' ? 'selected' : '' }}>Release
                             Date
                             (Newest)</option>
