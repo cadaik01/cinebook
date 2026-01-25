@@ -9,6 +9,7 @@ use App\Models\ShowtimeSeat;
 use App\Models\Movie;
 use App\Models\Room;
 use App\Models\SeatType;
+use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -26,7 +27,7 @@ class AdminShowtimeController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Showtime::with(['movie', 'room.screenType', 'showtimeSeats']);
+        $query = Showtime::with(['movie', 'room.screenType', 'room.seats', 'showtimeSeats']);
 
         // Filter by movie
         if ($request->movie_id) {
@@ -47,10 +48,34 @@ class AdminShowtimeController extends Controller
             ->orderBy('show_time', 'desc')
             ->paginate(20);
 
+        // Ensure all showtimes have showtime seats created
+        foreach ($showtimes as $showtime) {
+            $this->ensureShowtimeSeats($showtime);
+        }
+
         $movies = Movie::where('status', '!=', 'ended')->orderBy('title')->get();
         $rooms = Room::with('screenType')->orderBy('name')->get();
 
         return view('admin.showtimes.index', compact('showtimes', 'movies', 'rooms'));
+    }
+
+    /**
+     * Ensure showtime has all seats created
+     */
+    private function ensureShowtimeSeats(Showtime $showtime)
+    {
+        $room = $showtime->room;
+        $existingSeats = $showtime->showtimeSeats->pluck('seat_id')->toArray();
+        
+        foreach ($room->seats as $seat) {
+            if (!in_array($seat->id, $existingSeats)) {
+                ShowtimeSeat::create([
+                    'showtime_id' => $showtime->id,
+                    'seat_id' => $seat->id,
+                    'status' => 'available',
+                ]);
+            }
+        }
     }
 
     public function create()
@@ -159,6 +184,7 @@ class AdminShowtimeController extends Controller
             }
 
             // Update showtime
+            $oldRoomId = $showtime->room_id;
             $showtime->update([
                 'movie_id' => $request->movie_id,
                 'room_id' => $request->room_id,
@@ -175,6 +201,28 @@ class AdminShowtimeController extends Controller
                     ],
                     ['price' => $price]
                 );
+            }
+
+            // If room changed, update showtime seats
+            if ($oldRoomId != $request->room_id) {
+                // Check if there are any bookings first
+                if ($showtime->bookings()->exists()) {
+                    DB::rollBack();
+                    return back()->with('error', 'Cannot change room for showtime with existing bookings!');
+                }
+
+                // Delete old showtime seats
+                ShowtimeSeat::where('showtime_id', $showtime->id)->delete();
+
+                // Create new showtime seats for the new room
+                $newRoom = Room::with('seats')->find($request->room_id);
+                foreach ($newRoom->seats as $seat) {
+                    ShowtimeSeat::create([
+                        'showtime_id' => $showtime->id,
+                        'seat_id' => $seat->id,
+                        'status' => 'available',
+                    ]);
+                }
             }
 
             DB::commit();

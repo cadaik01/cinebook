@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Movie;
 use App\Models\Genre;
+use Carbon\Carbon;
 
 /**
  * MovieController
@@ -64,6 +65,9 @@ class MovieController extends Controller
     //Homepage function - show movies on homepage
     public function homepage()
     {
+        // Auto-update movie statuses based on real-time
+        $this->updateMovieStatuses();
+        
         // Get viral/trending "Now Showing" movies based on:
         // 1. Number of bookings (popularity)
         // 2. Number of reviews (engagement)
@@ -109,6 +113,20 @@ class MovieController extends Controller
         $upcomingMovies = $this->attachAgeRatingsToMovies($upcomingMovies);
         
         return view('homepage', compact('movies', 'upcomingMovies'));
+    }
+
+    /**
+     * Auto-update movie statuses based on current date and time
+     */
+    private function updateMovieStatuses()
+    {
+        $now = Carbon::now();
+        
+        // Update coming_soon to now_showing for movies released today or before
+        // (but only if they haven't been manually ended)
+        Movie::where('status', 'coming_soon')
+            ->where('release_date', '<=', $now->toDateString())
+            ->update(['status' => 'now_showing']);
     }
     
     //1. movie function to fetch all movies from the database and return to index view
@@ -170,6 +188,9 @@ class MovieController extends Controller
     //2. upcomingMovies function to fetch upcoming movies from the database and return to upcoming_movies view
     public function upcomingMovies(Request $request)
     {
+        // Auto-update movie statuses based on real-time
+        $this->updateMovieStatuses();
+        
         $query = DB::table('movies')->where('status', 'coming_soon');
 
         // Filter: Genre
@@ -251,6 +272,9 @@ class MovieController extends Controller
     //3. nowShowing function to fetch now showing movies from the database and return to now_showing view
     public function nowShowing(Request $request)
     {
+        // Auto-update movie statuses based on real-time
+        $this->updateMovieStatuses();
+        
         $query = DB::table('movies')->where('status', 'now_showing');
 
         // Filter: Genre

@@ -25,17 +25,17 @@
 </div>
 
 @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
+<div class="alert alert-success alert-dismissible fade show">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
 @endif
 
 @if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show">
-        {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
+<div class="alert alert-danger alert-dismissible fade show">
+    {{ session('error') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
 @endif
 
 <!-- Filters -->
@@ -48,9 +48,9 @@
                     <select name="movie_id" class="form-select">
                         <option value="">All Movies</option>
                         @foreach($movies as $movie)
-                            <option value="{{ $movie->id }}" {{ request('movie_id') == $movie->id ? 'selected' : '' }}>
-                                {{ $movie->title }}
-                            </option>
+                        <option value="{{ $movie->id }}" {{ request('movie_id') == $movie->id ? 'selected' : '' }}>
+                            {{ $movie->title }}
+                        </option>
                         @endforeach
                     </select>
                 </div>
@@ -59,9 +59,9 @@
                     <select name="room_id" class="form-select">
                         <option value="">All Rooms</option>
                         @foreach($rooms as $room)
-                            <option value="{{ $room->id }}" {{ request('room_id') == $room->id ? 'selected' : '' }}>
-                                {{ $room->name }}
-                            </option>
+                        <option value="{{ $room->id }}" {{ request('room_id') == $room->id ? 'selected' : '' }}>
+                            {{ $room->name }}
+                        </option>
                         @endforeach
                     </select>
                 </div>
@@ -83,100 +83,116 @@
 <div class="card">
     <div class="card-body">
         @if($showtimes->isEmpty())
-            <div class="alert alert-info mb-0">
-                <i class="bi bi-info-circle"></i> No showtimes found.
-            </div>
+        <div class="alert alert-info mb-0">
+            <i class="bi bi-info-circle"></i> No showtimes found.
+        </div>
         @else
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Movie</th>
-                            <th>Room</th>
-                            <th>Screen Type</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Seats Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($showtimes as $showtime)
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Movie</th>
+                        <th>Room</th>
+                        <th>Screen Type</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Seats Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($showtimes as $showtime)
+                    @php
+                    // Refresh showtime seats after ensuring they exist
+                    $showtime->load('showtimeSeats');
+
+                    $totalRoomSeats = $showtime->room->seats->count();
+                    $showtimeSeats = $showtime->showtimeSeats;
+
+                    $bookedSeats = $showtimeSeats->where('status', 'booked')->count();
+                    $lockedSeats = $showtimeSeats->where('status', 'locked')->count();
+                    $availableSeats = $showtimeSeats->where('status', 'available')->count();
+
+                    // If showtime seats don't match room seats count, show total room seats
+                    if ($showtimeSeats->count() !== $totalRoomSeats) {
+                    $availableSeats = $totalRoomSeats - $bookedSeats - $lockedSeats;
+                    }
+
+                    $totalSeats = $totalRoomSeats;
+                    @endphp
+                    <tr>
+                        <td>{{ $showtime->id }}</td>
+                        <td>
+                            <strong>{{ $showtime->movie->title }}</strong><br>
+                            <small class="text-muted">{{ $showtime->movie->duration }} mins</small>
+                        </td>
+                        <td>{{ $showtime->room->name }}</td>
+                        <td>
                             @php
-                                $totalSeats = $showtime->showtimeSeats->count();
-                                $bookedSeats = $showtime->showtimeSeats->where('status', 'booked')->count();
-                                $lockedSeats = $showtime->showtimeSeats->where('status', 'locked')->count();
-                                $availableSeats = $showtime->showtimeSeats->where('status', 'available')->count();
+                            $screenTypeBg = match($showtime->room->screenType->name) {
+                            '2D' => 'bg-primary',
+                            '3D' => 'bg-success',
+                            'IMAX' => 'bg-danger',
+                            default => 'bg-secondary'
+                            };
                             @endphp
-                            <tr>
-                                <td>{{ $showtime->id }}</td>
-                                <td>
-                                    <strong>{{ $showtime->movie->title }}</strong><br>
-                                    <small class="text-muted">{{ $showtime->movie->duration }} mins</small>
-                                </td>
-                                <td>{{ $showtime->room->name }}</td>
-                                <td>
-                                    @php
-                                        $screenTypeBg = match($showtime->room->screenType->name) {
-                                            '2D' => 'bg-primary',
-                                            '3D' => 'bg-success',
-                                            'IMAX' => 'bg-danger',
-                                            default => 'bg-secondary'
-                                        };
-                                    @endphp
-                                    <span class="badge {{ $screenTypeBg }}">
-                                        {{ $showtime->room->screenType->name }}
-                                    </span>
-                                </td>
-                                <td>{{ $showtime->show_date->format('M d, Y') }}</td>
-                                <td>{{ \Carbon\Carbon::parse($showtime->show_time)->format('h:i A') }}</td>
-                                <td>
-                                    <small>
-                                        <span class="text-success">{{ $availableSeats }} available</span> /
-                                        <span class="text-warning">{{ $lockedSeats }} locked</span> /
-                                        <span class="text-danger">{{ $bookedSeats }} booked</span>
-                                    </small>
-                                    @if($totalSeats > 0)
-                                        <div class="progress mt-1" style="height: 5px;">
-                                            <div class="progress-bar bg-danger" style="width: {{ ($bookedSeats/$totalSeats)*100 }}%"></div>
-                                            <div class="progress-bar bg-warning" style="width: {{ ($lockedSeats/$totalSeats)*100 }}%"></div>
-                                        </div>
-                                    @else
-                                        <div class="text-muted small mt-1">No seats configured</div>
-                                    @endif
-                                </td>
-                                <td>
-                                    <a href="{{ route('admin.showtimes.edit', $showtime) }}" class="btn btn-sm btn-outline-primary">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <form action="{{ route('admin.showtimes.destroy', $showtime) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('Are you sure you want to delete this showtime?')">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            @if ($showtimes->hasPages())
-            <div class="cine-pagination-wrapper">
-                <nav aria-label="Showtimes pagination">
-                    <ul class="cine-pagination">
-                        @foreach ($showtimes->getUrlRange(1, $showtimes->lastPage()) as $page => $url)
-                            <li class="cine-page-item {{ $page == $showtimes->currentPage() ? 'is-active' : '' }}">
-                                <a class="cine-page-link" href="{{ $url }}">{{ $page }}</a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </nav>
-            </div>
-            @endif
+                            <span class="badge {{ $screenTypeBg }}">
+                                {{ $showtime->room->screenType->name }}
+                            </span>
+                        </td>
+                        <td>{{ $showtime->show_date->format('M d, Y') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($showtime->show_time)->format('h:i A') }}</td>
+                        <td>
+                            <small>
+                                <span class="text-success">{{ $availableSeats }} available</span> /
+                                <span class="text-warning">{{ $lockedSeats }} locked</span> /
+                                <span class="text-danger">{{ $bookedSeats }} booked</span>
+                            </small>
+                            @if($totalSeats > 0)
+                            <div class="progress mt-1" style="height: 5px;">
+                                <div class="progress-bar bg-danger"
+                                    style="width: {{ ($bookedSeats/$totalSeats)*100 }}%"></div>
+                                <div class="progress-bar bg-warning"
+                                    style="width: {{ ($lockedSeats/$totalSeats)*100 }}%"></div>
+                            </div>
+                            @else
+                            <div class="text-muted small mt-1">No seats configured</div>
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{ route('admin.showtimes.edit', $showtime) }}"
+                                class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <form action="{{ route('admin.showtimes.destroy', $showtime) }}" method="POST"
+                                class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Are you sure you want to delete this showtime?')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @if ($showtimes->hasPages())
+        <div class="cine-pagination-wrapper">
+            <nav aria-label="Showtimes pagination">
+                <ul class="cine-pagination">
+                    @foreach ($showtimes->getUrlRange(1, $showtimes->lastPage()) as $page => $url)
+                    <li class="cine-page-item {{ $page == $showtimes->currentPage() ? 'is-active' : '' }}">
+                        <a class="cine-page-link" href="{{ $url }}">{{ $page }}</a>
+                    </li>
+                    @endforeach
+                </ul>
+            </nav>
+        </div>
+        @endif
         @endif
     </div>
 </div>
