@@ -60,9 +60,30 @@ class PasswordResetController extends Controller
     //3. Show reset password form
     public function showResetPasswordForm($token)
     {
+        $email = request()->email;
+        
+        // Validate token exists in database
+        $resetRecord = DB::table('password_reset_tokens')
+            ->where('email', $email)
+            ->where('token', $token)
+            ->first();
+        
+        // If token not found or expired
+        if (!$resetRecord) {
+            return redirect('/password/forgot')
+                ->withErrors(['token' => 'Link reset password không hợp lệ hoặc đã hết hạn. Vui lòng yêu cầu lại.']);
+        }
+        
+        // Check if token is expired (60 minutes)
+        if (Carbon::parse($resetRecord->created_at)->addMinutes(60)->isPast()) {
+            DB::table('password_reset_tokens')->where('email', $email)->delete();
+            return redirect('/password/forgot')
+                ->withErrors(['token' => 'Link reset password đã hết hạn. Vui lòng yêu cầu lại.']);
+        }
+        
         return view('password.reset', [
             'token' => $token,
-            'email' => request()->email
+            'email' => $email
         ]);
     }
 
