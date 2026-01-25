@@ -135,35 +135,35 @@ class MovieController extends Controller
             $query->where('release_date', '<=', $releaseTo);
         }
 
-        // Sort
+        // Sort chỉ khi có chọn option
         $sort = $request->input('sort');
-        switch ($sort) {
-            case 'name_asc':
-                $query->orderBy('title', 'asc');
-                break;
-            case 'name_desc':
-                $query->orderBy('title', 'desc');
-                break;
-            case 'release_asc':
-                $query->orderBy('release_date', 'asc');
-                break;
-            case 'release_desc':
-                $query->orderBy('release_date', 'desc');
-                break;
-            case 'rating_asc':
-                $query->orderBy('rating_avg', 'asc');
-                break;
-            case 'rating_desc':
-                $query->orderBy('rating_avg', 'desc');
-                break;
-            case 'duration_asc':
-                $query->orderBy('duration', 'asc');
-                break;
-            case 'duration_desc':
-                $query->orderBy('duration', 'desc');
-                break;
-            default:
-                $query->orderBy('release_date', 'desc');
+        if ($sort) {
+            switch ($sort) {
+                case 'name_asc':
+                    $query->orderBy('title', 'asc');
+                    break;
+                case 'name_desc':
+                    $query->orderBy('title', 'desc');
+                    break;
+                case 'release_asc':
+                    $query->orderBy('release_date', 'asc');
+                    break;
+                case 'release_desc':
+                    $query->orderBy('release_date', 'desc');
+                    break;
+                case 'rating_asc':
+                    $query->orderBy('rating_avg', 'asc');
+                    break;
+                case 'rating_desc':
+                    $query->orderBy('rating_avg', 'desc');
+                    break;
+                case 'duration_asc':
+                    $query->orderBy('duration', 'asc');
+                    break;
+                case 'duration_desc':
+                    $query->orderBy('duration', 'desc');
+                    break;
+            }
         }
 
         $movies = $query->get();
@@ -213,35 +213,35 @@ class MovieController extends Controller
             $query->where('release_date', '<=', $releaseTo);
         }
 
-        // Sort
+        // Sort chỉ khi có chọn option
         $sort = $request->input('sort');
-        switch ($sort) {
-            case 'name_asc':
-                $query->orderBy('title', 'asc');
-                break;
-            case 'name_desc':
-                $query->orderBy('title', 'desc');
-                break;
-            case 'release_asc':
-                $query->orderBy('release_date', 'asc');
-                break;
-            case 'release_desc':
-                $query->orderBy('release_date', 'desc');
-                break;
-            case 'rating_asc':
-                $query->orderBy('rating_avg', 'asc');
-                break;
-            case 'rating_desc':
-                $query->orderBy('rating_avg', 'desc');
-                break;
-            case 'duration_asc':
-                $query->orderBy('duration', 'asc');
-                break;
-            case 'duration_desc':
-                $query->orderBy('duration', 'desc');
-                break;
-            default:
-                $query->orderBy('release_date', 'desc');
+        if ($sort) {
+            switch ($sort) {
+                case 'name_asc':
+                    $query->orderBy('title', 'asc');
+                    break;
+                case 'name_desc':
+                    $query->orderBy('title', 'desc');
+                    break;
+                case 'release_asc':
+                    $query->orderBy('release_date', 'asc');
+                    break;
+                case 'release_desc':
+                    $query->orderBy('release_date', 'desc');
+                    break;
+                case 'rating_asc':
+                    $query->orderBy('rating_avg', 'asc');
+                    break;
+                case 'rating_desc':
+                    $query->orderBy('rating_avg', 'desc');
+                    break;
+                case 'duration_asc':
+                    $query->orderBy('duration', 'asc');
+                    break;
+                case 'duration_desc':
+                    $query->orderBy('duration', 'desc');
+                    break;
+            }
         }
 
         $movies = $query->get();

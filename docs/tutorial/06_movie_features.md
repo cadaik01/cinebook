@@ -491,54 +491,71 @@ class MovieController extends Controller
             <p class="movies-subtitle">Khám phá các bộ phim mới nhất đang chiếu tại rạp</p>
         </div>
 
-        {{-- Filters --}}
-        <div class="movies-filters">
-            <form method="GET" action="{{ route('movies.now-showing') }}">
-                <div class="filters-row">
-                    <div class="filter-group">
-                        <label class="filter-label">Tìm kiếm</label>
-                        <input
-                            type="text"
-                            name="search"
-                            class="filter-input"
-                            placeholder="Tên phim, đạo diễn, diễn viên..."
-                            value="{{ request('search') }}"
-                        >
-                    </div>
-
-                    <div class="filter-group">
-                        <label class="filter-label">Thể loại</label>
-                        <select name="genre" class="filter-select">
-                            <option value="">Tất cả</option>
-                            @foreach($genres as $genre)
-                                <option value="{{ $genre->id }}" {{ request('genre') == $genre->id ? 'selected' : '' }}>
-                                    {{ $genre->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <label class="filter-label">Sắp xếp</label>
-                        <select name="sort" class="filter-select">
-                            <option value="rating_avg" {{ request('sort') == 'rating_avg' ? 'selected' : '' }}>
-                                Đánh giá cao
+        {{-- Filter & Sort Form --}}
+        <form method="GET" action="" class="movie-filter-form">
+            <div class="filter-row">
+                {{-- Genre Filter --}}
+                <div class="filter-group">
+                    <label for="genre">Genre</label>
+                    <select name="genre" id="genre">
+                        <option value="">All Genres</option>
+                        @foreach($genres as $genre)
+                            <option value="{{ $genre->id }}" {{ request('genre') == $genre->id ? 'selected' : '' }}>
+                                {{ $genre->name }}
                             </option>
-                            <option value="title" {{ request('sort') == 'title' ? 'selected' : '' }}>
-                                Tên A-Z
-                            </option>
-                            <option value="release_date" {{ request('sort') == 'release_date' ? 'selected' : '' }}>
-                                Mới nhất
-                            </option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        Lọc
-                    </button>
+                        @endforeach
+                    </select>
                 </div>
-            </form>
-        </div>
+
+                {{-- Language Filter --}}
+                <div class="filter-group">
+                    <label for="language">Language</label>
+                    <select name="language" id="language">
+                        <option value="">All Languages</option>
+                        @foreach($languages as $lang)
+                            <option value="{{ $lang }}" {{ request('language') == $lang ? 'selected' : '' }}>
+                                {{ $lang }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Rating Filter --}}
+                <div class="filter-group">
+                    <label for="rating">Rating</label>
+                    <select name="rating" id="rating">
+                        <option value="">All Ratings</option>
+                        <option value="5" {{ request('rating') == '5' ? 'selected' : '' }}>5 Stars</option>
+                        <option value="4" {{ request('rating') == '4' ? 'selected' : '' }}>4+ Stars</option>
+                        <option value="3" {{ request('rating') == '3' ? 'selected' : '' }}>3+ Stars</option>
+                    </select>
+                </div>
+
+                {{-- Showtime Date Filter --}}
+                <div class="filter-group">
+                    <label for="showtime_date">Showtime Date</label>
+                    <input type="date" name="showtime_date" id="showtime_date"
+                           value="{{ request('showtime_date', date('Y-m-d')) }}">
+                </div>
+
+                {{-- Sort --}}
+                <div class="filter-group">
+                    <label for="sort">Sort by</label>
+                    <select name="sort" id="sort">
+                        <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Name (A-Z)</option>
+                        <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Name (Z-A)</option>
+                        <option value="rating_desc" {{ request('sort') == 'rating_desc' ? 'selected' : '' }}>Rating (High-Low)</option>
+                        <option value="release_desc" {{ request('sort') == 'release_desc' ? 'selected' : '' }}>Release Date</option>
+                    </select>
+                </div>
+
+                {{-- Buttons --}}
+                <div class="filter-group filter-actions">
+                    <button type="submit" class="movie-btn movie-btn-primary">Apply</button>
+                    <a href="{{ route('now_showing') }}" class="movie-btn movie-btn-secondary">Reset</a>
+                </div>
+            </div>
+        </form>
 
         {{-- Movies Grid --}}
         @if($movies->count() > 0)

@@ -32,6 +32,61 @@ Nếu bạn muốn **tự tay xây dựng** dự án Cinebook từ con số 0, h
 
 ---
 
+## 🎤 TÀI LIỆU BẢO VỆ ĐỒ ÁN (MỚI!)
+
+### Cheatsheets - Quick Reference cho từng module
+👉 **[CHEATSHEET INDEX](CHEATSHEET_INDEX.md)** - Điểm bắt đầu
+
+| # | Module | Nội dung chính |
+|---|--------|----------------|
+| 1 | [Dashboard](CHEATSHEET_01_DASHBOARD.md) | KPIs, Charts, Queries |
+| 2 | [Movies](CHEATSHEET_02_MOVIES.md) | CRUD, Many-to-Many, sync() |
+| 3 | [Rooms](CHEATSHEET_03_ROOMS.md) | **Thuật toán tạo ghế**, Transaction |
+| 4 | [Showtimes](CHEATSHEET_04_SHOWTIMES.md) | **Dynamic Pricing**, Conflict Detection |
+| 5 | [Bookings](CHEATSHEET_05_BOOKINGS.md) | **Lifecycle**, Seat Locking, QR |
+| 6 | [Users/Reviews/QR](CHEATSHEET_06_USERS_REVIEWS_QR.md) | Role, Moderation, Check-in |
+
+### Hướng dẫn bảo vệ
+| File | Mô tả |
+|------|-------|
+| [DEFENSE_PREPARATION_GUIDE.md](DEFENSE_PREPARATION_GUIDE.md) | Hướng dẫn chi tiết A-Z |
+| [DEFENSE_CHEATSHEET.md](DEFENSE_CHEATSHEET.md) | Tờ in 2 trang ôn nhanh |
+
+---
+
+## 📖 SERIES TÀI LIỆU ADMIN PANEL
+
+### 1. Technical Series - Code & Kỹ thuật
+👉 **[ADMIN_PANEL_SCRIPT_INDEX.md](ADMIN_PANEL_SCRIPT_INDEX.md)**
+
+| Phần | Nội dung |
+|------|----------|
+| [Part 1](ADMIN_PANEL_SCRIPT_PART1_OVERVIEW.md) | Kiến trúc tổng quan |
+| [Part 2](ADMIN_PANEL_SCRIPT_PART2_TECHNICAL.md) | Database & Thuật toán |
+| [Part 3](ADMIN_PANEL_SCRIPT_PART3_UXUI.md) | UX/UI Design |
+| [Part 4](ADMIN_PANEL_SCRIPT_PART4_QA.md) | Q&A (30+ câu hỏi) |
+
+### 2. Podcast Series - Nghe hiểu không cần code
+👉 **[PODCAST_INDEX.md](PODCAST_INDEX.md)**
+
+| Phần | Nội dung |
+|------|----------|
+| [Part 1](PODCAST_PART1_OVERVIEW.md) | Tổng quan kiến trúc |
+| [Part 2](PODCAST_PART2_TECHNICAL.md) | Database & Thuật toán |
+| [Part 3](PODCAST_PART3_UXUI.md) | Thiết kế UX/UI |
+| [Part 4](PODCAST_PART4_BUSINESS.md) | Business & Thuyết trình |
+
+### 3. Design Thinking Series - WHY & Roadmap
+👉 **[DESIGN_THINKING_INDEX.md](DESIGN_THINKING_INDEX.md)**
+
+| Phần | Nội dung |
+|------|----------|
+| [Part 1](DESIGN_THINKING_PART1_WHY.md) | Tại sao & Động cơ |
+| [Part 2](DESIGN_THINKING_PART2_OPTIMIZATION.md) | Tối ưu & Phát triển |
+| [Part 3](DESIGN_THINKING_PART3_BUSINESS.md) | Business Intelligence |
+
+---
+
 ## 📘 TÀI LIỆU THAM KHẢO DỰ ÁN HIỆN CÓ
 
 Nếu bạn muốn **tìm hiểu về dự án Cinebook đã hoàn thành**, hãy đọc các tài liệu sau:

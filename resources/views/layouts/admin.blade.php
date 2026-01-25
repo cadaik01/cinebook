@@ -76,7 +76,8 @@
                     <li class="admin-layout-sidebar-item">
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
-                            <button type="submit" class="admin-layout-sidebar-link w-100" style="border: none; background: none;">
+                            <button type="submit" class="admin-layout-sidebar-link w-100"
+                                style="border: none; background: none;">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Logout</span>
                             </button>
