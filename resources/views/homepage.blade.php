@@ -21,7 +21,7 @@
 
 <!-- Featured Movies -->
 <div class="featured-movies">
-    <h2 class="section-title">🎬 Featured Movies</h2>
+    <h2 class="section-title">🔥 Featured Movies</h2>
 
     @if(isset($movies) && count($movies) > 0)
     <div class="movies-container">
@@ -82,7 +82,7 @@
 
     <div class="btn-view-all-container">
         <a href="{{ route('now_showing') }}" class="btn-view-all">
-            View All Featured Movies →
+            View All Now Showing Movies →
         </a>
     </div>
     @else

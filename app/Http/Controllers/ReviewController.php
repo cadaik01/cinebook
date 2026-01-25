@@ -76,26 +76,10 @@ class ReviewController extends Controller
     }
 
     /**
-     * Delete a review (User can delete own review)
+     * Delete a review - REMOVED: Users can no longer delete reviews
+     * Only admin can delete reviews through AdminReviewController
      */
-    public function destroy($id)
-    {
-        $review = Review::findOrFail($id);
-
-        // Ensure the authenticated user is the owner of the review
-        if (Auth::id() !== $review->user_id) {
-            return redirect()->back()->with('error', 'You are not authorized to delete this review.');
-        }
-
-        $movieId = $review->movie_id;
-        $review->delete();
-
-        // Update movie average rating
-        $movie = Movie::find($movieId);
-        $movie->updateAverageRating();
-
-        return redirect()->route('user.reviews.list')->with('success', 'Review deleted successfully.');
-    }
+    // public function destroy($id) { ... } - Functionality removed
 
     /**
      * Check if user can review a specific movie

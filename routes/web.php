@@ -91,6 +91,10 @@ Route::middleware('auth')->group(function () {
     // Change Password - GET for form, POST for submit
     Route::get('/profile/change-password', [ProfileController::class, 'showChangePasswordForm'])->name('user.profile.change-password');
     Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('user.profile.change-password.post');
+    
+    // User Reviews Management
+    Route::get('/profile/reviews', [ProfileController::class, 'reviewsList'])->name('user.reviews.list');
+    
     // SeatType price management
     Route::get('seat-types/prices', [\App\Http\Controllers\Admin\SeatTypeController::class, 'editPrices'])->name('admin.seat_types.edit_prices');
     Route::post('seat-types/prices', [\App\Http\Controllers\Admin\SeatTypeController::class, 'updatePrices'])->name('admin.seat_types.update_prices');
@@ -100,7 +104,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/movies/{movie_id}/reviews', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
     Route::post('/reviews/{id}/helpful', [\App\Http\Controllers\ReviewController::class, 'toggleHelpful'])->name('reviews.helpful');
-    Route::post('/reviews/{id}/delete', [\App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
+    // User delete review functionality removed - only admin can delete reviews
 });
 
 //Admin Routes - Grouped with 'admin' prefix, protected by auth & role:admin

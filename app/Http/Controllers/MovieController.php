@@ -53,13 +53,41 @@ class MovieController extends Controller
     //Homepage function - show movies on homepage
     public function homepage()
     {
+        // Get viral/trending "Now Showing" movies based on:
+        // 1. Number of bookings (popularity)
+        // 2. Number of reviews (engagement)
+        // 3. Average rating (quality)
         $movies = DB::table('movies')
-        ->where('status', 'now_showing')
-        ->limit(6)->get(); // fetch only 6 movies for homepage
+            ->select([
+                'movies.*',
+                DB::raw('COALESCE(booking_count, 0) as popularity_score'),
+                DB::raw('COALESCE(review_count, 0) as engagement_score'),
+                DB::raw('COALESCE(movies.rating_avg, 0) as quality_score'),
+                DB::raw('(COALESCE(booking_count, 0) * 0.4 + COALESCE(review_count, 0) * 0.3 + COALESCE(movies.rating_avg, 0) * 0.3) as viral_score')
+            ])
+            ->leftJoin(DB::raw('(SELECT 
+                    s.movie_id, 
+                    COUNT(DISTINCT b.id) as booking_count
+                FROM showtimes s
+                LEFT JOIN bookings b ON s.id = b.showtime_id AND b.status = "confirmed"
+                GROUP BY s.movie_id
+            ) as booking_stats'), 'movies.id', '=', 'booking_stats.movie_id')
+            ->leftJoin(DB::raw('(SELECT 
+                    movie_id, 
+                    COUNT(*) as review_count
+                FROM reviews
+                GROUP BY movie_id
+            ) as review_stats'), 'movies.id', '=', 'review_stats.movie_id')
+            ->where('movies.status', 'now_showing')
+            ->orderByDesc('viral_score')
+            ->orderByDesc('movies.rating_avg')
+            ->limit(6)
+            ->get();
         
-        //upcoming movies
+        //upcoming movies - ordered by release date
         $upcomingMovies = DB::table('movies')
         ->where('status', 'coming_soon')
+        ->orderBy('release_date', 'asc')
         ->limit(6)->get(); // fetch only 6 upcoming movies for homepage
 
         // Attach genres using helper function

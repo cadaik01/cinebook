@@ -10,7 +10,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    @vite(['resources/css/admin_layout.css'])
+    @vite(['resources/css/root.css', 'resources/css/admin_layout.css'])
+
+    @stack('styles')
 
     @yield('extra-css')
 </head>
@@ -23,7 +25,7 @@
             <div class="admin-layout-sidebar-header">
                 <h3 style="margin: 0;">
                     <i class="fas fa-film"></i>
-                        <a href="/" style="color: inherit; text-decoration: none;">TCA Cine</a>
+                    <a href="/" style="color: inherit; text-decoration: none;">TCA Cine</a>
                 </h3>
             </div>
 
@@ -43,6 +45,20 @@
                         <a href="{{ route('user.bookings.list') }}" class="admin-layout-sidebar-link">
                             <i class="fas fa-history"></i>
                             <span>Booking History</span>
+                        </a>
+                    </li>
+                    {{-- Menu Item 3: My Reviews --}}
+                    <li class="admin-layout-sidebar-item {{ request()->routeIs('user.reviews.*') ? 'active' : '' }}">
+                        <a href="{{ route('user.reviews.list') }}" class="admin-layout-sidebar-link">
+                            <i class="fas fa-star"></i>
+                            <span>My Reviews</span>
+                        </a>
+                    </li>
+                    {{-- Menu Item 4: View Website --}}
+                    <li class="admin-layout-sidebar-item">
+                        <a href="{{ route('homepage') }}" class="admin-layout-sidebar-link">
+                            <i class="fas fa-home"></i>
+                            <span>View Website</span>
                         </a>
                     </li>
                 </ul>
@@ -93,12 +109,19 @@
                                     </a>
                                 </li>
                                 <li>
+                                    <a class="dropdown-item" href="{{ route('user.reviews.list') }}">
+                                        <i class="fas fa-star me-2"></i>
+                                        My Reviews
+                                    </a>
+                                </li>
+                                <li>
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="dropdown-item text-danger" style="border: none; background: none; width: 100%; text-align: left; cursor: pointer;">
+                                        <button type="submit" class="dropdown-item text-danger"
+                                            style="border: none; background: none; width: 100%; text-align: left; cursor: pointer;">
                                             <i class="fas fa-sign-out-alt me-2"></i>
                                             Logout
                                         </button>
@@ -165,18 +188,18 @@
 
     {{-- Sidebar Toggle Script --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.querySelector('.admin-layout-sidebar');
-            const mainContent = document.querySelector('.admin-layout-main');
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.admin-layout-sidebar');
+        const mainContent = document.querySelector('.admin-layout-main');
 
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', function() {
-                    sidebar.classList.toggle('collapsed');
-                    mainContent.classList.toggle('expanded');
-                });
-            }
-        });
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+            });
+        }
+    });
     </script>
 </body>
 

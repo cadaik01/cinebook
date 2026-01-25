@@ -1,0 +1,498 @@
+/* My Reviews Page Styles */
+
+/* Profile Reviews Layout */
+.profile-reviews-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-6);
+}
+
+.profile-reviews-header {
+    margin-bottom: var(--space-6);
+}
+
+.profile-reviews-header h2 {
+    color: var(--prussian-blue);
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.profile-reviews-header .fa-star {
+    color: var(--tan);
+}
+
+.profile-reviews-subtitle {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* Filter Sections */
+.filters-section {
+    background: var(--color-surface);
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-5);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border-color);
+}
+
+.search-section {
+    background: var(--color-surface);
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-6);
+    box-shadow: var(--shadow-soft);
+    border-left: 4px solid var(--tan);
+    border-top: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.filter-header h4,
+.search-section h4 {
+    margin-bottom: var(--space-5);
+    color: var(--prussian-blue);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.filter-header .fa-filter,
+.search-section .fa-search {
+    color: var(--deep-teal);
+}
+
+/* Filter Form Layout */
+.filter-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-4);
+    align-items: end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group label {
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-2);
+    font-size: 0.9rem;
+}
+
+.filter-control {
+    padding: var(--space-3) var(--space-4);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    transition: all var(--transition-base);
+    background-color: var(--color-bg);
+}
+
+.filter-control:focus {
+    outline: none;
+    border-color: var(--tan);
+    box-shadow: 0 0 0 3px rgba(218, 183, 133, 0.15);
+    background-color: var(--color-surface);
+}
+
+/* Search Section Specific */
+.search-row {
+    display: flex;
+    gap: var(--space-4);
+    align-items: end;
+}
+
+.search-group {
+    display: flex;
+    gap: var(--space-3);
+    flex: 1;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    padding: var(--space-3) var(--space-4);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    transition: all var(--transition-base);
+    background-color: var(--color-bg);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--tan);
+    box-shadow: 0 0 0 3px rgba(218, 183, 133, 0.15);
+    background-color: var(--color-surface);
+}
+
+.search-btn {
+    min-width: 120px;
+    padding: var(--space-3) var(--space-5);
+}
+
+/* Filter Actions */
+.filter-actions {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-apply {
+    background: linear-gradient(135deg, var(--deep-teal), var(--deep-space-blue));
+    color: white;
+    border: none;
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.btn-apply:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(4, 57, 94, 0.3);
+}
+
+.btn-reset {
+    background: var(--color-bg);
+    color: var(--color-text-secondary);
+    border: 2px solid var(--border-color);
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.btn-reset:hover {
+    background: var(--color-surface);
+    border-color: var(--color-text-muted);
+}
+
+/* Review Cards */
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+}
+
+.review-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-base);
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+}
+
+.review-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.review-movie-info {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    flex-shrink: 0;
+    width: 300px;
+}
+
+.review-movie-poster {
+    width: 60px;
+    height: 90px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.review-movie-details h5 {
+    color: var(--prussian-blue);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    margin-bottom: var(--space-1);
+    font-size: 1rem;
+    line-height: 1.3;
+}
+
+.review-movie-details .text-muted {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* Review Content Wrapper */
+.review-content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    min-width: 0;
+}
+
+/* Star Ratings */
+.review-rating {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.stars {
+    display: flex;
+    gap: 1px;
+}
+
+.stars .fa-star {
+    color: var(--color-accent-gold);
+    font-size: 0.9rem;
+}
+
+.stars .fa-star.empty {
+    color: var(--border-color);
+}
+
+.rating-text {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+/* Review Content */
+.review-content {
+    color: var(--color-text-primary);
+    line-height: 1.5;
+    font-size: 0.9rem;
+    margin-top: var(--space-2);
+}
+
+.review-meta {
+    display: flex;
+    align-items: center;
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-color);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+/* Error States */
+.error-alert {
+    background: #fee;
+    border: 1px solid #fcc;
+    border-left: 4px solid #e74c3c;
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    margin-bottom: var(--space-5);
+}
+
+.error-content {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+}
+
+.error-content .fas {
+    color: #e74c3c;
+    font-size: 1.2rem;
+    margin-top: 2px;
+}
+
+.error-text strong {
+    color: #c0392b;
+    font-weight: 600;
+}
+
+.error-list {
+    margin: var(--space-2) 0 0 0;
+    padding-left: var(--space-4);
+    color: #c0392b;
+}
+
+.filter-control.error {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
+}
+
+.field-error {
+    display: block;
+    color: #e74c3c;
+    font-size: 0.8rem;
+    margin-top: var(--space-1);
+    font-weight: 500;
+}
+
+.field-hint {
+    display: block;
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    margin-top: var(--space-1);
+    font-style: italic;
+}
+
+.review-date {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border-color);
+}
+
+.empty-state h4 {
+    color: var(--color-text-primary);
+    font-family: var(--font-heading);
+    margin-bottom: var(--space-3);
+    font-size: 1.3rem;
+}
+
+.empty-state p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-5);
+    font-size: 1rem;
+}
+
+.btn-browse-movies {
+    background: linear-gradient(135deg, var(--deep-teal), var(--deep-space-blue));
+    color: white;
+    border: none;
+    padding: var(--space-4) var(--space-6);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    transition: all var(--transition-base);
+    font-size: 1rem;
+}
+
+.btn-browse-movies:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(4, 57, 94, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+/* Pagination */
+.reviews-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-6);
+}
+
+.reviews-pagination .pagination {
+    gap: var(--space-2);
+}
+
+.reviews-pagination .page-link {
+    color: var(--deep-teal);
+    border-color: var(--border-color);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.reviews-pagination .page-link:hover {
+    background-color: var(--tan);
+    border-color: var(--tan);
+    color: white;
+}
+
+.reviews-pagination .page-item.active .page-link {
+    background-color: var(--deep-teal);
+    border-color: var(--deep-teal);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-reviews-container {
+        padding: var(--space-4);
+    }
+
+    .filter-row {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+
+    .search-row {
+        flex-direction: column;
+        gap: var(--space-3);
+        align-items: stretch;
+    }
+
+    .search-group {
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+
+    .search-btn {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .reviews-list {
+        gap: var(--space-3);
+    }
+
+    .review-card {
+        flex-direction: column;
+        padding: var(--space-4);
+    }
+
+    .review-movie-info {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .review-movie-poster {
+        width: 80px;
+        height: 120px;
+    }
+
+    .filter-actions {
+        flex-direction: column;
+    }
+
+    .profile-reviews-header h2 {
+        font-size: 2rem;
+    }
+
+    .review-meta {
+        flex-direction: column;
+        gap: var(--space-2);
+        align-items: flex-start;
+    }
+}
