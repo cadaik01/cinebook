@@ -8,6 +8,10 @@
 @vite('resources/css/profile_reviews.css')
 @endpush
 
+@push('scripts')
+@vite('resources/js/profile-reviews-filter.js')
+@endpush
+
 @section('content')
 <div class="profile-reviews-container">
     <div class="profile-reviews-header">
@@ -158,9 +162,39 @@
     </div>
 
     <!-- Pagination -->
+    @if($reviews->hasPages())
     <div class="reviews-pagination">
-        {{ $reviews->appends(request()->query())->links() }}
+        <div class="pagination-simple">
+            {{-- Previous Page Link --}}
+            @if ($reviews->onFirstPage())
+            <span class="page-btn disabled">
+                <i class="fas fa-chevron-left"></i> Previous
+            </span>
+            @else
+            <a href="{{ $reviews->previousPageUrl() }}" class="page-btn prev">
+                <i class="fas fa-chevron-left"></i> Previous
+            </a>
+            @endif
+
+            {{-- Page Info --}}
+            <span class="page-info">
+                Page {{ $reviews->currentPage() }} of {{ $reviews->lastPage() }}
+                <small>({{ $reviews->total() }} reviews)</small>
+            </span>
+
+            {{-- Next Page Link --}}
+            @if ($reviews->hasMorePages())
+            <a href="{{ $reviews->nextPageUrl() }}" class="page-btn next">
+                Next <i class="fas fa-chevron-right"></i>
+            </a>
+            @else
+            <span class="page-btn disabled">
+                Next <i class="fas fa-chevron-right"></i>
+            </span>
+            @endif
+        </div>
     </div>
+    @endif
     @else
     <div class="empty-state">
         <h4>No Reviews Found</h4>
@@ -171,53 +205,5 @@
     </div>
     @endif
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('filterForm');
-    const dateFromInput = document.getElementById('date_from');
-    const dateToInput = document.getElementById('date_to');
-
-    // Date validation function
-    function validateDates() {
-        const fromDate = dateFromInput.value;
-        const toDate = dateToInput.value;
-
-        if (fromDate && toDate) {
-            const from = new Date(fromDate);
-            const to = new Date(toDate);
-
-            if (from > to) {
-                dateToInput.setCustomValidity('To Date must be after or equal to From Date');
-                dateToInput.classList.add('error');
-                return false;
-            } else {
-                dateToInput.setCustomValidity('');
-                dateToInput.classList.remove('error');
-                return true;
-            }
-        }
-
-        dateToInput.setCustomValidity('');
-        dateToInput.classList.remove('error');
-        return true;
-    }
-
-    // Add event listeners
-    dateFromInput.addEventListener('change', validateDates);
-    dateToInput.addEventListener('change', validateDates);
-
-    // Form submission validation
-    form.addEventListener('submit', function(e) {
-        if (!validateDates()) {
-            e.preventDefault();
-            alert('Please check your date range. To Date must be after or equal to From Date.');
-        }
-    });
-
-    // Initialize validation on page load
-    validateDates();
-});
-</script>
 
 @endsection

@@ -412,27 +412,70 @@
     margin-top: var(--space-6);
 }
 
-.reviews-pagination .pagination {
+.pagination-simple {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    background: var(--color-surface);
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border-color);
+}
+
+.page-btn {
+    display: inline-flex;
+    align-items: center;
     gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all var(--transition-base);
+    min-width: 100px;
+    justify-content: center;
 }
 
-.reviews-pagination .page-link {
-    color: var(--deep-teal);
-    border-color: var(--border-color);
-    padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-sm);
-    transition: all var(--transition-fast);
-}
-
-.reviews-pagination .page-link:hover {
-    background-color: var(--tan);
-    border-color: var(--tan);
+.page-btn:not(.disabled) {
+    background: var(--deep-teal);
     color: white;
+    border: 2px solid var(--deep-teal);
 }
 
-.reviews-pagination .page-item.active .page-link {
-    background-color: var(--deep-teal);
-    border-color: var(--deep-teal);
+.page-btn:not(.disabled):hover {
+    background: var(--deep-space-blue);
+    border-color: var(--deep-space-blue);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(4, 57, 94, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+.page-btn.disabled {
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+    border: 2px solid var(--border-color);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.page-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--color-text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    min-width: 140px;
+    text-align: center;
+}
+
+.page-info small {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    font-weight: 400;
+    margin-top: var(--space-1);
 }
 
 /* Responsive Design */
@@ -494,5 +537,24 @@
         flex-direction: column;
         gap: var(--space-2);
         align-items: flex-start;
+    }
+
+    /* Mobile Pagination */
+    .pagination-simple {
+        flex-direction: column;
+        gap: var(--space-3);
+        padding: var(--space-3);
+    }
+
+    .page-btn {
+        min-width: 120px;
+        padding: var(--space-2) var(--space-3);
+        font-size: 0.85rem;
+    }
+
+    .page-info {
+        order: -1;
+        min-width: auto;
+        margin-bottom: var(--space-2);
     }
 }
