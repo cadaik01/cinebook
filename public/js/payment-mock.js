@@ -4,7 +4,7 @@
  */
 
 // Cancel booking function
-function cancelBooking(bookingId, cancelRoute, csrfToken, homeRoute) {
+function cancelBooking(bookingId, cancelRoute, csrfToken, showtimeId, seatmapRoute) {
     if (!confirm('Are you sure you want to cancel this booking?')) {
         return;
     }
@@ -24,9 +24,9 @@ function cancelBooking(bookingId, cancelRoute, csrfToken, homeRoute) {
         if (data.success) {
             // Clear countdown timer
             localStorage.removeItem('booking_expiry_time');
-            alert('Booking cancelled successfully');
-            // Redirect to homepage
-            window.location.href = homeRoute;
+            // Redirect to seatmap with success message
+            const url = seatmapRoute.replace('SHOWTIME_ID', showtimeId);
+            window.location.href = url + '?cancel_success=1';
         } else {
             alert('Error: ' + data.message);
         }
@@ -54,6 +54,6 @@ function initPaymentMock(config) {
     
     // Expose cancel function to global scope
     window.cancelBookingHandler = function() {
-        cancelBooking(config.bookingId, config.cancelRoute, config.csrfToken, config.homeRoute);
+        cancelBooking(config.bookingId, config.cancelRoute, config.csrfToken, config.showtimeId, config.seatmapRoute);
     };
 }

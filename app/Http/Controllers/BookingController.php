@@ -100,7 +100,14 @@ class BookingController extends Controller
         if (!$showtime) {
             return redirect()->route('homepage')->with('error', 'Invalid showtime.');
         }
-        
+        // Block booking for showtimes in the past
+        if (
+            $showtime->show_date < now()->toDateString() ||
+            ($showtime->show_date == now()->toDateString() && $showtime->show_time < now()->toTimeString())
+        ) {
+            return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                ->with('error', 'Cannot book seats for a showtime in the past.');
+        }
         $room = $showtime->room()->with('screenType')->first();
         if (!$room) {
             return redirect()->route('homepage')->with('error', 'Room not found.');

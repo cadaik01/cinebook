@@ -19,6 +19,12 @@
     </div>
     @endif
 
+    @if(request()->get('cancel_success'))
+    <div class="alert alert-success">
+        Cancel booking success
+    </div>
+    @endif
+
     @if(session('error'))
     <div class="alert alert-error">
         {{ session('error') }}

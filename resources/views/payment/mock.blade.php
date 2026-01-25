@@ -87,7 +87,8 @@
         bookingId: {{ $booking->id }},
         cancelRoute: '{{ route('booking.cancel') }}',
         csrfToken: '{{ csrf_token() }}',
-        homeRoute: '{{ route('homepage') }}'
+        showtimeId: {{ $booking->showtime_id }},
+        seatmapRoute: '{{ route('booking.seatmap', ['showtime_id' => 'SHOWTIME_ID']) }}'
     });
 </script>
 @endsection
