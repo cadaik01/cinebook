@@ -83,8 +83,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'userProfile'])->name('user.profile');
     Route::get('/profile/bookings', [ProfileController::class, 'bookingsList'])->name('user.bookings.list');
     Route::get('/profile/bookings/{booking_id}', [BookingController::class, 'bookingDetails'])->name('user.booking.details');
-    Route::get('/profile/reviews', [ProfileController::class, 'reviewsList'])->name('user.reviews.list');
-    
+
     // Edit Profile - GET for form, POST for submit
     Route::get('/profile/edit', [ProfileController::class, 'editProfile'])->name('user.profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('user.profile.update');
@@ -92,19 +91,16 @@ Route::middleware('auth')->group(function () {
     // Change Password - GET for form, POST for submit
     Route::get('/profile/change-password', [ProfileController::class, 'showChangePasswordForm'])->name('user.profile.change-password');
     Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('user.profile.change-password.post');
+    // SeatType price management
+    Route::get('seat-types/prices', [\App\Http\Controllers\Admin\SeatTypeController::class, 'editPrices'])->name('admin.seat_types.edit_prices');
+    Route::post('seat-types/prices', [\App\Http\Controllers\Admin\SeatTypeController::class, 'updatePrices'])->name('admin.seat_types.update_prices');
 });
 
-    //Review Routes
-// Public reviews page
-Route::get('/reviews', [\App\Http\Controllers\ReviewController::class, 'index'])->name('reviews.index');
-
-// Protected review routes (require authentication)
+// Review Routes (only for movie detail page)
 Route::middleware('auth')->group(function () {
     Route::post('/movies/{movie_id}/reviews', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
-    Route::get('/reviews/{id}/edit', [\App\Http\Controllers\ReviewController::class, 'edit'])->name('reviews.edit');
-    Route::post('/reviews/{id}/update', [\App\Http\Controllers\ReviewController::class, 'update'])->name('reviews.update');
-    Route::post('/reviews/{id}/delete', [\App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
     Route::post('/reviews/{id}/helpful', [\App\Http\Controllers\ReviewController::class, 'toggleHelpful'])->name('reviews.helpful');
+    Route::post('/reviews/{id}/delete', [\App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
 
 //Admin Routes - Grouped with 'admin' prefix, protected by auth & role:admin
@@ -126,6 +122,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     // Rooms Management
     Route::resource('rooms', AdminRoomController::class, ['as' => 'admin']);
     Route::post('rooms/{room}/update-seats', [AdminRoomController::class, 'updateSeats'])->name('admin.rooms.update-seats');
+    Route::post('rooms/{room}/update-prices', [AdminRoomController::class, 'updatePrices'])->name('admin.rooms.update-prices');
 
     // Showtimes Management
     Route::resource('showtimes', AdminShowtimeController::class, ['as' => 'admin']);

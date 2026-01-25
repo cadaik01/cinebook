@@ -1,0 +1,183 @@
+/* Movie Filter Form Styles */
+.movie-filter-form {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    padding: var(--space-5) var(--space-6);
+    margin: 0 auto 2rem;
+    max-width: 1155px;
+    border: 1px solid var(--border-color);
+}
+
+.movie-filter-form .filter-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--space-4);
+    align-items: end;
+}
+
+.movie-filter-form .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+/* Button group */
+.movie-filter-form .filter-group:last-child {
+    flex-direction: row;
+    gap: var(--space-2);
+    align-items: flex-end;
+}
+
+.movie-filter-form label {
+    font-weight: 600;
+    color: var(--deep-space-blue);
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+}
+
+.movie-filter-form select,
+.movie-filter-form input[type="date"] {
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    transition: all var(--transition-fast);
+    width: 100%;
+}
+
+/* Placeholder styling */
+.movie-filter-form input::placeholder {
+    color: var(--color-text-muted);
+}
+
+/* Date input icon color */
+.movie-filter-form input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.movie-filter-form input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+.movie-filter-form select:hover,
+.movie-filter-form input[type="date"]:hover {
+    border-color: var(--deep-teal);
+}
+
+.movie-filter-form select:focus,
+.movie-filter-form input[type="date"]:focus {
+    border-color: var(--deep-teal);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(73, 111, 91, 0.2);
+}
+
+/* Filter actions (buttons group) */
+.movie-filter-form .filter-actions {
+    flex-direction: row;
+    gap: var(--space-2);
+    align-items: flex-end;
+    justify-content: flex-start;
+}
+
+/* Select dropdown styling */
+.movie-filter-form select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23496F5B' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+}
+
+.movie-filter-form select option {
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    padding: var(--space-2);
+}
+
+/* Filter buttons */
+.movie-filter-form .movie-btn {
+    padding: var(--space-2) var(--space-4);
+    min-width: 80px;
+    font-size: 0.9rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all var(--transition-base);
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+}
+
+.movie-filter-form .movie-btn-primary {
+    background: linear-gradient(135deg, var(--deep-teal) 0%, var(--color-btn-hover-dark) 100%);
+    color: #fff;
+}
+
+.movie-filter-form .movie-btn-primary:hover {
+    background: linear-gradient(135deg, var(--color-btn-hover-dark) 0%, var(--deep-teal) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(73, 111, 91, 0.4);
+}
+
+.movie-filter-form .movie-btn-secondary {
+    background: var(--color-bg);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.movie-filter-form .movie-btn-secondary:hover {
+    background: var(--border-color);
+    color: var(--color-text-primary);
+    transform: translateY(-2px);
+    border-color: var(--color-text-muted);
+}
+
+/* Responsive Design */
+@media (max-width: 1100px) {
+    .movie-filter-form .filter-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .movie-filter-form {
+        padding: var(--space-4);
+        margin: 0 var(--space-4) 2rem;
+    }
+
+    .movie-filter-form .filter-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-3);
+    }
+
+    .movie-filter-form .filter-group:last-child,
+    .movie-filter-form .filter-actions {
+        grid-column: span 2;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .movie-filter-form .filter-row {
+        grid-template-columns: 1fr;
+    }
+
+    .movie-filter-form .filter-group:last-child,
+    .movie-filter-form .filter-actions {
+        grid-column: span 1;
+        flex-direction: row;
+        justify-content: stretch;
+    }
+
+    .movie-filter-form .filter-group:last-child .movie-btn,
+    .movie-filter-form .filter-actions .movie-btn {
+        flex: 1;
+    }
+}

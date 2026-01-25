@@ -11,75 +11,6 @@ use App\Models\ReviewHelpful;
 class ReviewController extends Controller
 {
     /**
-     * Display all public reviews with filtering, sorting, and stats
-     */
-    public function index(Request $request)
-    {
-        // Build query with filters
-        $query = Review::with(['user', 'movie', 'helpfuls']);
-
-        // Filter by movie
-        if ($request->filled('movie_id')) {
-            $query->byMovie($request->movie_id);
-        }
-
-        // Filter by rating
-        if ($request->filled('rating')) {
-            $query->byRating($request->rating);
-        }
-
-        // Sorting
-        $sort = $request->get('sort', 'newest');
-        switch ($sort) {
-            case 'oldest':
-                $query->orderBy('created_at', 'asc');
-                break;
-            case 'highest':
-                $query->highestRated();
-                break;
-            case 'lowest':
-                $query->lowestRated();
-                break;
-            case 'helpful':
-                $query->mostHelpful();
-                break;
-            default: // newest
-                $query->latest();
-                break;
-        }
-
-        $reviews = $query->paginate(12)->withQueryString();
-
-        // Get stats
-        $stats = [
-            'total_reviews' => Review::count(),
-            'average_rating' => round(Review::avg('rating'), 1) ?: 0,
-            'total_reviewers' => Review::distinct('user_id')->count('user_id'),
-            'top_movie' => Movie::withCount('reviews')
-                ->having('reviews_count', '>', 0)
-                ->orderBy('reviews_count', 'desc')
-                ->first()
-        ];
-
-        // Get rating distribution
-        $ratingDistribution = [];
-        for ($i = 5; $i >= 1; $i--) {
-            $count = Review::where('rating', $i)->count();
-            $ratingDistribution[$i] = [
-                'count' => $count,
-                'percentage' => $stats['total_reviews'] > 0
-                    ? round(($count / $stats['total_reviews']) * 100)
-                    : 0
-            ];
-        }
-
-        // Get all movies for filter dropdown
-        $movies = Movie::whereHas('reviews')->orderBy('title')->get();
-
-        return view('reviews.index', compact('reviews', 'stats', 'ratingDistribution', 'movies'));
-    }
-
-    /**
      * Store a new review
      */
     public function store(Request $request)
@@ -106,24 +37,27 @@ class ReviewController extends Controller
             return redirect()->back()->with('error', 'You have already reviewed this movie.');
         }
 
-        // Check if user has watched this movie (showtime must be in the past)
-        $hasWatched = DB::table('booking_seats')
-            ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
-            ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
-            ->where('bookings.user_id', $userId)
-            ->where('showtimes.movie_id', $movieId)
-            ->where('bookings.payment_status', 'paid')
-            ->where(function($query) {
-                $query->where('showtimes.show_date', '<', now()->toDateString())
-                    ->orWhere(function($q) {
-                        $q->where('showtimes.show_date', '=', now()->toDateString())
-                          ->where('showtimes.show_time', '<', now()->toTimeString());
-                    });
-            })
-            ->exists();
+        // Nếu là admin thì bỏ qua kiểm tra đã xem phim
+        $isAdmin = Auth::user() && Auth::user()->role === 'admin';
+        if (!$isAdmin) {
+            $hasWatched = DB::table('booking_seats')
+                ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
+                ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
+                ->where('bookings.user_id', $userId)
+                ->where('showtimes.movie_id', $movieId)
+                ->where('bookings.payment_status', 'paid')
+                ->where(function($query) {
+                    $query->where('showtimes.show_date', '<', now()->toDateString())
+                        ->orWhere(function($q) {
+                            $q->where('showtimes.show_date', '=', now()->toDateString())
+                              ->where('showtimes.show_time', '<', now()->toTimeString());
+                        });
+                })
+                ->exists();
 
-        if (!$hasWatched) {
-            return redirect()->back()->with('error', 'You can only review movies you have watched.');
+            if (!$hasWatched) {
+                return redirect()->back()->with('error', 'You can only review movies you have watched.');
+            }
         }
 
         // Create and save the review
@@ -141,49 +75,6 @@ class ReviewController extends Controller
         return redirect()->back()->with('success', 'Review submitted successfully.');
     }
 
-    /**
-     * Show the form for editing a review
-     */
-    public function edit($id)
-    {
-        $review = Review::with('movie')->findOrFail($id);
-
-        // Ensure the authenticated user is the owner of the review
-        if (Auth::id() !== $review->user_id) {
-            return redirect()->back()->with('error', 'You are not authorized to edit this review.');
-        }
-
-        return view('reviews.edit', compact('review'));
-    }
-
-    /**
-     * Update an existing review
-     */
-    public function update(Request $request, $id)
-    {
-        $review = Review::findOrFail($id);
-
-        // Ensure the authenticated user is the owner of the review
-        if (Auth::id() !== $review->user_id) {
-            return redirect()->back()->with('error', 'You are not authorized to edit this review.');
-        }
-
-        $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string|max:1000',
-        ]);
-
-        $review->update([
-            'rating' => $request->rating,
-            'comment' => $request->comment,
-        ]);
-
-        // Update movie average rating
-        $movie = Movie::find($review->movie_id);
-        $movie->updateAverageRating();
-
-        return redirect()->route('user.reviews.list')->with('success', 'Review updated successfully.');
-    }
     /**
      * Delete a review (User can delete own review)
      */

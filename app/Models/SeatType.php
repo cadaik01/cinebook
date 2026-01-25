@@ -9,6 +9,7 @@ class SeatType extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
     protected $fillable = ['name', 'base_price', 'description'];
 
     public function seats()

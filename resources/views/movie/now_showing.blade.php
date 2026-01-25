@@ -8,13 +8,87 @@
 
 @section('content')
 
+
 <!-- Page Header -->
 <div class="page-header">
     <div class="header-content">
         <h1>Now Showing</h1>
-        <p>Discover what's currently playing in theaters</p>
+        <p>Discover what’s currently playing in theaters — before everyone spoils it for you.
+            🎬🔥</p>
+        <!-- Filter & Sort Form -->
+        <form method="GET" action="" class="movie-filter-form">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="genre">Genre</label>
+                    <select name="genre" id="genre">
+                        <option value="">All Genres</option>
+                        @if(isset($genres))
+                        @foreach($genres as $genre)
+                        <option value="{{ $genre->id }}" {{ request('genre') == $genre->id ? 'selected' : '' }}>
+                            {{ $genre->name }}</option>
+                        @endforeach
+                        @endif
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="language">Language</label>
+                    <select name="language" id="language">
+                        <option value="">All Languages</option>
+                        @if(isset($languages))
+                        @foreach($languages as $lang)
+                        <option value="{{ $lang }}" {{ request('language') == $lang ? 'selected' : '' }}>{{ $lang }}
+                        </option>
+                        @endforeach
+                        @endif
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="rating">Rating</label>
+                    <select name="rating" id="rating">
+                        <option value="">All Ratings</option>
+                        <option value="5" {{ request('rating') == '5' ? 'selected' : '' }}>5 Stars</option>
+                        <option value="4" {{ request('rating') == '4' ? 'selected' : '' }}>4+ Stars</option>
+                        <option value="3" {{ request('rating') == '3' ? 'selected' : '' }}>3+ Stars</option>
+                        <option value="2" {{ request('rating') == '2' ? 'selected' : '' }}>2+ Stars</option>
+                        <option value="1" {{ request('rating') == '1' ? 'selected' : '' }}>1+ Stars</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="showtime_date">Showtime Date</label>
+                    <input type="date" name="showtime_date" id="showtime_date"
+                        value="{{ request('showtime_date') ?? date('Y-m-d') }}">
+                </div>
+                <div class="filter-group">
+                    <label for="sort">Sort by</label>
+                    <select name="sort" id="sort">
+                        <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Name (A-Z)
+                        </option>
+                        <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Name (Z-A)
+                        </option>
+                        <option value="rating_desc" {{ request('sort') == 'rating_desc' ? 'selected' : '' }}>Rating
+                            (High-Low)
+                        </option>
+                        <option value="rating_asc" {{ request('sort') == 'rating_asc' ? 'selected' : '' }}>Rating
+                            (Low-High)
+                        </option>
+                        <option value="release_desc" {{ request('sort') == 'release_desc' ? 'selected' : '' }}>Release
+                            Date
+                            (Newest)</option>
+                        <option value="release_asc" {{ request('sort') == 'release_asc' ? 'selected' : '' }}>Release
+                            Date
+                            (Oldest)</option>
+                    </select>
+                </div>
+                <div class="filter-group filter-actions">
+                    <button type="submit" class="movie-btn movie-btn-primary">Apply</button>
+                    <a href="{{ route('now_showing') }}" class="movie-btn movie-btn-secondary">Reset</a>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
+
+
 
 <!-- Movies Grid -->
 <div class="movies-container">

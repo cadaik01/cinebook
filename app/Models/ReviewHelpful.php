@@ -11,7 +11,8 @@ class ReviewHelpful extends Model
 
     protected $fillable = [
         'review_id',
-        'user_id'
+        'user_id',
+        'is_helpful'
     ];
 
     /**

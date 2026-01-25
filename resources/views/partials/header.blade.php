@@ -3,7 +3,7 @@
         <div class="nav-container">
             <!-- Logo and Brand -->
             <div class="nav-brand">
-                <img src="{{ asset('images\tca-cine-logo.jpg') }}" alt="TCA Cine Logo" class="logo" style="width: 40px; height: 40px; object-fit: contain;">
+                <img src="{{ asset('images/tca-cine-logo.jpg') }}" alt="TCA Cine Logo" class="logo">
                 <h1 class="brand-name"><a href="{{ route('homepage') }}">TCA Cine</a></h1>
             </div>
 
@@ -28,53 +28,47 @@
                             Upcoming Movies
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('reviews.index') }}" class="nav-link">
-                            <i class="fas fa-star"></i>
-                            Reviews
-                        </a>
-                    </li>
                 </ul>
             </div>
 
             <!-- Credential Buttons -->
             <div class="nav-auth">
                 @php
-                    $currentUser = session('user_id') ? \App\Models\User::find(session('user_id')) : null;
+                $currentUser = session('user_id') ? \App\Models\User::find(session('user_id')) : null;
                 @endphp
                 @if($currentUser)
-                    <div class="user-menu">
-                        <span class="user-greeting">Hello, {{ $currentUser->name }}!</span>
-                        @if($currentUser->role === 'admin')
-                            <a href="{{ route('admin.dashboard') }}" class="btn btn-warning">
-                                <i class="fas fa-tools"></i>
-                                Admin Panel
-                            </a>
-                        @else
-                            <a href="{{ route('user.profile') }}" class="btn btn-outline">
-                                <i class="fas fa-user"></i>
-                                Profile
-                            </a>
-                        @endif
-                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="btn btn-primary" style="border: none; cursor: pointer;">
-                                <i class="fas fa-sign-out-alt"></i>
-                                Logout
-                            </button>
-                        </form>
-                    </div>
+                <div class="user-menu">
+                    <span class="user-greeting">Hello, {{ $currentUser->name }}!</span>
+                    @if($currentUser->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-warning">
+                        <i class="fas fa-tools"></i>
+                        Admin Panel
+                    </a>
+                    @else
+                    <a href="{{ route('user.profile') }}" class="btn btn-outline">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                    @endif
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </button>
+                    </form>
+                </div>
                 @else
-                    <div class="auth-buttons">
-                        <a href="{{ route('login') }}" class="btn btn-outline">
-                            <i class="fas fa-sign-in-alt"></i>
-                            Login
-                        </a>
-                        <a href="{{ route('register') }}" class="btn btn-primary">
-                            <i class="fas fa-user-plus"></i>
-                            Sign Up
-                        </a>
-                    </div>
+                <div class="auth-buttons">
+                    <a href="{{ route('login') }}" class="btn btn-outline">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login
+                    </a>
+                    <a href="{{ route('register') }}" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i>
+                        Sign Up
+                    </a>
+                </div>
                 @endif
             </div>
 
@@ -87,7 +81,3 @@
         </div>
     </nav>
 </header>
-
-
-
-

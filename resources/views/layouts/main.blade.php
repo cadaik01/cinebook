@@ -9,6 +9,7 @@
         'resources/css/app.css',
         'resources/css/header.css',
         'resources/css/footer.css',
+        'resources/css/movie-filter.css',
         'resources/js/app.js'
     ])
     @stack('styles')
