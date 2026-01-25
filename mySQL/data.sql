@@ -108,8 +108,8 @@ INSERT INTO movies (id, title, language, director, cast, duration, release_date,
 
 (32, 'The Nun II', 'English', 'Michael Chaves', 'Taissa Farmiga, Jonas Bloquet, Storm Reid, Anna Popplewell, Bonnie Aarons', 110, '2023-09-08', 'T18', 'ended', 'https://i.postimg.cc/MTnNxcXz/The_Nun_II.jpg', 'https://www.youtube.com/watch?v=QF-oyCwaArU', 'A new chapter in the Conjuring Universe follows Sister Irene as she confronts a demonic entity terrorizing Europe. Dark, atmospheric, and suspenseful, the film expands the mythology of Valak with chilling consequences.', 4.0);
 
--- movie_genre (liên kết phim với thể loại)
-INSERT INTO movie_genre (movie_id, genre_id) VALUES
+-- movie_genres (liên kết phim với thể loại)
+INSERT INTO movie_genres (movie_id, genre_id) VALUES
 -- Avengers: Endgame (1) - Action, Adventure, Sci-Fi
 (1, 1), (1, 2), (1, 11),
 -- John Wick: Chapter 4 (2) - Action, Crime, Thriller
@@ -373,65 +373,7 @@ INSERT INTO reviews (user_id, movie_id, rating, comment, created_at, updated_at)
 (15, 15, 5, 'A must-watch!', NOW(), NOW()),
 (16, 15, 4, 'Great suspense.', NOW(), NOW());
 
---data seeding for genres table
-INSERT INTO genres (id, name) VALUES
-(1, 'Action'),
-(2, 'Adventure'),
-(3, 'Sci-Fi'),
-(4, 'Drama'),
-(5, 'Thriller'),
-(6, 'Crime'),
-(7, 'Horror'),
-(8, 'Comedy'),
-(9, 'Romance'),
-(10, 'Animation'),
-(11, 'Fantasy'),
-(12, 'Mystery'),
-(13, 'Family'),
-(14, 'Biography'),
-(15, 'War'),
-(16, 'Music');
-
-
---data seeding for movie_genres table
-INSERT INTO movie_genres (movie_id, genre_id) VALUES
--- NOW SHOWING (1 - 15)
-(1, 1), (1, 2), (1, 3), -- Avengers: Endgame (Action, Adventure, Sci-Fi)
-(2, 1), (2, 5), (2, 6), -- John Wick 4 (Action, Thriller, Crime)
-(3, 4), (3, 5), (3, 8), -- Parasite (Drama, Thriller, Comedy)
-(4, 1), (4, 7), (4, 5), -- Train to Busan (Action, Horror, Thriller)
-(5, 1), (5, 6), (5, 4), -- The Dark Knight (Action, Crime, Drama)
-(6, 2), (6, 3), (6, 11), -- Avatar (Adventure, Sci-Fi, Fantasy)
-(7, 4), (7, 9), (7, 16), -- La La Land (Drama, Romance, Music)
-(8, 9), (8, 11), (8, 4), -- Your Name (Romance, Fantasy, Drama)
-(9, 10), (9, 11), (9, 13), -- Spirited Away (Animation, Fantasy, Family)
-(10, 8), (10, 4), -- Intouchables (Comedy, Drama)
-(11, 10), (11, 8), (11, 13), -- Toy Story (Animation, Comedy, Family)
-(12, 7), (12, 5), (12, 12), -- The Conjuring (Horror, Thriller, Mystery)
-(13, 1), (13, 5), (13, 4), -- Furie (Action, Thriller, Drama)
-(14, 4), (14, 8), (14, 9), -- Forrest Gump (Drama, Comedy, Romance)
-(15, 1), (15, 7), (15, 5), -- Train to Busan (duplicate) (Action, Horror, Thriller)
-
--- COMING SOON (16 - 25)
-(16, 2), (16, 3), (16, 4), -- Dune Part Two (Adventure, Sci-Fi, Drama)
-(17, 14), (17, 4), (17, 15), -- Oppenheimer (Biography, Drama, War)
-(18, 9), (18, 11), (18, 4), -- Weathering With You (Romance, Fantasy, Drama)
-(19, 10), (19, 2), (19, 13), -- Finding Nemo (Animation, Adventure, Family)
-(20, 5), (20, 12), (20, 4), -- Decision to Leave (Thriller, Mystery, Drama)
-(21, 13), (21, 8), (21, 2), -- Paddington (Family, Comedy, Adventure)
-(22, 1), (22, 2), (22, 4), -- Rurouni Kenshin (Action, Adventure, Drama)
-(23, 4), (23, 9), -- Blue Is the Warmest Color (Drama, Romance)
-(24, 4), (24, 8), (24, 12), -- Intimate Strangers (Drama, Comedy, Mystery)
-(25, 7), (25, 12), (25, 5), -- The Medium (Horror, Mystery, Thriller)
-
--- ENDED (26 - 32)
-(26, 4), (26, 9), -- Titanic (Drama, Romance)
-(27, 4), (27, 8), (27, 9), -- Forrest Gump (Drama, Comedy, Romance)
-(28, 4), (28, 6), -- Shawshank (Drama, Crime)
-(29, 7), (29, 12), (29, 5), -- The Wailing (Horror, Mystery, Thriller)
-(30, 4), (30, 9), -- Call Me By Your Name (Drama, Romance)
-(31, 10), (31, 11), (31, 4), -- Belle (Animation, Fantasy, Drama)
-(32, 7), (32, 12), (32, 5); -- The Nun II (Horror, Mystery, Thriller)
+-- Note: duplicate genres insert removed to avoid conflict with earlier insert
 
 -- first 4 rooms, rows A-H, seats 1-18
 -- Xóa dữ liệu seats trước khi insert lại để tránh lỗi duplicate
@@ -660,7 +602,27 @@ INSERT INTO showtimes (movie_id, room_id, show_date, show_time) VALUES
 (5, 4, '2026-01-25', '19:30:00'),
 (6, 4, '2026-01-25', '22:15:00');
 
+-- showtime_prices (insert prices for all showtimes)
+-- For simplicity, we'll insert prices for seat types for each showtime
+-- Price = seat_type.base_price + screen_type.price
+INSERT INTO showtime_prices (showtime_id, seat_type_id, price)
+SELECT 
+    st.id as showtime_id,
+    stype.id as seat_type_id,
+    (stype.base_price + scr.price) as price
+FROM showtimes st
+JOIN rooms r ON st.room_id = r.id
+JOIN screen_types scr ON r.screen_type_id = scr.id
+CROSS JOIN seat_types stype;
 
+-- showtime_seats (create available seats for all showtimes)
+INSERT INTO showtime_seats (showtime_id, seat_id, status)
+SELECT 
+    st.id as showtime_id,
+    s.id as seat_id,
+    'available' as status
+FROM showtimes st
+JOIN seats s ON st.room_id = s.room_id;
 
 INSERT INTO bookings (user_id, showtime_id, status, payment_status, total_price, created_at, updated_at) VALUES
 (2, 1, 'confirmed', 'paid', 240000, NOW(), NOW()),
@@ -673,3 +635,21 @@ INSERT INTO bookings (user_id, showtime_id, status, payment_status, total_price,
 (7, 8, 'cancelled', 'pending', 120000, NOW(), NOW()),
 (8, 9, 'confirmed', 'paid', 200000, NOW(), NOW()),
 (9, 10, 'pending', 'pending', 280000, NOW(), NOW());
+
+-- booking_seats (sample data for bookings)
+INSERT INTO booking_seats (booking_id, showtime_id, seat_id, price, qr_code, qr_status) VALUES
+-- Booking 1 (2 seats)
+(1, 1, 1, 120000, 'QR-1-1-1', 'active'),
+(1, 1, 2, 120000, 'QR-1-1-2', 'active'),
+-- Booking 2 (2 seats)
+(2, 2, 3, 80000, 'QR-2-2-3', 'active'),
+(2, 2, 4, 80000, 'QR-2-2-4', 'active'),
+-- Booking 3 (1 seat)
+(3, 3, 5, 120000, 'QR-3-3-5', 'cancelled'),
+-- Booking 4 (3 seats)
+(4, 4, 6, 100000, 'QR-4-4-6', 'checked'),
+(4, 4, 7, 100000, 'QR-4-4-7', 'checked'),
+(4, 4, 8, 120000, 'QR-4-4-8', 'checked'),
+-- Booking 5 (2 seats)
+(5, 5, 9, 80000, 'QR-5-5-9', 'active'),
+(5, 5, 10, 80000, 'QR-5-5-10', 'active');
