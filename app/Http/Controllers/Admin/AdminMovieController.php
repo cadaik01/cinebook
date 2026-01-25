@@ -119,14 +119,4 @@ class AdminMovieController extends Controller
         return redirect()->route('admin.movies.index')
             ->with('success', 'Movie updated successfully!');
     }
-
-    public function destroy(Movie $movie)
-    {
-        // Detach all genres first
-        $movie->genres()->detach();
-        
-        $movie->delete();
-        return redirect()->route('admin.movies.index')
-            ->with('success', 'Movie deleted successfully!');
-    }
 }

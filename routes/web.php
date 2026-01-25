@@ -113,7 +113,12 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
     // Movies Management
-    Route::resource('movies', AdminMovieController::class, ['as' => 'admin']);
+    Route::get('movies', [AdminMovieController::class, 'index'])->name('admin.movies.index');
+    Route::get('movies/create', [AdminMovieController::class, 'create'])->name('admin.movies.create');
+    Route::post('movies', [AdminMovieController::class, 'store'])->name('admin.movies.store');
+    Route::get('movies/{movie}', [AdminMovieController::class, 'show'])->name('admin.movies.show');
+    Route::get('movies/{movie}/edit', [AdminMovieController::class, 'edit'])->name('admin.movies.edit');
+    Route::put('movies/{movie}', [AdminMovieController::class, 'update'])->name('admin.movies.update');
 
     // Users Management
     Route::get('users', [AdminUserController::class, 'index'])->name('admin.users.index');
