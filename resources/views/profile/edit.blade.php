@@ -18,7 +18,7 @@
                         <div class="mb-4 text-center">
                             <div class="mb-3">
                                 <img id="avatar-preview" 
-                                     src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('images/default-avatar.png') }}" 
+                                     src="{{ $user->avatar_url ? asset('storage/' . $user->avatar_url) : asset('images/default-avatar.png') }}" 
                                      alt="Avatar" 
                                      class="rounded-circle" 
                                      style="width: 150px; height: 150px; object-fit: cover; border: 4px solid var(--deep-teal);">

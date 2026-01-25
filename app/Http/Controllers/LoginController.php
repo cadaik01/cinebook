@@ -70,7 +70,12 @@ class LoginController extends Controller
         if ($existingUser) {
             return redirect('/register')->with('error', 'Email already registered');
         }
-        //3. create new user
+        //3. check if user with phone already exists
+        $existingPhone = User::where('phone', $phone)->first();
+        if ($existingPhone) {
+            return redirect('/register')->with('error', 'Phone number already registered');
+        }
+        //4. create new user
         $user = User::create([
             'name' => $name,
             'email' => $email,
@@ -79,12 +84,12 @@ class LoginController extends Controller
             'phone' => $phone,
             'role' => 'user' // default role
         ]);
-        //4. log the user in using Laravel Auth
+        //5. log the user in using Laravel Auth
         Auth::login($user);
         // Also keep session for backward compatibility
         Session::put('user_id', $user->id);
         Session::put('user_name', $user->name);
-        //5. redirect to homepage
+        //6. redirect to homepage
         return redirect('/');
     }
 }

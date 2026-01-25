@@ -121,6 +121,7 @@
                         Unknown
                         @endif
                     </span>
+                    <span class="age-rating">{{ $movie->age_rating ?? 'N/A' }}</span>
                     <span class="duration">⏱️ {{ $movie->duration ?? '120' }} min</span>
                 </div>
 

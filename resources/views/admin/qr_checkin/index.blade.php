@@ -20,6 +20,9 @@
                     <h5 class="mb-0"><i class="bi bi-upc-scan"></i> Quét mã QR</h5>
                 </div>
                 <div class="card-body">
+                    <!-- Camera Reader -->
+                    <div id="reader" width="600px" class="mb-3"></div>
+
                     <!-- Manual Input -->
                     <div class="mb-3">
                         <label for="qrInput" class="form-label">Nhập mã QR:</label>
@@ -78,5 +81,6 @@
 @endsection
 
 @push('scripts')
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script src="{{ asset('js/qr_checkin.js') }}"></script>
 @endpush

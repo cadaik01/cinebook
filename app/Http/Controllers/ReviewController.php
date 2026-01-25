@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Review;
 use App\Models\Movie;
 use App\Models\ReviewHelpful;
@@ -39,7 +40,7 @@ class ReviewController extends Controller
         // Nếu là admin thì bỏ qua kiểm tra đã xem phim
         $isAdmin = Auth::user() && Auth::user()->role === 'admin';
         if (!$isAdmin) {
-            $hasWatched = \DB::table('booking_seats')
+            $hasWatched = DB::table('booking_seats')
                 ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
                 ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
                 ->where('bookings.user_id', $userId)
@@ -93,7 +94,7 @@ class ReviewController extends Controller
         $movie = Movie::find($movieId);
         $movie->updateAverageRating();
 
-        return redirect()->back()->with('success', 'Review deleted successfully.');
+        return redirect()->route('user.reviews.list')->with('success', 'Review deleted successfully.');
     }
 
     /**
@@ -117,7 +118,7 @@ class ReviewController extends Controller
         }
 
         // Check if user has watched this movie
-        $hasWatched = \DB::table('booking_seats')
+        $hasWatched = DB::table('booking_seats')
             ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
             ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
             ->where('bookings.user_id', $userId)

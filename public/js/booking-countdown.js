@@ -14,7 +14,7 @@ class BookingCountDown{
         this.storageKey = options.storageKey || 'booking_expiry_time';
         
         // Get or set expiry time
-        this.expiryTime = this.getOrSetExpiryTime(options.timeleft || 600);
+        this.expiryTime = this.getOrSetExpiryTime(options.timeLeft || 120);
         
         //Validate elements
         if (!this.countdownElement) {
@@ -30,12 +30,30 @@ class BookingCountDown{
     getOrSetExpiryTime(defaultSeconds) {
         const stored = localStorage.getItem(this.storageKey);
         
+        console.log('🔍 Storage Key:', this.storageKey);
+        console.log('🔍 Stored Value:', stored);
+        console.log('🔍 Default Seconds:', defaultSeconds);
+        
         if (stored) {
             // Use existing expiry time
-            return parseInt(stored);
+            const expiryTime = parseInt(stored);
+            const timeLeft = Math.floor((expiryTime - Date.now()) / 1000);
+            console.log('⏰ Time left from storage:', timeLeft, 'seconds');
+            
+            // Nếu đã hết hạn, tạo mới
+            if (timeLeft <= 0) {
+                console.warn('⚠️ Stored time expired, creating new countdown');
+                localStorage.removeItem(this.storageKey);
+                const newExpiryTime = Date.now() + (defaultSeconds * 1000);
+                localStorage.setItem(this.storageKey, newExpiryTime);
+                return newExpiryTime;
+            }
+            
+            return expiryTime;
         } else {
             // Set new expiry time (current time + duration)
             const expiryTime = Date.now() + (defaultSeconds * 1000);
+            console.log('✅ Creating new countdown:', defaultSeconds, 'seconds');
             localStorage.setItem(this.storageKey, expiryTime);
             return expiryTime;
         }
@@ -134,19 +152,32 @@ class BookingCountDown{
     }
 }
 
-// Auto-initialize on DOM load
+//Auto init on DOM load
 document.addEventListener('DOMContentLoaded', () => {
     const countdown = document.getElementById('countdown');
-    const paymentForm = document.querySelector('form[action*="booking.process"]');
-    
-    if (countdown){
+    const paymentForm = document.getElementById('payment-form');
+
+    if (countdown) {
+        //Read atrributes for customization
+        //Read showtime ID if needed
+        const showtimeId = countdown.getAttribute('data-showtime-id');
+        //Read seats ID
+        const seatsId = countdown.getAttribute('data-seats-id');
+        //Read countdown time if specified, if not default 120 seconds
+        const timeLeft = parseInt(countdown.getAttribute('data-timeleft')) || 120;
+
+        //Create unique key for storage 
+        let storageKey = 'booking_expiry_time';
+        if (showtimeId && seatsId) {
+            storageKey = `booking_expiry_time_${showtimeId}_${seatsId}`;
+        }
         new BookingCountDown({
-            timeleft: 600, // 10 minutes
             elementId: 'countdown',
             paymentForm: paymentForm,
+            timeLeft: timeLeft,
+            storageKey: storageKey,
             redirectUrl: '/',
-            warningThreshold: 60,
-            storageKey: 'booking_expiry_time'
+            warningThreshold: 30
         });
     }
 });

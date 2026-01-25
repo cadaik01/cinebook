@@ -34,14 +34,37 @@ class BookingController extends Controller
             ->orderBy('seat_number', 'asc')
             ->get();
         
-        // Get booked seats for this showtime (including reserved)
+        // Auto-clean expired reserved seats (không cần scheduler!)
+        DB::table('showtime_seats')
+            ->where('status', 'reserved')
+            ->where('reserved_until', '<', now())
+            ->update([
+                'status' => 'available',
+                'reserved_until' => null,
+                'reserved_by_user_id' => null,
+            ]);
+        
+        // Get booked seats (confirmed bookings only)
         $bookedSeats = DB::table('showtime_seats')
             ->where('showtime_id', $showtime_id)
-            ->whereIn('status', ['booked', 'reserved'])//get both booked and reserved seats
-            ->pluck('seat_id') //pluck seat_id for booked seats
-            ->toArray();//convert to array
+            ->where('status', 'booked')
+            ->pluck('seat_id')
+            ->toArray();
+        
+        // Get reserved seats (temporarily held by other users)
+        $user_id = Session::get('user_id');
+        $reservedSeats = DB::table('showtime_seats')
+            ->where('showtime_id', $showtime_id)
+            ->where('status', 'reserved')
+            ->where('reserved_until', '>', now())
+            ->when($user_id, function ($query) use ($user_id) {
+                // Exclude seats reserved by current user
+                return $query->where('reserved_by_user_id', '!=', $user_id);
+            })
+            ->pluck('seat_id')
+            ->toArray();
             
-        return view('booking.seat_map', compact('showtime', 'room', 'seats', 'bookedSeats'));//return seat map view with data- compact is used to pass multiple variables to the view
+        return view('booking.seat_map', compact('showtime', 'room', 'seats', 'bookedSeats', 'reservedSeats'));
     }
     
     /**
@@ -77,40 +100,95 @@ class BookingController extends Controller
         if (!$showtime) {
             return redirect()->route('homepage')->with('error', 'Invalid showtime.');
         }
-        
+        // Block booking for showtimes in the past
+        if (
+            $showtime->show_date < now()->toDateString() ||
+            ($showtime->show_date == now()->toDateString() && $showtime->show_time < now()->toTimeString())
+        ) {
+            return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                ->with('error', 'Cannot book seats for a showtime in the past.');
+        }
         $room = $showtime->room()->with('screenType')->first();
         if (!$room) {
             return redirect()->route('homepage')->with('error', 'Room not found.');
         }
         
-        //5. Collect seat information for confirmation and pricing
-        $seatDetails = [];
-        $totalPrice = 0;
-        $validatedCouplePairs = [];
-        foreach ($selectedSeats as $seat_id) {
-            $seat = Seat::with('seatType')->find($seat_id);
-            if (!$seat) {
+        //5. START TRANSACTION WITH PESSIMISTIC LOCKING
+        DB::beginTransaction();
+        
+        try {
+            // STEP 1: LOCK selected seats to prevent race conditions
+            // lockForUpdate() prevents other transactions from reading/writing these rows
+            $lockedSeats = Seat::with('seatType')
+                ->whereIn('id', $selectedSeats)
+                ->lockForUpdate() // ← CRITICAL: This locks the rows until transaction commits
+                ->get()
+                ->keyBy('id'); // Convert to associative array for easy access
+            
+            // STEP 2: Validate all selected seats exist
+            if ($lockedSeats->count() !== count($selectedSeats)) {
+                DB::rollBack();
                 return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                    ->with('error', 'Invalid seat selected.');
+                    ->with('error', 'Some selected seats are invalid.');
             }
-            $existingBooking = DB::table('showtime_seats')
+            
+            // STEP 3: Check if any locked seats are already BOOKED (confirmed)
+            $bookedSeatIds = DB::table('showtime_seats')
                 ->where('showtime_id', $showtime_id)
-                ->where('seat_id', $seat_id)
-                ->whereIn('status', ['booked', 'reserved'])
-                ->first();
-            if ($existingBooking) {
+                ->whereIn('seat_id', $selectedSeats)
+                ->where('status', 'booked') // Only check booked, not reserved
+                ->lockForUpdate()
+                ->pluck('seat_id')
+                ->toArray();
+            
+            if (!empty($bookedSeatIds)) {
+                DB::rollBack();
+                $bookedCodes = $lockedSeats->whereIn('id', $bookedSeatIds)->pluck('seat_code')->implode(', ');
                 return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                    ->with('error', 'Seat ' . $seat->seat_code . ' is already booked.');
+                    ->with('error', "Seats {$bookedCodes} are already booked.");
             }
+            
+            // STEP 3.5: Check if any seats are RESERVED by OTHER users (have not expired)
+            foreach ($selectedSeats as $seat_id) {
+                $reservedSeat = DB::table('showtime_seats')
+                    ->where('showtime_id', $showtime_id)
+                    ->where('seat_id', $seat_id)
+                    ->where('status', 'reserved')
+                    ->where('reserved_until', '>', now()) // have not expired
+                    ->lockForUpdate()
+                    ->first();
+                
+                if ($reservedSeat) {
+                    // IF reserved by DIFFERENT user → ERROR
+                    if ($reservedSeat->reserved_by_user_id != $user_id) {
+                        DB::rollBack();
+                        $seatCode = $lockedSeats->get($seat_id)->seat_code ?? $seat_id;
+                        return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                            ->with('error', "Seat {$seatCode} is temporarily reserved by another user. Please select different seats.");
+                    }
+                    // IF reserved by SAME user → OK, proceed
+                }
+            }
+            
+            // STEP 4: Collect seat information for pricing (seats are now safely locked)
+            $seatDetails = [];
+            $totalPrice = 0;
+            $validatedCouplePairs = [];
+            
+            foreach ($selectedSeats as $seat_id) {
+                $seat = $lockedSeats->get($seat_id);
+            
+            // Couple seat validation
             if ($seat->seat_type_id == 3) {
                 $pairKey = $this->getCouplePairKey($seat->seat_code);
                 if (!in_array($pairKey, $validatedCouplePairs)) {
                     $validation = $this->validateCoupleSeat($seat, $selectedSeats, $showtime_id);
                     if (!$validation['valid']) {
+                        DB::rollBack(); // Rollback on validation error
                         return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
                             ->with('error', $validation['message']);
                     }
-                    // Tính tiền 1 lần cho cả cặp
+                    // Logic to calculate price for couple seats
                     $seatPrice = ($room->screenType->price ?? 0) + ($seat->seatType->base_price ?? 0);
                     $totalPrice += $seatPrice;
                     $seatDetails[] = [
@@ -132,6 +210,47 @@ class BookingController extends Controller
                 ];
             }
         }
+        //STEP 4.5: Reserve seat 120 seconds
+        foreach ($selectedSeats as $seat_id) {
+            //check if already reserved (should not happen due to locks, but double-check)
+            $existingSeat = DB::table('showtime_seats')
+                ->where('showtime_id', $showtime_id)
+                ->where('seat_id', $seat_id)
+                ->first();
+            $reserveData = [
+                'status' => 'reserved',
+                'reserved_until'=> now()->addSeconds(120),
+                'reserved_by_user_id'=> $user_id,
+            ];
+            if ($existingSeat) {
+                //update existing record
+                DB::table('showtime_seats')
+                    ->where('showtime_id', $showtime_id)
+                    ->where('seat_id', $seat_id)
+                    ->update($reserveData);
+            } else {
+                //insert new record
+                DB::table('showtime_seats')
+                    ->insert(array_merge($reserveData, [
+                        'showtime_id' => $showtime_id,
+                        'seat_id' => $seat_id,
+                        'status' => 'reserved',
+                        'reserved_until'=> now()->addSeconds(120),
+                        'reserved_by_user_id'=> $user_id
+                    ]));
+            }
+        }
+
+        // STEP 5: Commit transaction (releases all locks)
+        DB::commit();
+        
+        } catch (\Exception $e) {
+            // STEP 6: Rollback on any error
+            DB::rollBack();
+            return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                ->with('error', 'Booking failed: ' . $e->getMessage());
+        }
+        
         //8. Get Movie info using relationship
         $movie = $showtime->movie;
         //9. Redirect to confirmation page with booking details

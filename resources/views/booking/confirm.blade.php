@@ -8,7 +8,11 @@
     <!-- Countdown Timer -->
 <div style="background: #ff6b6b; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
     <h3 style="margin: 0;">⏰ Expiration Time</h3>
-    <div id="countdown" style="font-size: 32px; font-weight: bold; margin-top: 10px;">10:00</div>
+    <div id="countdown" 
+         data-showtime-id="{{ $showtime_id }}"
+         data-seats-id="{{ implode('_', array_column($seatDetails, 'id')) }}"
+         data-timeleft="120"
+         style="font-size: 32px; font-weight: bold; margin-top: 10px;">02:00</div>
     <p style="margin: 5px 0 0 0; font-size: 14px;">Booking will be automatically canceled if not paid within this time</p>
 </div>
     <!-- Display movie and showtime details -->
@@ -66,6 +70,17 @@
     <script src="{{ asset('js/booking-countdown.js') }}"></script>
     <script src="{{ asset('js/booking-confirm.js') }}"></script>
     <script>
+        // Clear old localStorage keys trước khi init countdown mới
+        Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('booking_expiry_time')) {
+                const expiry = parseInt(localStorage.getItem(key));
+                // Xóa nếu đã hết hạn hoặc không phải booking này
+                if (!key.includes('{{ $showtime_id }}_{{ implode("_", array_column($seatDetails, "id")) }}') || expiry < Date.now()) {
+                    localStorage.removeItem(key);
+                }
+            }
+        });
+        
         // Initialize booking confirmation page
         initBookingConfirm({
             bookingData: {

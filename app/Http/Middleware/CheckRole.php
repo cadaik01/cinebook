@@ -22,7 +22,7 @@ class CheckRole
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'You need to log in to continue');
         }
-        // check user role
+        // Check if user has the required role
         if (Auth::user()->role !== $role) {
             abort(403, 'You do not have permission to access this page');
         }

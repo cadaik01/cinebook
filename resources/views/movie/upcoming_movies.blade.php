@@ -112,17 +112,15 @@
                         Unknown
                         @endif
                     </span>
+                    <span class="age-rating"> {{ $movie->age_rating ?? 'N/A' }}</span>
                     @if($movie->release_date)
                     <span class="release-date">📅
                         {{ \Carbon\Carbon::parse($movie->release_date)->format('M d, Y') }}</span>
                     @endif
+                    @if($movie->duration)
+                    <span class="duration">⏱️ {{ $movie->duration }} min</span>
+                    @endif
                 </div>
-
-                @if($movie->duration)
-                <div class="movie-duration">
-                    <span>⏱️ {{ $movie->duration }} min</span>
-                </div>
-                @endif
 
                 <p class="movie-description">
                     {{ Str::limit($movie->description ?? 'Get ready for this exciting upcoming film!', 100) }}</p>

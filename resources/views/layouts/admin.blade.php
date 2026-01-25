@@ -21,7 +21,7 @@
         <!-- Sidebar -->
         <aside class="admin-layout-sidebar" id="sidebar">
             <div class="admin-layout-sidebar-header">
-                <h3><i class="bi bi-film"></i> <span>CineBook Admin</span></h3>
+                <h3><a href="/"><i class="bi bi-film"></i> <span>CineBook Admin</span></a></h3>
             </div>
             <nav class="admin-layout-sidebar-nav">
                 <ul class="admin-layout-sidebar-menu">

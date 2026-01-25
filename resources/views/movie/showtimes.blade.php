@@ -22,6 +22,11 @@
         </thead>
         <tbody>
             @foreach($showtimes as $showtime)
+            @php
+                // Check if showtime is in the past
+                $showtimeDateTime = \Carbon\Carbon::parse($showtime->show_date->format('Y-m-d') . ' ' . $showtime->show_time->format('H:i:s'));
+                $isPast = $showtimeDateTime->isPast();
+            @endphp
             <tr>
                 <td data-label="Date" class="showtime-date">{{ $showtime->show_date->format('d/m/Y') }}</td>
                 <td data-label="Time" class="showtime-time">{{ $showtime->show_time->format('H:i') }}</td>
@@ -29,9 +34,13 @@
                     <span class="room-badge">{{ $showtime->room->name }}</span>
                 </td>
                 <td data-label="Action">
-                    <a href="{{ route('booking.seatmap', ['showtime_id' => $showtime->id]) }}" class="showtimes-select-btn">
-                        Select Seats
-                    </a>
+                    @if($isPast)
+                        <span class="text-muted" style="font-style: italic;">Expired</span>
+                    @else
+                        <a href="{{ route('booking.seatmap', ['showtime_id' => $showtime->id]) }}" class="showtimes-select-btn">
+                            Select Seats
+                        </a>
+                    @endif
                 </td>
             </tr>
             @endforeach

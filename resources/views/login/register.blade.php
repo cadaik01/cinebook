@@ -64,50 +64,8 @@
         </div>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const password = document.getElementById('password');
-    const confirmPassword = document.getElementById('password_confirmation');
-    const errorSpan = document.getElementById('passwordError');
-    const submitBtn = document.getElementById('submitBtn');
-    const emailInput = document.getElementById('email');
-    const phoneInput = document.getElementById('phone');
-
-    function validatePasswords() {
-        if (confirmPassword.value && password.value !== confirmPassword.value) {
-            errorSpan.style.display = 'inline';
-            confirmPassword.classList.add('error');
-            submitBtn.disabled = true;
-        } else {
-            errorSpan.style.display = 'none';
-            confirmPassword.classList.remove('error');
-            submitBtn.disabled = false;
-        }
-    }
-
-    function validateEmail() {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (emailInput.value && !emailRegex.test(emailInput.value)) {
-            emailInput.classList.add('error');
-        } else {
-            emailInput.classList.remove('error');
-        }
-    }
-
-    function validatePhone() {
-        const phoneRegex = /^[0-9]{10,11}$/;
-        if (phoneInput.value && !phoneRegex.test(phoneInput.value)) {
-            phoneInput.classList.add('error');
-        } else {
-            phoneInput.classList.remove('error');
-        }
-    }
-
-    password.addEventListener('input', validatePasswords);
-    confirmPassword.addEventListener('input', validatePasswords);
-    emailInput.addEventListener('blur', validateEmail);
-    phoneInput.addEventListener('blur', validatePhone);
-});
-</script>
 @endsection
+
+@push('scripts')
+<script src="{{ asset('js/register.js') }}"></script>
+@endpush

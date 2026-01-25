@@ -69,7 +69,7 @@ class ProfileController extends Controller
         $user->city = $validated['city'] ?? $user->city;
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $avatarPath;
+            $user->avatar_url = $avatarPath;
         }
         $user->save();
                 
@@ -93,19 +93,20 @@ class ProfileController extends Controller
             'new_password' => 'required|string|min:8|confirmed',
         ]);
 
-        // Check if current password matches
-        if (!Hash::check($validated['current_password'], $user->password)) {
+        // Check if current password matches (plain text comparison)
+        if ($user->password !== $validated['current_password']) {
             return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.']);
         }
+        
         //check new password is different from current password
-        if (Hash::check($validated['new_password'], $user->password)) {
+        if ($validated['new_password'] === $validated['current_password']) {
             return redirect()->back()->withErrors(['new_password' => 'New password must be different from the current password.']);
         }
         
-        // Update to new password
-        $user->password = Hash::make($validated['new_password']);
+        // Update to new password (store as plain text)
+        $user->password = $validated['new_password'];
         $user->save();
 
-        return redirect()->back()->with('success', 'Password changed successfully.');
+        return redirect()->route('user.profile')->with('success', 'Password changed successfully.');
     }
 }

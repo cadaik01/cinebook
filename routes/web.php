@@ -7,6 +7,7 @@ use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ShowtimeController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentController;
@@ -38,7 +39,13 @@ Route::get('/login', [LoginController::class, 'showLoginForm']);
 Route::post('/login',[LoginController::class, 'login'])->name('login');
 // Logout Route
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
- 
+
+// Password Reset Routes
+Route::get('/password/forgot', [PasswordResetController::class, 'showForgotPasswordForm'])->name('password.forgot');
+Route::post('/password/email', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
+Route::get('/password/reset/{token}', [PasswordResetController::class, 'showResetPasswordForm'])->name('password.reset');
+Route::post('/password/update', [PasswordResetController::class, 'resetPassword'])->name('password.update');
+
 // Register Routes
 Route::get('register',[LoginController::class, 'showRegisterForm']);
 Route::post('register',[LoginController::class, 'register'])->name('register');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Movie;
 use App\Models\Genre;
 
@@ -30,15 +31,45 @@ class MovieController extends Controller
         
         return $movies;
     }
+    /**
+     * Helper function to attach age rating descriptions to movies
+     * Vietnamese film rating system
+     */
+    private function attachAgeRatingsToMovies($movies)
+    {
+        $ageRatings = [
+            'P' => 'General Audiences - Suitable for all ages',
+            'T13' => 'Parental Guidance Suggested - For ages 13 and above',
+            'T16' => 'Parents Strongly Cautioned - For ages 16 and above',
+            'T18' => 'Restricted - For ages 18 and above only',
+            'C' => 'Adults Only - Mature content, 18+ strictly enforced'
+        ];
+
+        foreach ($movies as $movie) {
+            $movie->age_rating_description = $ageRatings[$movie->age_rating] ?? 'Not Rated';
+        }
+        return $movies;
+    }
     //Homepage function - show movies on homepage
     public function homepage()
     {
-        $movies = DB::table('movies')->limit(6)->get(); // only fetch 6 movies for homepage
+        $movies = DB::table('movies')
+        ->where('status', 'now_showing')
+        ->limit(6)->get(); // fetch only 6 movies for homepage
         
+        //upcoming movies
+        $upcomingMovies = DB::table('movies')
+        ->where('status', 'coming_soon')
+        ->limit(6)->get(); // fetch only 6 upcoming movies for homepage
+
         // Attach genres using helper function
         $movies = $this->attachGenresToMovies($movies);
+        $upcomingMovies = $this->attachGenresToMovies($upcomingMovies);
+        // Attach age ratings using helper function
+        $movies = $this->attachAgeRatingsToMovies($movies);
+        $upcomingMovies = $this->attachAgeRatingsToMovies($upcomingMovies);
         
-        return view('homepage', compact('movies'));
+        return view('homepage', compact('movies', 'upcomingMovies'));
     }
     
     //1. movie function to fetch all movies from the database and return to index view
@@ -66,14 +97,14 @@ class MovieController extends Controller
 
         // Check if user can review this movie
         $canReview = false;
-        if (auth()->check()) {
-            $user = auth()->user();
+        if (Auth::check()) {
+            $user = Auth::user();
             if ($user->role === 'admin') {
                 $canReview = true;
             } else {
                 $userId = $user->id;
                 // Check if user has watched this movie (showtime must be in the past)
-                $hasWatched = \DB::table('booking_seats')
+                $hasWatched = DB::table('booking_seats')
                     ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
                     ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
                     ->where('bookings.user_id', $userId)
@@ -168,6 +199,9 @@ class MovieController extends Controller
 
         $movies = $query->get();
         $movies = $this->attachGenresToMovies($movies);
+        
+        // Attach age ratings using helper function
+        $movies = $this->attachAgeRatingsToMovies($movies);
 
         // For filter dropdowns
         $genres = \App\Models\Genre::all();
@@ -246,6 +280,9 @@ class MovieController extends Controller
 
         $movies = $query->get();
         $movies = $this->attachGenresToMovies($movies);
+        
+        //Attach age ratings using helper function
+        $movies = $this->attachAgeRatingsToMovies($movies);
 
         // For filter dropdowns
         $genres = \App\Models\Genre::all();

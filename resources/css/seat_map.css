@@ -1,4 +1,4 @@
-/* Couple seat button: rộng gấp đôi ghế đơn */
+/* Couple seat button */
 .seat-btn.couple {
     width: 95px;
     min-width: 90px;
@@ -237,14 +237,15 @@
 }
 
 /* Seat type colors */
+/* Standard Seat */
 .seat-btn[data-seat-type="1"] {
     background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
 }
-
+/* VIP Seat */
 .seat-btn[data-seat-type="2"] {
     background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%);
 }
-
+/* Couple Seat */
 .seat-btn[data-seat-type="3"] {
     background: linear-gradient(135deg, #e84393 0%, #d63384 100%);
 }
