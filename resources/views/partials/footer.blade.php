@@ -21,9 +21,9 @@
             <p>Your ultimate cinema destination.</p>
             
             <div class="footer-socials">
-                <a href="#">Facebook</a> |
-                <a href="#">Twitter</a> |
-                <a href="#">Instagram</a>
+                <a href="{{ route('coming_soon') }}">Facebook</a> |
+                <a href="{{ route('coming_soon') }}">Twitter</a> |
+                <a href="{{ route('coming_soon') }}">Instagram</a>
             </div>
         </div>
 
@@ -51,8 +51,8 @@
     <div class="footer-bottom">
         <p>&copy; {{ date('Y') }} TCA Cine. All rights reserved.</p>
         <p>
-            <a href="">Privacy Policy</a> | 
-            <a href="">Terms of Service</a> | 
+            <a href="{{ route('coming_soon') }}">Privacy Policy</a> | 
+            <a href="{{ route('coming_soon') }}">Terms of Service</a> | 
             <a href="{{ route('sitemap') }}">Sitemap</a>
         </p>
     </div>

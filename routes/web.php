@@ -42,6 +42,11 @@ Route::get('/promotions', [MovieController::class, 'promotions'])->name('promoti
 // Sitemap Route
 Route::get('/sitemap', [MovieController::class, 'sitemap'])->name('sitemap');
 
+// Coming Soon Route
+Route::get('/coming-soon', function () {
+    return view('coming-soon');
+})->name('coming_soon');
+
 // Login Routes
 Route::get('/login', [LoginController::class, 'showLoginForm']);
 Route::post('/login',[LoginController::class, 'login'])->name('login');
