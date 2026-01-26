@@ -353,5 +353,31 @@ class MovieController extends Controller
 
         return view('movie.now_showing', compact('movies', 'genres', 'languages'));
     }
+
+    /**
+     * Display promotions page
+     * 
+     * Shows all available cinema promotions and special offers
+     * organized in tabbed categories for easy navigation
+     * 
+     * @return \Illuminate\View\View
+     */
+    public function promotions()
+    {
+        return view('promotions');
+    }
+
+    /**
+     * Display sitemap page
+     * 
+     * Shows complete site structure and navigation
+     * for easy access to all pages and features
+     * 
+     * @return \Illuminate\View\View
+     */
+    public function sitemap()
+    {
+        return view('sitemap');
+    }
     
 }

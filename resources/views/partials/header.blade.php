@@ -40,6 +40,12 @@
                             Upcoming Movies
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('promotions') }}" class="nav-link">
+                            <i class="fas fa-gift"></i>
+                            Promotions
+                        </a>
+                    </li>
                 </ul>
             </div>
 

@@ -33,6 +33,14 @@ Route::get('/', [MovieController::class, 'homepage'])->name('homepage');
 Route::get('/now-showing', [MovieController::class, 'nowShowing'])->name('now_showing');
 // Upcoming Movies Route
 Route::get('/upcoming-movies', [MovieController::class, 'upcomingMovies'])->name('upcoming_movies');
+// Promotions Route
+Route::get('/promotions', [MovieController::class, 'promotions'])->name('promotions');
+// Sitemap Route
+Route::get('/sitemap', [MovieController::class, 'sitemap'])->name('sitemap');
+// Promotions Route
+Route::get('/promotions', [MovieController::class, 'promotions'])->name('promotions');
+// Sitemap Route
+Route::get('/sitemap', [MovieController::class, 'sitemap'])->name('sitemap');
 
 // Login Routes
 Route::get('/login', [LoginController::class, 'showLoginForm']);

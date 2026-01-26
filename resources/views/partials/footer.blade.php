@@ -34,7 +34,8 @@
                 <li><a href="{{ route('homepage') }}">Home</a></li>
                 <li><a href="{{ route('now_showing') }}">Now Showing</a></li>
                 <li><a href="{{ route('upcoming_movies') }}">Upcoming</a></li>
-                <li><a href="">Reviews</a></li>
+                <li><a href="{{ route('promotions') }}">Promotions</a></li>
+                <li><a href="{{ route('sitemap') }}">📍 View Sitemap</a></li>
             </ul>
         </div>
 
@@ -50,7 +51,9 @@
     <div class="footer-bottom">
         <p>&copy; {{ date('Y') }} TCA Cine. All rights reserved.</p>
         <p>
-            <a href="">Privacy Policy</a> | <a href="">Terms of Service</a>
+            <a href="">Privacy Policy</a> | 
+            <a href="">Terms of Service</a> | 
+            <a href="{{ route('sitemap') }}">Sitemap</a>
         </p>
     </div>
 </footer>

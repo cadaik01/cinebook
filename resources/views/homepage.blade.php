@@ -190,7 +190,7 @@
                 alt="Premium Combo" class="corner-main-img">
             <div class="corner-main-title">🎁 Get Free Premium Popcorn Combo - Limited Time Offer!</div>
             <div class="corner-main-meta">
-                <span class="corner-like-btn">🎟️ Claim Now</span>
+                <a href="{{ route('promotions') }}" class="corner-like-btn">🎟️ Claim Now</a>
                 <span class="corner-view"><i class="fa fa-fire"></i> Hot Deal</span>
             </div>
         </div>
@@ -201,7 +201,7 @@
                 <div class="corner-side-info">
                     <div class="corner-side-title">🎬 Exclusive Movie Merchandise - Buy 2 Tickets Get 1 Free Collectible</div>
                     <div class="corner-side-meta">
-                        <span class="corner-like-btn">🛍️ Shop Now</span>
+                        <a href="{{ route('promotions') }}" class="corner-like-btn">🛍️ Shop Now</a>
                         <span class="corner-view"><i class="fa fa-gift"></i> Limited</span>
                     </div>
                 </div>
@@ -212,7 +212,7 @@
                 <div class="corner-side-info">
                     <div class="corner-side-title">🎂 Birthday Special - Free Ticket on Your Special Day!</div>
                     <div class="corner-side-meta">
-                        <span class="corner-like-btn">🎉 Register</span>
+                        <a href="{{ route('register') }}" class="corner-like-btn">🎉 Register</a>
                         <span class="corner-view"><i class="fa fa-birthday-cake"></i> Members</span>
                     </div>
                 </div>
@@ -222,7 +222,7 @@
                 <div class="corner-side-info">
                     <div class="corner-side-title">🎓 Student Discount - 20% Off Every Tuesday & Wednesday</div>
                     <div class="corner-side-meta">
-                        <span class="corner-like-btn">💳 Get Card</span>
+                        <a href="{{ route('promotions') }}" class="corner-like-btn">💳 Get Card</a>
                         <span class="corner-view"><i class="fa fa-percent"></i> Save 20%</span>
                     </div>
                 </div>
@@ -230,7 +230,7 @@
         </div>
     </div>
     <div class="corner-more-btn-container">
-        <a href="#" class="corner-more-btn">View All Promotions <span>&rarr;</span></a>
+        <a href="{{ route('promotions') }}" class="corner-more-btn">View All Promotions <span>&rarr;</span></a>
     </div>
 </div>
 

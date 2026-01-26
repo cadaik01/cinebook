@@ -189,6 +189,8 @@
     margin-right: 4px;
     cursor: pointer;
     transition: background 0.18s, color 0.18s;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .corner-like-btn:hover {
