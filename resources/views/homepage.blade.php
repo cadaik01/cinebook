@@ -182,11 +182,10 @@
         <span class="corner-title-bar"></span>
         <span class="corner-title">SPECIAL PROMOTIONS</span>
         <span class="corner-tab active">Cinema Gifts</span>
-        <span class="corner-tab">Member Rewards</span>
     </div>
     <div class="cinema-corner-content">
         <div class="corner-main-article">
-            <img src="https://i.postimg.cc/cCwHKgSD/popcorn-combo.jpg"
+            <img src="{{ asset('images/tca_promo_popcorn_centered.png') }}"
                 alt="Premium Combo" class="corner-main-img">
             <div class="corner-main-title">🎁 Get Free Premium Popcorn Combo - Limited Time Offer!</div>
             <div class="corner-main-meta">
@@ -196,7 +195,7 @@
         </div>
         <div class="corner-side-articles">
             <div class="corner-side-article">
-                <img src="https://i.postimg.cc/ZKMB4XJd/movie-merch.jpg" alt="Movie Merchandise"
+                <img src="{{ asset('images/tca_promo_merch_centered.png') }}" alt="Movie Merchandise"
                     class="corner-side-img">
                 <div class="corner-side-info">
                     <div class="corner-side-title">🎬 Exclusive Movie Merchandise - Buy 2 Tickets Get 1 Free Collectible</div>
@@ -207,7 +206,7 @@
                 </div>
             </div>
             <div class="corner-side-article">
-                <img src="https://i.postimg.cc/MpDSW5qj/birthday-special.jpg"
+                <img src="{{ asset('images/tca_promo_birthday_centered.png') }}"
                     alt="Birthday Special" class="corner-side-img">
                 <div class="corner-side-info">
                     <div class="corner-side-title">🎂 Birthday Special - Free Ticket on Your Special Day!</div>
@@ -218,7 +217,7 @@
                 </div>
             </div>
             <div class="corner-side-article">
-                <img src="https://i.postimg.cc/nLvSj8BC/student-discount.jpg" alt="Student Discount" class="corner-side-img">
+                <img src="{{ asset('images/tca_promo_student_centered.png') }}" alt="Student Discount" class="corner-side-img">
                 <div class="corner-side-info">
                     <div class="corner-side-title">🎓 Student Discount - 20% Off Every Tuesday & Wednesday</div>
                     <div class="corner-side-meta">

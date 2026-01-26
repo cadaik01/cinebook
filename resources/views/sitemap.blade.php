@@ -175,32 +175,25 @@
                 <li><a href="{{ route('search') }}"><i class="fas fa-search"></i> Search Movies</a></li>
             </ul>
             <div class="sitemap-subsection">
-                <h3>Movie Details</h3>
+                <h3>How It Works</h3>
                 <ul class="sitemap-links">
-                    <li><a href="#"><i class="fas fa-info-circle"></i> Movie Information</a></li>
-                    <li><a href="#"><i class="fas fa-clock"></i> Showtimes Schedule</a></li>
-                    <li><a href="#"><i class="fas fa-star"></i> Reviews & Ratings</a></li>
+                    <li><i class="fas fa-info-circle"></i> Browse movies and view details</li>
+                    <li><i class="fas fa-clock"></i> Select showtimes for each movie</li>
+                    <li><i class="fas fa-star"></i> Read and write reviews</li>
                 </ul>
             </div>
         </div>
 
-        <!-- Booking System -->
+        <!-- Booking Process -->
         <div class="sitemap-section">
-            <h2><span class="icon">🎫</span> Booking System</h2>
+            <h2><span class="icon">🎫</span> Booking Process</h2>
             <ul class="sitemap-links">
-                <li><a href="#"><i class="fas fa-couch"></i> Seat Selection</a></li>
-                <li><a href="#"><i class="fas fa-shopping-cart"></i> Booking Confirmation</a></li>
-                <li><a href="#"><i class="fas fa-credit-card"></i> Payment Methods</a></li>
-                <li><a href="#"><i class="fas fa-check-circle"></i> Booking Success</a></li>
+                <li><i class="fas fa-info-circle"></i> Select a movie from the list</li>
+                <li><i class="fas fa-clock"></i> Choose your preferred showtime</li>
+                <li><i class="fas fa-couch"></i> Pick your seats on the seat map</li>
+                <li><i class="fas fa-credit-card"></i> Complete payment</li>
+                <li><i class="fas fa-check-circle"></i> Receive booking confirmation</li>
             </ul>
-            <div class="sitemap-subsection">
-                <h3>Payment Options</h3>
-                <ul class="sitemap-links">
-                    <li><a href="#"><i class="fas fa-wallet"></i> VNPay</a></li>
-                    <li><a href="#"><i class="fas fa-mobile-alt"></i> Momo</a></li>
-                    <li><a href="#"><i class="fas fa-university"></i> Bank Transfer</a></li>
-                </ul>
-            </div>
         </div>
 
         <!-- User Account -->
@@ -208,13 +201,13 @@
             <h2><span class="icon">👤</span> User Account</h2>
             <ul class="sitemap-links">
                 <li><a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-                <li><a href="{{ route('register') }}"><i class="fas fa-user-plus"></i> Register</a></li>
+                <li><a href="/register"><i class="fas fa-user-plus"></i> Register</a></li>
                 @auth
                 <li><a href="{{ route('user.profile') }}"><i class="fas fa-user"></i> My Profile</a></li>
-                <li><a href="{{ route('user.bookings') }}"><i class="fas fa-ticket-alt"></i> My Bookings</a></li>
-                <li><a href="{{ route('user.reviews') }}"><i class="fas fa-comment"></i> My Reviews</a></li>
-                <li><a href="{{ route('user.edit') }}"><i class="fas fa-edit"></i> Edit Profile</a></li>
-                <li><a href="{{ route('user.password') }}"><i class="fas fa-key"></i> Change Password</a></li>
+                <li><a href="{{ route('user.bookings.list') }}"><i class="fas fa-ticket-alt"></i> My Bookings</a></li>
+                <li><a href="{{ route('user.reviews.list') }}"><i class="fas fa-comment"></i> My Reviews</a></li>
+                <li><a href="{{ route('user.profile.edit') }}"><i class="fas fa-edit"></i> Edit Profile</a></li>
+                <li><a href="{{ route('user.profile.change-password') }}"><i class="fas fa-key"></i> Change Password</a></li>
                 @endauth
             </ul>
             <div class="sitemap-subsection">
@@ -260,19 +253,19 @@
                 <li><a href="{{ route('admin.users.index') }}"><i class="fas fa-users"></i> Manage Users</a></li>
                 <li><a href="{{ route('admin.reviews.index') }}"><i class="fas fa-comments"></i> Manage Reviews</a></li>
                 <li><a href="{{ route('admin.qr.index') }}"><i class="fas fa-qrcode"></i> QR Check-in</a></li>
-                <li><a href="{{ route('admin.seat-types.prices') }}"><i class="fas fa-dollar-sign"></i> Seat Pricing</a></li>
+                <li><a href="{{ route('admin.seat_types.edit_prices') }}"><i class="fas fa-dollar-sign"></i> Seat Pricing</a></li>
             </ul>
         </div>
         @endif
 
-        <!-- Help & Support -->
+        <!-- Additional Information -->
         <div class="sitemap-section">
-            <h2><span class="icon">❓</span> Help & Support</h2>
+            <h2><span class="icon">ℹ️</span> Additional Information</h2>
             <ul class="sitemap-links">
-                <li><a href="#contact"><i class="fas fa-envelope"></i> Contact Us</a></li>
-                <li><a href="#faq"><i class="fas fa-question-circle"></i> FAQ</a></li>
-                <li><a href="#terms"><i class="fas fa-file-contract"></i> Terms & Conditions</a></li>
-                <li><a href="#privacy"><i class="fas fa-shield-alt"></i> Privacy Policy</a></li>
+                <li><i class="fas fa-ticket-alt"></i> Dynamic booking flow based on movie selection</li>
+                <li><i class="fas fa-qrcode"></i> QR code for ticket check-in</li>
+                <li><i class="fas fa-users"></i> User registration for exclusive benefits</li>
+                <li><i class="fas fa-crown"></i> Member rewards and promotions</li>
             </ul>
         </div>
     </div>
