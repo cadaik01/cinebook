@@ -170,10 +170,6 @@
         <!-- Movies & Showtimes -->
         <div class="sitemap-section">
             <h2><span class="icon">🎬</span> Movies & Showtimes</h2>
-            <ul class="sitemap-links">
-                <li><a href="{{ route('movies.index') }}"><i class="fas fa-list"></i> All Movies</a></li>
-                <li><a href="{{ route('search') }}"><i class="fas fa-search"></i> Search Movies</a></li>
-            </ul>
             <div class="sitemap-subsection">
                 <h3>How It Works</h3>
                 <ul class="sitemap-links">
