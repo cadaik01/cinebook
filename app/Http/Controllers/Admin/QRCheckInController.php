@@ -88,7 +88,7 @@ class QRCheckInController extends Controller
         if ($bookingSeats->isEmpty()) {
             return response()->json([
                 'success' => false,
-                'message' => 'QR code không tồn tại'
+                'message' => 'QR code does not exist'
             ], 404);
         }
 

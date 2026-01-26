@@ -226,7 +226,7 @@ class MovieController extends Controller
             $query->where('release_date', '<=', $releaseTo);
         }
 
-        // Sort chỉ khi có chọn option
+        // Sort only when option is selected
         $sort = $request->input('sort');
         if ($sort) {
             switch ($sort) {
@@ -310,7 +310,7 @@ class MovieController extends Controller
             $query->where('release_date', '<=', $releaseTo);
         }
 
-        // Sort chỉ khi có chọn option
+        // Sort only when option is selected
         $sort = $request->input('sort');
         if ($sort) {
             switch ($sort) {

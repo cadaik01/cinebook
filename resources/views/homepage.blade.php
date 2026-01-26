@@ -142,7 +142,8 @@
                         <span class="duration">⏱️ {{ $movie->duration ?? '120' }} min</span>
                     </div>
 
-                    @if(isset($movie->rating_avg) && $movie->rating_avg > 0)
+                    {{-- Only show rating for movies that are not coming soonb  --}}
+                    @if(isset($movie->rating_avg) && $movie->rating_avg > 0 && ($movie->status ?? '') !== 'coming_soon')
                     <div class="movie-rating">
                         <span class="rating-value">⭐ {{ $movie->rating_avg }}/5</span>
                     </div>

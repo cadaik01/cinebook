@@ -27,24 +27,24 @@
 <body>
     <div class="container">
         <div class="header">
-            <h2>Xác nhận đặt vé thành công</h2>
+            <h2>Booking Confirmation Successful</h2>
         </div>
-        
-        <p>Xin chào <strong>{{ $booking->user->name }}</strong>,</p>
-        <p>Cảm ơn bạn đã đặt vé tại TCA Cine. Dưới đây là thông tin vé của bạn:</p>
+
+        <p>Hello <strong>{{ $booking->user->name }}</strong>,</p>
+        <p>Thank you for booking at TCA Cine. Below is your ticket information:</p>
         
         <div class="details">
-            <p><strong>Mã đơn hàng:</strong> #{{ $booking->id }}</p>
-            <p><strong>Phim:</strong> {{ $booking->showtime->movie->title }}</p>
-            <p><strong>Rạp:</strong> {{ $booking->showtime->room->name }}</p>
-            <p><strong>Ngày chiếu:</strong> {{ \Carbon\Carbon::parse($booking->showtime->show_date)->format('d/m/Y') }}</p>
-            <p><strong>Giờ chiếu:</strong> {{ $booking->showtime->show_time }}</p>
-            <p><strong>Tổng tiền:</strong> {{ number_format($booking->total_price, 0, ',', '.') }} đ</p>
+            <p><strong>Order Code:</strong> #{{ $booking->id }}</p>
+            <p><strong>Movie:</strong> {{ $booking->showtime->movie->title }}</p>
+            <p><strong>Theater:</strong> {{ $booking->showtime->room->name }}</p>
+            <p><strong>Show Date:</strong> {{ \Carbon\Carbon::parse($booking->showtime->show_date)->format('d/m/Y') }}</p>
+            <p><strong>Show Time:</strong> {{ $booking->showtime->show_time }}</p>
+            <p><strong>Total:</strong> {{ number_format($booking->total_price, 0, ',', '.') }} VND</p>
         </div>
 
         <div class="qr-section">
-            <h3>Vé của bạn (Mã QR)</h3>
-            <p>Vui lòng xuất trình mã QR bên dưới tại quầy vé hoặc cửa soát vé.</p>
+            <h3>Your Ticket (QR Code)</h3>
+            <p>Please present the QR code below at the ticket counter or entrance.</p>
             
             @php
                 // Group seats by QR code (for couple seats sharing one QR)
@@ -54,7 +54,7 @@
             @foreach($groupedSeats as $qrCode => $seats)
                 <div class="qr-code">
                     <div class="seat-info">
-                        Ghế: {{ $seats->map(fn($s) => $s->seat->seat_code)->join(', ') }}
+                        Seat: {{ $seats->map(fn($s) => $s->seat->seat_code)->join(', ') }}
                     </div>
                     {{-- Generate QR Code Image --}}
                     <img src="data:image/png;base64,{{ base64_encode(SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(200)->generate($qrCode)) }}" alt="QR Code">
@@ -64,7 +64,7 @@
         </div>
 
         <div class="footer">
-            <p>Nếu bạn có thắc mắc, vui lòng liên hệ với chúng tôi qua email support@tcacine.com</p>
+            <p>If you have any questions, please contact us via email support@tcacine.com</p>
             <p>&copy; {{ date('Y') }} TCA Cine. All rights reserved.</p>
         </div>
     </div>

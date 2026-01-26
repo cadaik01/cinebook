@@ -69,9 +69,9 @@
                             <label for="city" class="form-label">City</label>
                             <select name="city" id="city" class="form-select">
                                 <option value="">-- Select City --</option>
-                                <option value="tphcm" {{ old('city', $user->city) == 'tphcm' ? 'selected' : '' }}>Hồ Chí Minh</option>
-                                <option value="hanoi" {{ old('city', $user->city) == 'hanoi' ? 'selected' : '' }}>Hà Nội</option>
-                                <option value="danang" {{ old('city', $user->city) == 'danang' ? 'selected' : '' }}>Đà Nẵng</option>
+                                <option value="tphcm" {{ old('city', $user->city) == 'tphcm' ? 'selected' : '' }}>Ho Chi Minh</option>
+                                <option value="hanoi" {{ old('city', $user->city) == 'hanoi' ? 'selected' : '' }}>Hanoi</option>
+                                <option value="danang" {{ old('city', $user->city) == 'danang' ? 'selected' : '' }}>Da Nang</option>
                             </select>
                         </div>
                         

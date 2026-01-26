@@ -90,7 +90,7 @@
 </div>
 
 <div class="container-fluid">
-    <!-- Seat Type Prices Section (hiển thị trực tiếp) -->
+    <!-- Seat Type Prices Section (display directly) -->
     <div class="mb-4">
         <div class="card">
             <div class="card-header bg-primary text-white">

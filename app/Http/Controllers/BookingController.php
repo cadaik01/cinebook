@@ -44,7 +44,7 @@ class BookingController extends Controller
             ->orderBy('seat_number', 'asc')
             ->get();
         
-        // Auto-clean expired reserved seats (không cần scheduler!)
+        // Auto-clean expired reserved seats (no scheduler needed!)
         DB::table('showtime_seats')
             ->where('status', 'reserved')
             ->where('reserved_until', '<', now())

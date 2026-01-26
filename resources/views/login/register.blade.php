@@ -48,9 +48,9 @@
                     <label for="city">City</label>
                     <select name="city" id="city" required>
                         <option value="">Choose your city</option>
-                        <option value="TPHCM">Thành phố Hồ Chí Minh</option>
-                        <option value="HN">Hà Nội</option>
-                        <option value="DN">Đà Nẵng</option>
+                        <option value="TPHCM">Ho Chi Minh City</option>
+                        <option value="HN">Hanoi</option>
+                        <option value="DN">Da Nang</option>
                     </select>
                 </div>
 

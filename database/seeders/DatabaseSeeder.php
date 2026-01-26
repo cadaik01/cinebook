@@ -15,12 +15,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Gọi các Seeder theo thứ tự logic
+        // Call Seeders in logical order
         $this->call([
             UserSeeder::class,
             GenreSeeder::class,
-            // MovieSeeder::class, // Cần tạo file này hoặc import SQL trước
-            // MovieGenreSeeder::class, // Chỉ chạy được khi đã có Movies
+            // MovieSeeder::class, // Need to create this file or import SQL first
+            // MovieGenreSeeder::class, // Can only run when Movies exist
         ]);
     }
 }

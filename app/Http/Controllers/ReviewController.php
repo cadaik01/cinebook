@@ -47,7 +47,7 @@ class ReviewController extends Controller
             return redirect()->back()->with('error', 'You have already reviewed this movie.');
         }
 
-        // Nếu là admin thì bỏ qua kiểm tra đã xem phim
+        // If is admin then skip checking if movie was watched
         $isAdmin = Auth::user() && Auth::user()->role === 'admin';
         if (!$isAdmin) {
             $hasWatched = DB::table('booking_seats')

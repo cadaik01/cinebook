@@ -89,9 +89,9 @@
                             @if($user->city)
                                 <p class="fs-5 mb-0">
                                     <i class="fas fa-map-marker-alt me-2 text-primary"></i>
-                                    @if($user->city == 'tphcm') Hồ Chí Minh
-                                    @elseif($user->city == 'hanoi') Hà Nội
-                                    @elseif($user->city == 'danang') Đà Nẵng
+                                    @if($user->city == 'tphcm') Ho Chi Minh
+                                    @elseif($user->city == 'hanoi') Hanoi
+                                    @elseif($user->city == 'danang') Da Nang
                                     @else {{ $user->city }}
                                     @endif
                                 </p>

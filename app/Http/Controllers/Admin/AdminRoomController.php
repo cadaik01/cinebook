@@ -142,7 +142,7 @@ class AdminRoomController extends Controller
                 $seat = Seat::find($seatData['seat_id']);
                 $newTypeId = $seatData['seat_type_id'];
                 if ($newTypeId == 3) { // Couple
-                    // Set ghế này và ghế liền kề cùng là couple
+                    // Set this seat and adjacent seat as couple
                     $seat->update(['seat_type_id' => $newTypeId]);
                     $nextSeat = Seat::where('room_id', $seat->room_id)
                         ->where('seat_row', $seat->seat_row)
@@ -163,7 +163,7 @@ class AdminRoomController extends Controller
         }
     }
 
-    // Đã chuyển quản lý giá ghế sang SeatTypeController
+    // Seat price management has been moved to SeatTypeController
 
     public function destroy(Room $room)
     {
