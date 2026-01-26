@@ -7,7 +7,6 @@ export default defineConfig({
             input: [
                 "resources/css/app.css",
                 "resources/js/app.js",
-                "resources/js/profile-reviews-filter.js",
                 "resources/css/admin_layout.css",
                 "resources/css/header.css",
                 "resources/css/footer.css",

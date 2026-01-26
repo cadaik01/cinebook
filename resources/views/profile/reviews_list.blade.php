@@ -34,7 +34,7 @@
 @endpush
 
 @push('scripts')
-@vite('resources/js/profile-reviews-filter.js')
+<script src="{{ asset('js/profile-reviews-filter.js') }}"></script>
 @endpush
 
 @section('content')
