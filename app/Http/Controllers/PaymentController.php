@@ -208,8 +208,13 @@ class PaymentController extends Controller
             
             // Send Booking Confirmation Email
             try {
-                // Load additional relationships for the email
-                $booking->load(['user', 'bookingSeats.seat']);
+                // Load all necessary relationships for the email
+                $booking->load([
+                    'user', 
+                    'bookingSeats.seat', 
+                    'showtime.movie', 
+                    'showtime.room'
+                ]);
                 
                 if ($booking->user && $booking->user->email) {
                     Mail::to($booking->user->email)->send(new BookingConfirmationMail($booking));

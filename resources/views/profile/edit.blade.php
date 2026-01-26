@@ -11,6 +11,17 @@
                     <h5 class="mb-0"><i class="fas fa-user-edit"></i> Edit Profile</h5>
                 </div>
                 <div class="card-body">
+                    {{-- Display validation errors --}}
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form method="POST" action="{{ route('user.profile.update') }}" enctype="multipart/form-data">
                         @csrf
                         
@@ -50,7 +61,10 @@
                         
                         <div class="mb-3">
                             <label for="phone" class="form-label">Phone</label>
-                            <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone', $user->phone) }}">
+                            <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone', $user->phone) }}">
+                            @error('phone')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         
                         <div class="mb-3">

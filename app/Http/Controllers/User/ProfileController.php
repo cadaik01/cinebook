@@ -60,13 +60,13 @@ class ProfileController extends Controller
         $user = Auth::user();//Authenticated user who is logged in (1: admin, 2: regular user, 3: guest)
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'phone' => 'nullable|string|max:20|unique:users,phone,' . $user->id,
             'city' => 'nullable|string|max:100',
             'avatar' => 'nullable|image|max:2048',
         ]);
         $user->name = $validated['name'];
-        $user->phone = $validated['phone'] ?? $user->phone;
-        $user->city = $validated['city'] ?? $user->city;
+        $user->phone = $validated['phone'];
+        $user->city = $validated['city'];
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
             $user->avatar_url = $avatarPath;

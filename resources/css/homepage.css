@@ -11,6 +11,44 @@
     gap: 24px;
 }
 
+/* === Promotion Section Styling === */
+.promotion-section {
+    background: linear-gradient(135deg, #fff5e6 0%, #fff 100%);
+    border: 2px solid #f7c873;
+}
+
+.promotion-section .corner-title-bar {
+    background: linear-gradient(135deg, #f7c873 0%, #e6a040 100%);
+}
+
+.promotion-section .corner-title {
+    background: linear-gradient(135deg, #e6a040 0%, #d89030 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.promotion-section .corner-main-article {
+    background: linear-gradient(135deg, #fffbf0 0%, #fff 100%);
+    border: 1px solid #f7c87330;
+}
+
+.promotion-section .corner-side-article {
+    background: linear-gradient(135deg, #fffbf0 0%, #fff 100%);
+    border: 1px solid #f7c87320;
+}
+
+.promotion-section .corner-like-btn {
+    background: linear-gradient(135deg, #f7c873 0%, #e6a040 100%);
+    box-shadow: 0 2px 8px rgba(247, 200, 115, 0.3);
+}
+
+.promotion-section .corner-like-btn:hover {
+    background: linear-gradient(135deg, #e6a040 0%, #d89030 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(247, 200, 115, 0.4);
+}
+
 .cinema-corner-header {
     display: flex;
     align-items: center;

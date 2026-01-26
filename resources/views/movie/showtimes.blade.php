@@ -17,30 +17,25 @@
                 <th>Date</th>
                 <th>Time</th>
                 <th>Room</th>
+                <th>Screen Type</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach($showtimes as $showtime)
-            @php
-                // Check if showtime is in the past
-                $showtimeDateTime = \Carbon\Carbon::parse($showtime->show_date->format('Y-m-d') . ' ' . $showtime->show_time->format('H:i:s'));
-                $isPast = $showtimeDateTime->isPast();
-            @endphp
             <tr>
                 <td data-label="Date" class="showtime-date">{{ $showtime->show_date->format('d/m/Y') }}</td>
                 <td data-label="Time" class="showtime-time">{{ $showtime->show_time->format('H:i') }}</td>
                 <td data-label="Room" class="showtime-room">
                     <span class="room-badge">{{ $showtime->room->name }}</span>
                 </td>
+                <td data-label="Screen Type" class="showtime-screen-type">
+                    <span class="screen-type-badge">{{ $showtime->room->screenType->name }}</span>
+                </td>
                 <td data-label="Action">
-                    @if($isPast)
-                        <span class="text-muted" style="font-style: italic;">Expired</span>
-                    @else
-                        <a href="{{ route('booking.seatmap', ['showtime_id' => $showtime->id]) }}" class="showtimes-select-btn">
-                            Select Seats
-                        </a>
-                    @endif
+                    <a href="{{ route('booking.seatmap', ['showtime_id' => $showtime->id]) }}" class="showtimes-select-btn">
+                        Select Seats
+                    </a>
                 </td>
             </tr>
             @endforeach

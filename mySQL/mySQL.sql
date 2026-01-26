@@ -34,6 +34,7 @@ CREATE TABLE movies (
     cast TEXT,
     duration INT,
     release_date DATE,
+    end_date DATE,
     age_rating ENUM('P','T13','T16','T18','C'),
     status ENUM('now_showing','coming_soon','ended') DEFAULT 'coming_soon',
     poster_url VARCHAR(255),

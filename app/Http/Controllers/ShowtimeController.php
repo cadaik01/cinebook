@@ -14,8 +14,19 @@ class ShowtimeController extends Controller
     public function showtimes($id)
     {
         $movie = Movie::find($id);
-        $showtimes = Showtime::with('room')
+        $now = now();
+        
+        $showtimes = Showtime::with('room.screenType')
             ->where('movie_id', $id)
+            ->where(function($query) use ($now) {
+                // Chỉ lấy suất chiếu trong tương lai
+                $query->where('show_date', '>', $now->toDateString())
+                      ->orWhere(function($q) use ($now) {
+                          // Hoặc trong cùng ngày hôm nay nhưng giờ chiếu chưa qua
+                          $q->where('show_date', '=', $now->toDateString())
+                            ->where('show_time', '>', $now->toTimeString());
+                      });
+            })
             ->orderBy('show_date', 'asc')
             ->orderBy('show_time', 'asc')
             ->get();
