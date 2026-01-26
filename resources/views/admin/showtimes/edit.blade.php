@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Showtime Edit
+ * 
+ * Showtime editing interface including:
+ * - Pre-filled showtime information
+ * - Schedule modification options
+ * - Pricing updates
+ * - Booking impact warnings
+ * - Save and cancel options
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Edit Showtime')

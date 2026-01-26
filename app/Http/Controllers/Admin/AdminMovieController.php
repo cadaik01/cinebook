@@ -5,9 +5,22 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Movie;
 use App\Models\Genre;
+use App\Models\Showtime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
+/**
+ * AdminMovieController
+ * 
+ * Handles admin movie management operations including:
+ * - Movie listing with genre relationships
+ * - Movie creation with genre assignment
+ * - Movie editing and updates
+ * - Movie status management (now_showing, coming_soon, ended)
+ * - Genre attachment and relationship management
+ * Note: Movie deletion disabled to protect data integrity
+ */
 class AdminMovieController extends Controller
 {
     /**
@@ -34,6 +47,9 @@ class AdminMovieController extends Controller
 
     public function index()
     {
+        // Auto-update movie statuses based on real-time
+        $this->updateMovieStatuses();
+        
         $movies = Movie::latest()->paginate(20);
         
         // Convert to array for helper function
@@ -41,6 +57,20 @@ class AdminMovieController extends Controller
         $moviesArray = $this->attachGenresToMovies($moviesArray);
         
         return view('admin.movies.index', compact('movies'));
+    }
+
+    /**
+     * Auto-update movie statuses based on current date and time
+     */
+    private function updateMovieStatuses()
+    {
+        $now = Carbon::now();
+        
+        // Update coming_soon to now_showing for movies released today or before
+        // (but only if they haven't been manually ended)
+        Movie::where('status', 'coming_soon')
+            ->where('release_date', '<=', $now->toDateString())
+            ->update(['status' => 'now_showing']);
     }
 
     public function create()
@@ -66,6 +96,28 @@ class AdminMovieController extends Controller
             'status' => 'required|in:now_showing,coming_soon,ended',
             'description' => 'nullable|string',
         ]);
+
+        // Validate status based on release date and real time
+        $releaseDate = Carbon::parse($validated['release_date']);
+        $now = Carbon::now();
+
+        // Auto-determine status based on release date if not manually overridden
+        if ($releaseDate->isFuture()) {
+            // Movies with future release date must be coming_soon
+            if ($validated['status'] === 'now_showing') {
+                return back()->withErrors([
+                    'status' => 'Movies with future release date must be set as "Coming Soon".'
+                ])->withInput();
+            }
+            $validated['status'] = 'coming_soon';
+        } elseif ($releaseDate->isPast() || $releaseDate->isToday()) {
+            // Movies released today or before can be now_showing or ended
+            if ($validated['status'] === 'coming_soon' && ($releaseDate->isPast() || $releaseDate->isToday())) {
+                return back()->withErrors([
+                    'status' => 'Movies already released cannot be set as "Coming Soon".'
+                ])->withInput();
+            }
+        }
 
         // Remove genres from validated data for mass assignment
         $genres = $validated['genres'] ?? [];
@@ -107,6 +159,50 @@ class AdminMovieController extends Controller
             'description' => 'nullable|string',
         ]);
 
+        // Validate status based on release date and real time
+        $releaseDate = Carbon::parse($validated['release_date']);
+        $now = Carbon::now();
+
+        // Check if trying to set coming_soon for already released movie
+        if ($releaseDate->isPast() && $validated['status'] === 'coming_soon') {
+            return back()->withErrors([
+                'status' => 'Movies already released cannot be set as "Coming Soon".'
+            ])->withInput();
+        }
+
+        // Check if trying to set now_showing for future release
+        if ($releaseDate->isFuture() && $validated['status'] === 'now_showing') {
+            return back()->withErrors([
+                'status' => 'Movies with future release date cannot be set as "Now Showing".'
+            ])->withInput();
+        }
+
+        // Check if trying to set ended status
+        if ($validated['status'] === 'ended') {
+            // Get the latest showtime for this movie
+            $latestShowtime = Showtime::where('movie_id', $movie->id)
+                ->orderBy('show_date', 'desc')
+                ->orderBy('show_time', 'desc')
+                ->first();
+
+            if ($latestShowtime) {
+                // Parse show_date and show_time separately then combine
+                $showDate = Carbon::parse($latestShowtime->show_date);
+                $showTime = Carbon::parse($latestShowtime->show_time);
+                
+                // Combine date and time properly
+                $showtimeDateTime = $showDate->setTime($showTime->hour, $showTime->minute, $showTime->second)
+                    ->addMinutes($movie->duration); // Add movie duration
+
+                if ($showtimeDateTime->isFuture()) {
+                    return back()->withErrors([
+                        'status' => 'Cannot end movie while there are future showtimes. Last showtime ends at ' . 
+                                  $showtimeDateTime->format('M d, Y h:i A') . '.'
+                    ])->withInput();
+                }
+            }
+        }
+
         // Remove genres from validated data for mass assignment
         $genres = $validated['genres'] ?? [];
         unset($validated['genres']);
@@ -118,15 +214,5 @@ class AdminMovieController extends Controller
 
         return redirect()->route('admin.movies.index')
             ->with('success', 'Movie updated successfully!');
-    }
-
-    public function destroy(Movie $movie)
-    {
-        // Detach all genres first
-        $movie->genres()->detach();
-        
-        $movie->delete();
-        return redirect()->route('admin.movies.index')
-            ->with('success', 'Movie deleted successfully!');
     }
 }

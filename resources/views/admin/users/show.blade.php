@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin User Details
+ * 
+ * Detailed user information including:
+ * - Complete user profile display
+ * - Booking history and statistics
+ * - Account activity timeline
+ * - Role and permission management
+ * - Account actions and controls
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'User Details')

@@ -5,10 +5,11 @@
 Sau bài học này, bạn sẽ có:
 - ✅ Chức năng viết review & rating (1-5 sao)
 - ✅ Permission check (chỉ khi đã xem phim)
-- ✅ CRUD reviews (Create, Read, Update, Delete)
+- ✅ CRUD reviews (Create, Read, Delete)
 - ✅ Auto-update movie average rating
-- ✅ Review listing với pagination
+- ✅ **Review sorting (Latest / Highest Rating)**
 - ✅ Star rating UI
+- ✅ **Admin moderation panel (view, filter, delete)**
 
 **Thời gian ước tính**: 60 phút
 
@@ -680,6 +681,273 @@ Route::middleware('auth')->group(function () {
 
 ---
 
+## 🛠️ BƯỚC 5: REVIEW SORTING (USER-FACING)
+
+### 5.1. Thêm Sorting vào Movie Details
+
+Người dùng có thể sắp xếp reviews theo:
+- **Latest** (mặc định): Mới nhất trước
+- **Highest Rating**: Rating cao nhất trước
+
+**File**: `resources/views/movie_details.blade.php`
+
+```blade
+<!-- Reviews Header with Sort Dropdown -->
+<div class="reviews-header">
+    <h5 class="mb-0">All Reviews</h5>
+    @if($movie->reviews->count() > 0)
+    <div class="review-sort-dropdown">
+        <label for="review_sort">Sort by:</label>
+        <select id="review_sort" onchange="sortReviews(this.value)">
+            <option value="latest" {{ ($reviewSort ?? 'latest') == 'latest' ? 'selected' : '' }}>Latest</option>
+            <option value="highest" {{ ($reviewSort ?? '') == 'highest' ? 'selected' : '' }}>Highest Rating</option>
+        </select>
+    </div>
+    @endif
+</div>
+
+@php
+    $sortedReviews = ($reviewSort ?? 'latest') == 'highest'
+        ? $movie->reviews->sortBy([['rating', 'desc'], ['created_at', 'desc']])
+        : $movie->reviews->sortByDesc('created_at');
+@endphp
+
+@forelse($sortedReviews as $review)
+    <!-- Review items -->
+@endforelse
+```
+
+### 5.2. JavaScript Sort Function
+
+```javascript
+function sortReviews(sortValue) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('review_sort', sortValue);
+    window.location.href = url.toString();
+}
+```
+
+### 5.3. Controller Update
+
+**File**: `app/Http/Controllers/MovieController.php`
+
+```php
+public function show(Request $request, $id)
+{
+    $movie = Movie::with('genres','reviews.user')->findOrFail($id);
+
+    // Get review sort parameter (default: latest)
+    $reviewSort = $request->input('review_sort', 'latest');
+
+    // ... other logic
+
+    return view('movie_details', compact('movie', 'canReview', 'reviewSort'));
+}
+```
+
+---
+
+## 🛠️ BƯỚC 6: ADMIN MODERATION PANEL
+
+### 6.1. AdminReviewController
+
+**File**: `app/Http/Controllers/Admin/AdminReviewController.php`
+
+```php
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Review;
+use App\Models\Movie;
+use Illuminate\Http\Request;
+
+class AdminReviewController extends Controller
+{
+    /**
+     * Display all reviews with filtering and sorting
+     */
+    public function index(Request $request)
+    {
+        $query = Review::with(['user', 'movie']);
+
+        // Filter by movie
+        if ($request->filled('movie_id')) {
+            $query->where('movie_id', $request->movie_id);
+        }
+
+        // Filter by rating
+        if ($request->filled('rating')) {
+            $query->where('rating', $request->rating);
+        }
+
+        // Sort: latest or highest_rated
+        $sort = $request->get('sort', 'latest');
+        if ($sort === 'highest_rated') {
+            $query->highestRated(); // Using model scope
+        } else {
+            $query->latest();
+        }
+
+        $reviews = $query->paginate(20);
+        $movies = Movie::orderBy('title')->get();
+
+        return view('admin.reviews.index', compact('reviews', 'movies'));
+    }
+
+    /**
+     * Delete a review (Admin can delete any review)
+     */
+    public function destroy($id)
+    {
+        $review = Review::findOrFail($id);
+        $movieId = $review->movie_id;
+
+        $review->delete();
+
+        // Update movie average rating
+        $movie = Movie::find($movieId);
+        $movie->updateAverageRating();
+
+        return redirect()->back()->with('success', 'Review deleted successfully.');
+    }
+}
+```
+
+### 6.2. Review Model Scopes
+
+**File**: `app/Models/Review.php`
+
+```php
+// Query Scopes for sorting
+public function scopeLatest($query)
+{
+    return $query->orderBy('created_at', 'desc');
+}
+
+public function scopeHighestRated($query)
+{
+    return $query->orderBy('rating', 'desc')
+                 ->orderBy('created_at', 'desc');
+}
+```
+
+### 6.3. Admin Routes
+
+**File**: `routes/web.php`
+
+```php
+// Admin Review Management
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('reviews', [AdminReviewController::class, 'index'])
+        ->name('admin.reviews.index');
+    Route::delete('reviews/{id}', [AdminReviewController::class, 'destroy'])
+        ->name('admin.reviews.destroy');
+});
+```
+
+### 6.4. Admin View
+
+**File**: `resources/views/admin/reviews/index.blade.php`
+
+```blade
+@extends('layouts.admin')
+
+@section('content')
+<h2>Manage Reviews</h2>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h6>Total Reviews</h6>
+                <h2>{{ $reviews->total() }}</h2>
+            </div>
+        </div>
+    </div>
+    <!-- More stat cards: Average Rating, 5-Star Count, Low Rating Count -->
+</div>
+
+<!-- Filters -->
+<form method="GET" action="{{ route('admin.reviews.index') }}">
+    <div class="row g-3">
+        <div class="col-md-4">
+            <select name="movie_id" class="form-select">
+                <option value="">All Movies</option>
+                @foreach($movies as $movie)
+                <option value="{{ $movie->id }}">{{ $movie->title }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="rating" class="form-select">
+                <option value="">All Ratings</option>
+                @for($i = 5; $i >= 1; $i--)
+                <option value="{{ $i }}">{{ $i }} Stars</option>
+                @endfor
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select name="sort" class="form-select">
+                <option value="latest">Latest</option>
+                <option value="highest_rated">Highest Rated</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+</form>
+
+<!-- Reviews Table -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Movie</th>
+            <th>Rating</th>
+            <th>Comment</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($reviews as $review)
+        <tr>
+            <td>#{{ $review->id }}</td>
+            <td>{{ $review->user->name }}</td>
+            <td>{{ $review->movie->title }}</td>
+            <td>
+                @for($i = 1; $i <= 5; $i++)
+                    <span class="{{ $i <= $review->rating ? 'text-warning' : 'text-muted' }}">★</span>
+                @endfor
+            </td>
+            <td>{{ Str::limit($review->comment, 100) }}</td>
+            <td>{{ $review->created_at->format('M d, Y') }}</td>
+            <td>
+                <form action="{{ route('admin.reviews.destroy', $review->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-sm btn-danger"
+                        onclick="return confirm('Delete this review?')">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+
+{{ $reviews->links() }}
+@endsection
+```
+
+---
+
 ## 📝 TÓM TẮT
 
 Đã hoàn thành:
@@ -687,7 +955,11 @@ Route::middleware('auth')->group(function () {
 - ✅ Permission check (watched movie)
 - ✅ Star rating UI
 - ✅ Auto-update movie rating
-- ✅ Review listing & pagination
+- ✅ **Review sorting (Latest / Highest Rating)**
+- ✅ **Admin moderation panel**
+  - Filter by movie, rating
+  - Sort by latest, highest rated
+  - Delete inappropriate reviews
 
 **Bài tiếp**: [11. Admin Panel →](11_admin_panel.md)
 

@@ -9,8 +9,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+/**
+ * AdminBookingController
+ * 
+ * Handles admin booking management operations including:
+ * - Booking listing with filtering and search
+ * - Booking detail view with relationships
+ * - Booking cancellation and seat release
+ * - Booking statistics and analytics
+ */
 class AdminBookingController extends Controller
 {
+    // Booking List Page
     public function index(Request $request)
     {
         $query = Booking::with(['user', 'showtime.movie', 'showtime.room', 'bookingSeats.seat']);
@@ -58,6 +68,7 @@ class AdminBookingController extends Controller
         return view('admin.bookings.index', compact('bookings', 'stats'));
     }
 
+    // Booking Detail Page
     public function show(Booking $booking)
     {
         $booking->load([
@@ -70,6 +81,7 @@ class AdminBookingController extends Controller
         return view('admin.bookings.show', compact('booking'));
     }
 
+    // Cancel Booking + Release Seats
     public function cancel(Booking $booking)
     {
         if ($booking->status === 'cancelled' || $booking->status === 'expired') {

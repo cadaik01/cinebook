@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Movie Create
+ * 
+ * Movie creation interface including:
+ * - Movie information form
+ * - Poster and media upload
+ * - Genre and rating selection
+ * - Showtime scheduling
+ * - Form validation and submission
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Create Movie')

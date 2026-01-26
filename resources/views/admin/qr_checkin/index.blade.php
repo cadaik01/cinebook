@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin QR Check-in Scanner
+ * 
+ * QR code scanning interface including:
+ * - Camera-based QR scanner
+ * - Manual booking code entry
+ * - Real-time booking validation
+ * - Check-in status updates
+ * - Attendance tracking
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'QR Check-in')
@@ -17,7 +29,7 @@
         <div class="col-md-6 mb-4">
             <div class="card qr-scanner-card">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-upc-scan"></i> Quét mã QR</h5>
+                    <h5 class="mb-0"><i class="bi bi-upc-scan"></i> Scan QR Code</h5>
                 </div>
                 <div class="card-body">
                     <!-- Camera Reader -->
@@ -25,14 +37,14 @@
 
                     <!-- Manual Input -->
                     <div class="mb-3">
-                        <label for="qrInput" class="form-label">Nhập mã QR:</label>
-                        <input type="text" id="qrInput" class="form-control form-control-lg" 
-                               placeholder="Nhập hoặc quét mã QR..." autofocus>
+                        <label for="qrInput" class="form-label">Enter QR Code:</label>
+                        <input type="text" id="qrInput" class="form-control form-control-lg"
+                               placeholder="Enter or scan QR code..." autofocus>
                     </div>
                     
                     <div class="d-grid gap-2">
                         <button id="previewBtn" class="btn btn-info btn-lg">
-                            <i class="bi bi-eye"></i> Xem trước
+                            <i class="bi bi-eye"></i> Preview
                         </button>
                         <button id="checkInBtn" class="btn btn-success btn-lg">
                             <i class="bi bi-check-circle"></i> Check-in
@@ -49,10 +61,10 @@
         <div class="col-md-6 mb-4">
             <div class="card qr-result-card">
                 <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> Thông tin đặt vé</h5>
+                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> Booking Information</h5>
                 </div>
                 <div class="card-body" id="resultSection">
-                    <p class="text-muted text-center">Quét mã QR để xem thông tin</p>
+                    <p class="text-muted text-center">Scan QR code to view information</p>
                 </div>
             </div>
         </div>
@@ -61,11 +73,11 @@
     <!-- Recent Check-ins -->
     <div class="card mt-4">
         <div class="card-header bg-dark text-white">
-            <h5 class="mb-0"><i class="bi bi-clock-history"></i> Lịch sử check-in gần đây</h5>
+            <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Check-in History</h5>
         </div>
         <div class="card-body p-0">
             <div id="recentCheckIns">
-                <p class="text-muted p-3">Chưa có check-in nào</p>
+                <p class="text-muted p-3">No check-ins yet</p>
             </div>
         </div>
     </div>

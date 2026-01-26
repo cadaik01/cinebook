@@ -1,3 +1,15 @@
+{{--
+/**
+ * Mock Payment Page
+ * 
+ * Simulated payment processing interface including:
+ * - Payment form with card details
+ * - Order summary and total amount
+ * - Security features simulation
+ * - Payment processing animation
+ * - Success/failure handling
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'Payment - {{ $booking->payment_method }}')

@@ -1,3 +1,15 @@
+{{--
+/**
+ * Main Layout Template
+ * 
+ * Base layout template for all public pages including:
+ * - HTML document structure and meta tags
+ * - Global CSS/JS asset loading via Vite
+ * - Bootstrap and FontAwesome integration
+ * - Header and footer components inclusion
+ * - Content section placeholder
+ */
+--}}
 <!DOCTYPE html>
 <html lang="en">
 <head>

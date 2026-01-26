@@ -11,6 +11,15 @@ use App\Mail\PasswordResetMail;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
+/**
+ * PasswordResetController
+ * 
+ * Handles password reset functionality including:
+ * - Password reset request handling
+ * - Email token generation and sending
+ * - Token validation and verification
+ * - Password update processing
+ */
 class PasswordResetController extends Controller
 {
     //1. Show form to request password reset
@@ -71,14 +80,14 @@ class PasswordResetController extends Controller
         // If token not found or expired
         if (!$resetRecord) {
             return redirect('/password/forgot')
-                ->withErrors(['token' => 'Link reset password không hợp lệ hoặc đã hết hạn. Vui lòng yêu cầu lại.']);
+                ->withErrors(['token' => 'Password reset link is invalid or expired. Please request again.']);
         }
         
         // Check if token is expired (60 minutes)
         if (Carbon::parse($resetRecord->created_at)->addMinutes(60)->isPast()) {
             DB::table('password_reset_tokens')->where('email', $email)->delete();
             return redirect('/password/forgot')
-                ->withErrors(['token' => 'Link reset password đã hết hạn. Vui lòng yêu cầu lại.']);
+                ->withErrors(['token' => 'Password reset link has expired. Please request again.']);
         }
         
         return view('password.reset', [

@@ -250,13 +250,13 @@
 
 /* Search Form Styles */
 .search-form {
-
     margin: 0 auto 24px;
     display: flex;
     gap: 10px;
     align-items: stretch;
-    width: 60%;
-
+    width: 900px;
+    max-width: 900px;
+    min-width: 300px;
 }
 
 .search-input,
@@ -553,6 +553,13 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+    .search-form {
+        width: 95%;
+        max-width: 95%;
+        margin: 0 auto 20px;
+        gap: 8px;
+    }
+
     .hero-section h1 {
         font-size: 2em;
     }

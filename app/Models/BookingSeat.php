@@ -55,7 +55,7 @@ class BookingSeat extends Model
         if ($seats->isEmpty()) {
             return [
                 'success' => false,
-                'message' => 'QR không hợp lệ hoặc đã được sử dụng'
+                'message' => 'QR code is invalid or already used'
             ];
         }
 
@@ -67,7 +67,7 @@ class BookingSeat extends Model
 
         return [
             'success' => true,
-            'message' => 'Check-in thành công',
+            'message' => 'Check-in successful',
             'seats' => $seats->pluck('seat.seat_code'),
             'booking_id' => $seats->first()->booking_id
         ];

@@ -1,3 +1,15 @@
+{{--
+/**
+ * Now Showing Movies Page
+ * 
+ * Current movies display including:
+ * - Grid layout of currently playing movies
+ * - Movie posters and basic information
+ * - Quick booking access
+ * - Genre and rating filters
+ * - Search and sort functionality
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'Now Showing - TCA Cine')
@@ -64,12 +76,6 @@
                         <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Name (A-Z)
                         </option>
                         <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Name (Z-A)
-                        </option>
-                        <option value="rating_desc" {{ request('sort') == 'rating_desc' ? 'selected' : '' }}>Rating
-                            (High-Low)
-                        </option>
-                        <option value="rating_asc" {{ request('sort') == 'rating_asc' ? 'selected' : '' }}>Rating
-                            (Low-High)
                         </option>
                         <option value="release_desc" {{ request('sort') == 'release_desc' ? 'selected' : '' }}>Release
                             Date

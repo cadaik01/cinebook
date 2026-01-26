@@ -7,6 +7,14 @@ use App\Models\Review;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 
+/**
+ * AdminReviewController
+ * 
+ * Handles admin review management including:
+ * - Review listing and filtering
+ * - Movie-based review filtering
+ * - Review moderation and management
+ */
 class AdminReviewController extends Controller
 {
     /**

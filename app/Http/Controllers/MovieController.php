@@ -7,7 +7,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Movie;
 use App\Models\Genre;
+use Carbon\Carbon;
 
+/**
+ * MovieController
+ * 
+ * Handles public movie display and interaction operations including:
+ * - Homepage movie listings with viral score algorithm
+ * - Movie details with reviews and recommendations
+ * - Now showing and coming soon movie pages
+ * - Genre-based movie filtering
+ * - Movie search functionality
+ * - Review aggregation and display
+ */
 class MovieController extends Controller
 {
     /**
@@ -53,13 +65,44 @@ class MovieController extends Controller
     //Homepage function - show movies on homepage
     public function homepage()
     {
-        $movies = DB::table('movies')
-        ->where('status', 'now_showing')
-        ->limit(6)->get(); // fetch only 6 movies for homepage
+        // Auto-update movie statuses based on real-time
+        $this->updateMovieStatuses();
         
-        //upcoming movies
+        // Get viral/trending "Now Showing" movies based on:
+        // 1. Number of bookings (popularity)
+        // 2. Number of reviews (engagement)
+        // 3. Average rating (quality)
+        $movies = DB::table('movies')
+            ->select([
+                'movies.*',
+                DB::raw('COALESCE(booking_count, 0) as popularity_score'),
+                DB::raw('COALESCE(review_count, 0) as engagement_score'),
+                DB::raw('COALESCE(movies.rating_avg, 0) as quality_score'),
+                DB::raw('(COALESCE(booking_count, 0) * 0.4 + COALESCE(review_count, 0) * 0.3 + COALESCE(movies.rating_avg, 0) * 0.3) as viral_score')
+            ])
+            ->leftJoin(DB::raw('(SELECT 
+                    s.movie_id, 
+                    COUNT(DISTINCT b.id) as booking_count
+                FROM showtimes s
+                LEFT JOIN bookings b ON s.id = b.showtime_id AND b.status = "confirmed"
+                GROUP BY s.movie_id
+            ) as booking_stats'), 'movies.id', '=', 'booking_stats.movie_id')
+            ->leftJoin(DB::raw('(SELECT 
+                    movie_id, 
+                    COUNT(*) as review_count
+                FROM reviews
+                GROUP BY movie_id
+            ) as review_stats'), 'movies.id', '=', 'review_stats.movie_id')
+            ->where('movies.status', 'now_showing')
+            ->orderByDesc('viral_score')
+            ->orderByDesc('movies.rating_avg')
+            ->limit(6)
+            ->get();
+        
+        //upcoming movies - ordered by release date
         $upcomingMovies = DB::table('movies')
         ->where('status', 'coming_soon')
+        ->orderBy('release_date', 'asc')
         ->limit(6)->get(); // fetch only 6 upcoming movies for homepage
 
         // Attach genres using helper function
@@ -70,6 +113,20 @@ class MovieController extends Controller
         $upcomingMovies = $this->attachAgeRatingsToMovies($upcomingMovies);
         
         return view('homepage', compact('movies', 'upcomingMovies'));
+    }
+
+    /**
+     * Auto-update movie statuses based on current date and time
+     */
+    private function updateMovieStatuses()
+    {
+        $now = Carbon::now();
+        
+        // Update coming_soon to now_showing for movies released today or before
+        // (but only if they haven't been manually ended)
+        Movie::where('status', 'coming_soon')
+            ->where('release_date', '<=', $now->toDateString())
+            ->update(['status' => 'now_showing']);
     }
     
     //1. movie function to fetch all movies from the database and return to index view
@@ -131,6 +188,9 @@ class MovieController extends Controller
     //2. upcomingMovies function to fetch upcoming movies from the database and return to upcoming_movies view
     public function upcomingMovies(Request $request)
     {
+        // Auto-update movie statuses based on real-time
+        $this->updateMovieStatuses();
+        
         $query = DB::table('movies')->where('status', 'coming_soon');
 
         // Filter: Genre
@@ -166,35 +226,35 @@ class MovieController extends Controller
             $query->where('release_date', '<=', $releaseTo);
         }
 
-        // Sort
+        // Sort only when option is selected
         $sort = $request->input('sort');
-        switch ($sort) {
-            case 'name_asc':
-                $query->orderBy('title', 'asc');
-                break;
-            case 'name_desc':
-                $query->orderBy('title', 'desc');
-                break;
-            case 'release_asc':
-                $query->orderBy('release_date', 'asc');
-                break;
-            case 'release_desc':
-                $query->orderBy('release_date', 'desc');
-                break;
-            case 'rating_asc':
-                $query->orderBy('rating_avg', 'asc');
-                break;
-            case 'rating_desc':
-                $query->orderBy('rating_avg', 'desc');
-                break;
-            case 'duration_asc':
-                $query->orderBy('duration', 'asc');
-                break;
-            case 'duration_desc':
-                $query->orderBy('duration', 'desc');
-                break;
-            default:
-                $query->orderBy('release_date', 'desc');
+        if ($sort) {
+            switch ($sort) {
+                case 'name_asc':
+                    $query->orderBy('title', 'asc');
+                    break;
+                case 'name_desc':
+                    $query->orderBy('title', 'desc');
+                    break;
+                case 'release_asc':
+                    $query->orderBy('release_date', 'asc');
+                    break;
+                case 'release_desc':
+                    $query->orderBy('release_date', 'desc');
+                    break;
+                case 'rating_asc':
+                    $query->orderBy('rating_avg', 'asc');
+                    break;
+                case 'rating_desc':
+                    $query->orderBy('rating_avg', 'desc');
+                    break;
+                case 'duration_asc':
+                    $query->orderBy('duration', 'asc');
+                    break;
+                case 'duration_desc':
+                    $query->orderBy('duration', 'desc');
+                    break;
+            }
         }
 
         $movies = $query->get();
@@ -212,6 +272,9 @@ class MovieController extends Controller
     //3. nowShowing function to fetch now showing movies from the database and return to now_showing view
     public function nowShowing(Request $request)
     {
+        // Auto-update movie statuses based on real-time
+        $this->updateMovieStatuses();
+        
         $query = DB::table('movies')->where('status', 'now_showing');
 
         // Filter: Genre
@@ -247,35 +310,35 @@ class MovieController extends Controller
             $query->where('release_date', '<=', $releaseTo);
         }
 
-        // Sort
+        // Sort only when option is selected
         $sort = $request->input('sort');
-        switch ($sort) {
-            case 'name_asc':
-                $query->orderBy('title', 'asc');
-                break;
-            case 'name_desc':
-                $query->orderBy('title', 'desc');
-                break;
-            case 'release_asc':
-                $query->orderBy('release_date', 'asc');
-                break;
-            case 'release_desc':
-                $query->orderBy('release_date', 'desc');
-                break;
-            case 'rating_asc':
-                $query->orderBy('rating_avg', 'asc');
-                break;
-            case 'rating_desc':
-                $query->orderBy('rating_avg', 'desc');
-                break;
-            case 'duration_asc':
-                $query->orderBy('duration', 'asc');
-                break;
-            case 'duration_desc':
-                $query->orderBy('duration', 'desc');
-                break;
-            default:
-                $query->orderBy('release_date', 'desc');
+        if ($sort) {
+            switch ($sort) {
+                case 'name_asc':
+                    $query->orderBy('title', 'asc');
+                    break;
+                case 'name_desc':
+                    $query->orderBy('title', 'desc');
+                    break;
+                case 'release_asc':
+                    $query->orderBy('release_date', 'asc');
+                    break;
+                case 'release_desc':
+                    $query->orderBy('release_date', 'desc');
+                    break;
+                case 'rating_asc':
+                    $query->orderBy('rating_avg', 'asc');
+                    break;
+                case 'rating_desc':
+                    $query->orderBy('rating_avg', 'desc');
+                    break;
+                case 'duration_asc':
+                    $query->orderBy('duration', 'asc');
+                    break;
+                case 'duration_desc':
+                    $query->orderBy('duration', 'desc');
+                    break;
+            }
         }
 
         $movies = $query->get();

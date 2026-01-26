@@ -1,3 +1,16 @@
+{{--
+/**
+ * Profile Layout Template
+ * 
+ * Main layout template for user profile section including:
+ * - Responsive sidebar navigation with profile menu items
+ * - Clean navbar with page title display
+ * - Alert system for success/error messages
+ * - Bootstrap integration and FontAwesome icons
+ * - CSS and JavaScript asset management
+ */
+--}}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,7 +23,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    @vite(['resources/css/admin_layout.css'])
+    @vite(['resources/css/root.css', 'resources/css/admin_layout.css'])
+
+    @stack('styles')
 
     @yield('extra-css')
 </head>
@@ -23,7 +38,7 @@
             <div class="admin-layout-sidebar-header">
                 <h3 style="margin: 0;">
                     <i class="fas fa-film"></i>
-                        <a href="/" style="color: inherit; text-decoration: none;">TCA Cine</a>
+                    <a href="/" style="color: inherit; text-decoration: none;">TCA Cine</a>
                 </h3>
             </div>
 
@@ -45,6 +60,20 @@
                             <span>Booking History</span>
                         </a>
                     </li>
+                    {{-- Menu Item 3: My Reviews --}}
+                    <li class="admin-layout-sidebar-item {{ request()->routeIs('user.reviews.*') ? 'active' : '' }}">
+                        <a href="{{ route('user.reviews.list') }}" class="admin-layout-sidebar-link">
+                            <i class="fas fa-star"></i>
+                            <span>My Reviews</span>
+                        </a>
+                    </li>
+                    {{-- Menu Item 4: View Website --}}
+                    <li class="admin-layout-sidebar-item">
+                        <a href="{{ route('homepage') }}" class="admin-layout-sidebar-link">
+                            <i class="fas fa-home"></i>
+                            <span>View Website</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </aside>
@@ -54,59 +83,10 @@
 
                 <div class="container-fluid">
 
-                    <button class="btn btn-link sidebar-toggle" id="sidebarToggle">
-                        <i class="fas fa-bars"></i>
-                    </button>
-
                     <span class="navbar-text navbar-title">
                         @yield('page-title', 'Your Profile')
                     </span>
 
-                    <div class="navbar-nav ms-auto">
-
-                        <div class="nav-item dropdown">
-
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user-circle"></i>
-                                <span class="ms-2">{{ Auth::user()->name }}</span>
-                            </a>
-
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('user.profile.edit') }}">
-                                        <i class="fas fa-user me-2"></i>
-                                        Edit Your Profile
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('user.profile.change-password') }}">
-                                        <i class="fas fa-key me-2"></i>
-                                        Change Password
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('user.bookings.list') }}">
-                                        <i class="fas fa-history me-2"></i>
-                                        Booking History
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <form action="{{ route('logout') }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item text-danger" style="border: none; background: none; width: 100%; text-align: left; cursor: pointer;">
-                                            <i class="fas fa-sign-out-alt me-2"></i>
-                                            Logout
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
             </nav>
 
@@ -163,21 +143,7 @@
     {{-- Bootstrap JS for dropdowns and components --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    {{-- Sidebar Toggle Script --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.querySelector('.admin-layout-sidebar');
-            const mainContent = document.querySelector('.admin-layout-main');
-
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', function() {
-                    sidebar.classList.toggle('collapsed');
-                    mainContent.classList.toggle('expanded');
-                });
-            }
-        });
-    </script>
+    @stack('scripts')
 </body>
 
 </html>

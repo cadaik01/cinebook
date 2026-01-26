@@ -1,3 +1,15 @@
+{{--
+/**
+ * Seat Selection Page
+ * 
+ * Interactive seat booking interface including:
+ * - Visual seat map with availability status
+ * - Seat type and pricing display
+ * - Multiple seat selection capability
+ * - Real-time seat availability updates
+ * - Booking summary and total calculation
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'Seat Map - {{ $showtime->movie->title }}')

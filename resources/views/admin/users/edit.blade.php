@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin User Edit
+ * 
+ * User editing interface including:
+ * - User information form
+ * - Role and permission assignment
+ * - Account status controls
+ * - Password reset options
+ * - Save and cancel actions
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Edit User')

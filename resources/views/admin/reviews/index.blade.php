@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Reviews Management
+ * 
+ * Review moderation interface including:
+ * - All reviews list with filtering
+ * - Review approval/rejection
+ * - Inappropriate content flagging
+ * - User and movie filtering
+ * - Bulk review operations
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Manage Reviews')

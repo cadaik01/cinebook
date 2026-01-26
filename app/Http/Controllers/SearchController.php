@@ -6,6 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Genre;
 
+/**
+ * SearchController
+ * 
+ * Handles search functionality including:
+ * - Movie search by title, director, language
+ * - Genre-based search filtering
+ * - Search result display and formatting
+ */
 class SearchController extends Controller
 {
     public function search(Request $request)

@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Bookings List
+ * 
+ * Booking management interface including:
+ * - All bookings list with filtering
+ * - Booking status management
+ * - Customer information display
+ * - Revenue tracking
+ * - Search and export options
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Manage Bookings')

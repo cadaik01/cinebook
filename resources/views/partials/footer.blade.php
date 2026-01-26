@@ -1,3 +1,15 @@
+{{--
+/**
+ * Footer Partial
+ * 
+ * Site-wide footer including:
+ * - Brand information and contact details
+ * - Quick navigation links
+ * - Social media links
+ * - Copyright information
+ * - Additional site resources
+ */
+--}}
 <footer class="footer">
     <div>
         <!-- Brand Section -->

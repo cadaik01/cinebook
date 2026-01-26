@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * ProfileController
+ * 
+ * Handles user profile management and related operations including:
+ * - User profile display and statistics
+ * - Booking history (upcoming and past bookings)
+ * - Profile editing and password changes
+ * - User reviews management with filtering and pagination
+ * - Date range validation for review filters
+ */
 class ProfileController extends Controller
 {
     /**
@@ -108,5 +118,53 @@ class ProfileController extends Controller
         $user->save();
 
         return redirect()->route('user.profile')->with('success', 'Password changed successfully.');
+    }
+
+    /**
+     * Show user's reviews with filtering and search
+     */
+    public function reviewsList(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        
+        // Validate date range logic
+        $request->validate([
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+            'rating' => 'nullable|integer|between:1,5',
+            'search' => 'nullable|string|max:255'
+        ], [
+            'date_to.after_or_equal' => 'To Date must be after or equal to From Date.',
+            'rating.between' => 'Rating must be between 1 and 5 stars.',
+        ]);
+        
+        $query = $user->reviews()->with(['movie.genres']);
+        
+        // Filter by rating
+        if ($request->filled('rating')) {
+            $query->where('rating', $request->rating);
+        }
+        
+        // Filter by date range with validation
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+        
+        // Search by movie title
+        if ($request->filled('search')) {
+            $query->whereHas('movie', function($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%');
+            });
+        }
+        
+        // Sort by latest reviews first
+        $reviews = $query->latest()->paginate(10);
+        
+        return view('profile.reviews_list', compact('reviews'));
     }
 }

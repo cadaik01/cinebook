@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Dashboard
+ * 
+ * Main admin control panel including:
+ * - Key performance metrics and statistics
+ * - Recent activity summaries
+ * - Quick action buttons
+ * - System status indicators
+ * - Data visualization charts
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Dashboard - Admin Panel')
@@ -12,7 +24,8 @@
     <!-- Row 1: Main Stats -->
     <div class="row mb-4">
         <div class="col-md-3 mb-3">
-            <div class="card text-white" style="background: linear-gradient(135deg, var(--deep-teal), var(--deep-space-blue));">
+            <div class="card text-white"
+                style="background: linear-gradient(135deg, var(--deep-teal), var(--deep-space-blue));">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -135,23 +148,13 @@
                 </div>
                 <div class="card-body d-flex flex-column">
                     @if($highestRevenueMovie)
-                        <div class="mb-3 pb-3 border-bottom">
-                            <h6 class="text-success mb-1"><i class="bi bi-arrow-up-circle"></i> Highest Revenue</h6>
-                            <strong>{{ $highestRevenueMovie->title }}</strong>
-                            <p class="text-success mb-0 fs-5">{{ number_format($highestRevenueMovie->revenue) }}₫</p>
-                        </div>
-                    @endif
-
-                    @if($lowestRevenueMovie)
-                        <div>
-                            <h6 class="text-danger mb-1"><i class="bi bi-arrow-down-circle"></i> Lowest Revenue</h6>
-                            <strong>{{ $lowestRevenueMovie->title }}</strong>
-                            <p class="text-danger mb-0 fs-5">{{ number_format($lowestRevenueMovie->revenue) }}₫</p>
-                        </div>
-                    @endif
-
-                    @if(!$highestRevenueMovie && !$lowestRevenueMovie)
-                        <p class="text-muted mb-0">No revenue data available yet.</p>
+                    <div class="mb-3">
+                        <h6 class="text-success mb-1"><i class="bi bi-arrow-up-circle"></i> Highest Revenue</h6>
+                        <strong>{{ $highestRevenueMovie->title }}</strong>
+                        <p class="text-success mb-0 fs-5">{{ number_format($highestRevenueMovie->revenue) }}₫</p>
+                    </div>
+                    @else
+                    <p class="text-muted mb-0">No revenue data available yet.</p>
                     @endif
                 </div>
             </div>
@@ -167,63 +170,65 @@
                 </div>
                 <div class="card-body">
                     @if($recentBookings->isEmpty())
-                        <p class="text-muted mb-0">No bookings yet.</p>
+                    <p class="text-muted mb-0">No bookings yet.</p>
                     @else
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>User</th>
-                                        <th>Movie</th>
-                                        <th>Showtime</th>
-                                        <th>Seats</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                        <th>Payment</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($recentBookings as $booking)
-                                        <tr>
-                                            <td><strong>#{{ $booking->id }}</strong></td>
-                                            <td>{{ $booking->user->name }}</td>
-                                            <td>{{ $booking->showtime->movie->title }}</td>
-                                            <td>
-                                                {{ \Carbon\Carbon::parse($booking->showtime->show_date)->format('M d, Y') }}<br>
-                                                <small class="text-muted">{{ \Carbon\Carbon::parse($booking->showtime->show_time)->format('h:i A') }}</small>
-                                            </td>
-                                            <td>{{ $booking->bookingSeats->count() }} seats</td>
-                                            <td><strong>{{ number_format($booking->total_price) }}₫</strong></td>
-                                            <td>
-                                                @if($booking->status == 'confirmed')
-                                                    <span class="badge bg-success">Confirmed</span>
-                                                @elseif($booking->status == 'pending')
-                                                    <span class="badge bg-warning">Pending</span>
-                                                @elseif($booking->status == 'cancelled')
-                                                    <span class="badge bg-danger">Cancelled</span>
-                                                @else
-                                                    <span class="badge bg-secondary">{{ ucfirst($booking->status) }}</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if($booking->payment_status == 'paid')
-                                                    <span class="badge bg-success">Paid</span>
-                                                @else
-                                                    <span class="badge bg-warning">{{ ucfirst($booking->payment_status) }}</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('admin.bookings.show', $booking) }}" class="btn btn-sm btn-outline-primary">
-                                                    <i class="bi bi-eye"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User</th>
+                                    <th>Movie</th>
+                                    <th>Showtime</th>
+                                    <th>Seats</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Payment</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($recentBookings as $booking)
+                                <tr>
+                                    <td><strong>#{{ $booking->id }}</strong></td>
+                                    <td>{{ $booking->user->name }}</td>
+                                    <td>{{ $booking->showtime->movie->title }}</td>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($booking->showtime->show_date)->format('M d, Y') }}<br>
+                                        <small
+                                            class="text-muted">{{ \Carbon\Carbon::parse($booking->showtime->show_time)->format('h:i A') }}</small>
+                                    </td>
+                                    <td>{{ $booking->bookingSeats->count() }} seats</td>
+                                    <td><strong>{{ number_format($booking->total_price) }}₫</strong></td>
+                                    <td>
+                                        @if($booking->status == 'confirmed')
+                                        <span class="badge bg-success">Confirmed</span>
+                                        @elseif($booking->status == 'pending')
+                                        <span class="badge bg-warning">Pending</span>
+                                        @elseif($booking->status == 'cancelled')
+                                        <span class="badge bg-danger">Cancelled</span>
+                                        @else
+                                        <span class="badge bg-secondary">{{ ucfirst($booking->status) }}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($booking->payment_status == 'paid')
+                                        <span class="badge bg-success">Paid</span>
+                                        @else
+                                        <span class="badge bg-warning">{{ ucfirst($booking->payment_status) }}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('admin.bookings.show', $booking) }}"
+                                            class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                     @endif
                 </div>
             </div>

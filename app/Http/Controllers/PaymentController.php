@@ -12,6 +12,16 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\BookingConfirmationMail;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * PaymentController
+ * 
+ * Handles payment processing and booking confirmation including:
+ * - Booking confirmation and payment processing
+ * - Seat reservation finalization
+ * - Email confirmation sending
+ * - Payment validation and error handling
+ * - Transaction management for bookings
+ */
 class PaymentController extends Controller
 {
     /**

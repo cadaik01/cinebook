@@ -18,8 +18,8 @@ class SeatSeeder extends Seeder
                 while ($seat <= $room['seats_per_row']) {
                     $seatCode = chr(64 + $row) . $seat;
                     $seatType = $this->determineSeatType($row, $seat, $room['seats_per_row']);
-                    if ($seatType == 3 && $seat < $room['seats_per_row']) { // Couple, set cho 2 ghế liền kề
-                        // Ghế đầu cặp
+                    if ($seatType == 3 && $seat < $room['seats_per_row']) { // Couple, set for 2 adjacent seats
+                        // First seat of pair
                         Seat::create([
                             'room_id' => $room['room_id'],
                             'seat_row' => $row,
@@ -27,7 +27,7 @@ class SeatSeeder extends Seeder
                             'seat_code' => $seatCode,
                             'seat_type_id' => 3,
                         ]);
-                        // Ghế thứ 2 trong cặp
+                        // Second seat of pair
                         $nextSeat = $seat + 1;
                         $nextSeatCode = chr(64 + $row) . $nextSeat;
                         Seat::create([
@@ -56,10 +56,10 @@ class SeatSeeder extends Seeder
 
     private function determineSeatType(int $row, int $seat, int $seatsPerRow): int
     {
-        // VIP: giữa phòng
+        // VIP: middle of room
         if ($row >= 5 && $row <= 7 && $seat >= intdiv($seatsPerRow,2)-1 && $seat <= intdiv($seatsPerRow,2)+2) return 2;
-        // Couple: các hàng cuối, ghép thành từng cặp
-        if ($row >= 8 && $seat % 2 == 1) return 3; // chỉ set ghế đầu cặp là couple
+        // Couple: back rows, paired together
+        if ($row >= 8 && $seat % 2 == 1) return 3; // only set first seat of pair as couple
         return 1; // Standard
     }
 }

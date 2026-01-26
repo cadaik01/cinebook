@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Showtime Create
+ * 
+ * Showtime creation interface including:
+ * - Movie and room selection
+ * - Date and time scheduling
+ * - Pricing configuration
+ * - Seat availability setup
+ * - Schedule conflict detection
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Create Showtime')

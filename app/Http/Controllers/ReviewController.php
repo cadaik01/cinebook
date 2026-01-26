@@ -8,6 +8,16 @@ use App\Models\Review;
 use App\Models\Movie;
 use App\Models\ReviewHelpful;
 
+/**
+ * ReviewController
+ * 
+ * Handles movie review operations including:
+ * - Review creation and validation (rating 1-5 stars)
+ * - User review restrictions (only for watched movies)
+ * - Review helpfulness voting system
+ * - Review display and aggregation
+ * - Review ownership verification
+ */
 class ReviewController extends Controller
 {
     /**
@@ -37,7 +47,7 @@ class ReviewController extends Controller
             return redirect()->back()->with('error', 'You have already reviewed this movie.');
         }
 
-        // Nếu là admin thì bỏ qua kiểm tra đã xem phim
+        // If is admin then skip checking if movie was watched
         $isAdmin = Auth::user() && Auth::user()->role === 'admin';
         if (!$isAdmin) {
             $hasWatched = DB::table('booking_seats')
@@ -76,26 +86,10 @@ class ReviewController extends Controller
     }
 
     /**
-     * Delete a review (User can delete own review)
+     * Delete a review - REMOVED: Users can no longer delete reviews
+     * Only admin can delete reviews through AdminReviewController
      */
-    public function destroy($id)
-    {
-        $review = Review::findOrFail($id);
-
-        // Ensure the authenticated user is the owner of the review
-        if (Auth::id() !== $review->user_id) {
-            return redirect()->back()->with('error', 'You are not authorized to delete this review.');
-        }
-
-        $movieId = $review->movie_id;
-        $review->delete();
-
-        // Update movie average rating
-        $movie = Movie::find($movieId);
-        $movie->updateAverageRating();
-
-        return redirect()->route('user.reviews.list')->with('success', 'Review deleted successfully.');
-    }
+    // public function destroy($id) { ... } - Functionality removed
 
     /**
      * Check if user can review a specific movie

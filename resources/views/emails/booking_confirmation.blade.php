@@ -1,3 +1,15 @@
+{{--
+/**
+ * Booking Confirmation Email Template
+ * 
+ * Email template for booking confirmations including:
+ * - Booking details and movie information
+ * - QR code for entry
+ * - Theater and seat details
+ * - Important instructions
+ * - Contact information
+ */
+--}}
 <!DOCTYPE html>
 <html>
 <head>
@@ -195,126 +207,47 @@
     </style>
 </head>
 <body>
-    <div class="email-wrapper">
-        <div class="container">
-            <div class="header">
-                <div class="logo">🎬</div>
-                <h1>ĐẶT VÉ THÀNH CÔNG!</h1>
-                <p>TCA Cine - Your Cinema Experience</p>
-            </div>
+    <div class="container">
+        <div class="header">
+            <h2>Xác nhận đặt vé thành công</h2>
+        </div>
+        
+        <p>Xin chào <strong>{{ $booking->user->name }}</strong>,</p>
+        <p>Cảm ơn bạn đã đặt vé tại TCA Cine. Dưới đây là thông tin vé của bạn:</p>
+        
+        <div class="details">
+            <p><strong>Mã đơn hàng:</strong> #{{ $booking->id }}</p>
+            <p><strong>Phim:</strong> {{ $booking->showtime->movie->title }}</p>
+            <p><strong>Rạp:</strong> {{ $booking->showtime->room->name }}</p>
+            <p><strong>Ngày chiếu:</strong> {{ \Carbon\Carbon::parse($booking->showtime->show_date)->format('d/m/Y') }}</p>
+            <p><strong>Giờ chiếu:</strong> {{ $booking->showtime->show_time }}</p>
+            <p><strong>Tổng tiền:</strong> {{ number_format($booking->total_price, 0, ',', '.') }} đ</p>
+        </div>
+
+        <div class="qr-section">
+            <h3>Vé của bạn (Mã QR)</h3>
+            <p>Vui lòng xuất trình mã QR bên dưới tại quầy vé hoặc cửa soát vé.</p>
             
-            <div class="content">
-                <p class="greeting">Xin chào <strong>{{ $booking->user->name }}</strong>,</p>
-                <p class="intro-text">
-                    Cảm ơn bạn đã tin tưởng và đặt vé tại <strong>TCA Cine</strong>. 
-                    Chúng tôi rất vui được phục vụ bạn! Dưới đây là thông tin chi tiết về đơn đặt vé của bạn:
-                </p>
-                
-                <div class="details-section">
-                    <h3>📋 Thông Tin Đặt Vé</h3>
-                    
-                    <div class="detail-row">
-                        <span class="detail-label">Mã đơn hàng:</span>
-                        <span class="detail-value"><strong>#{{ str_pad($booking->id, 6, '0', STR_PAD_LEFT) }}</strong></span>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <span class="detail-label">Phim:</span>
-                        <span class="detail-value"><strong>{{ $booking->showtime->movie->title }}</strong></span>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <span class="detail-label">Phòng chiếu:</span>
-                        <span class="detail-value">{{ $booking->showtime->room->name }}</span>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <span class="detail-label">Ngày chiếu:</span>
-                        <span class="detail-value">{{ \Carbon\Carbon::parse($booking->showtime->show_date)->locale('vi')->isoFormat('dddd, DD/MM/YYYY') }}</span>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <span class="detail-label">Giờ chiếu:</span>
-                        <span class="detail-value">{{ $booking->showtime->show_time }}</span>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <span class="detail-label">Ghế đã đặt:</span>
-                        <span class="detail-value">
-                            <strong>{{ $booking->bookingSeats->map(fn($s) => $s->seat->seat_code)->join(', ') }}</strong>
-                            ({{ $booking->bookingSeats->count() }} ghế)
-                        </span>
-                    </div>
-                    
-                    <div class="total-price">
-                        Tổng tiền: {{ number_format($booking->total_price, 0, ',', '.') }} VNĐ
-                    </div>
-                </div>
+            @php
+                // Group seats by QR code (for couple seats sharing one QR)
+                $groupedSeats = $booking->bookingSeats->groupBy('qr_code');
+            @endphp
 
-                <div class="qr-section">
-                    <h3>🎫 Vé Điện Tử Của Bạn</h3>
-                    <div class="qr-instructions">
-                        <strong>📱 Hướng dẫn sử dụng:</strong>
-                        Vui lòng xuất trình mã QR bên dưới tại quầy vé hoặc cửa soát vé khi đến rạp.
+            @foreach($groupedSeats as $qrCode => $seats)
+                <div class="qr-code">
+                    <div class="seat-info">
+                        Ghế: {{ $seats->map(fn($s) => $s->seat->seat_code)->join(', ') }}
                     </div>
-                    
-                    @php
-                        // Group seats by QR code (for couple seats sharing one QR)
-                        $groupedSeats = $booking->bookingSeats->groupBy('qr_code');
-                    @endphp
-
-                    @foreach($groupedSeats as $qrCode => $seats)
-                        <div class="qr-code-container">
-                            <div class="seat-info">
-                                🪑 Ghế: {{ $seats->map(fn($s) => $s->seat->seat_code)->join(', ') }}
-                            </div>
-                            
-                            {{-- Generate QR Code Image --}}
-                            @php
-                                try {
-                                    $qrImage = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(220)->margin(1)->generate($qrCode));
-                                } catch (\Exception $e) {
-                                    $qrImage = '';
-                                }
-                            @endphp
-                            
-                            @if($qrImage)
-                                <img src="data:image/png;base64,{{ $qrImage }}" alt="QR Code - {{ $seats->map(fn($s) => $s->seat->seat_code)->join(', ') }}">
-                            @else
-                                <p style="color: #dc3545;">Không thể tạo mã QR. Vui lòng liên hệ bộ phận hỗ trợ.</p>
-                            @endif
-                            
-                            <p class="qr-text">{{ $qrCode }}</p>
-                        </div>
-                    @endforeach
+                    {{-- Generate QR Code Image --}}
+                    <img src="data:image/png;base64,{{ base64_encode(SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(200)->generate($qrCode)) }}" alt="QR Code">
+                    <p><small>{{ $qrCode }}</small></p>
                 </div>
+            @endforeach
+        </div>
 
-                <div class="important-note">
-                    <strong>⚠️ Lưu ý quan trọng:</strong>
-                    <ul style="margin-left: 20px; color: #555;">
-                        <li>Vui lòng đến rạp trước giờ chiếu ít nhất 15 phút</li>
-                        <li>Xuất trình mã QR hoặc mã đơn hàng tại quầy vé</li>
-                        <li>Mã QR chỉ sử dụng được một lần duy nhất</li>
-                        <li>Không chia sẻ mã QR cho người khác</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer">
-                <p>Nếu bạn có thắc mắc, vui lòng liên hệ với chúng tôi:</p>
-                <p>
-                    📧 Email: <a href="mailto:support@tcacine.com" class="contact">support@tcacine.com</a> | 
-                    📞 Hotline: <strong>1900-xxxx</strong>
-                </p>
-                <div class="social-links">
-                    <a href="#">Facebook</a> | 
-                    <a href="#">Instagram</a> | 
-                    <a href="#">Twitter</a>
-                </div>
-                <p style="margin-top: 15px; color: #999;">
-                    &copy; {{ date('Y') }} TCA Cine. All rights reserved.
-                </p>
-            </div>
+        <div class="footer">
+            <p>Nếu bạn có thắc mắc, vui lòng liên hệ với chúng tôi qua email support@tcacine.com</p>
+            <p>&copy; {{ date('Y') }} TCA Cine. All rights reserved.</p>
         </div>
     </div>
 </body>

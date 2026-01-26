@@ -7,6 +7,15 @@ use App\Models\User;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 
+/**
+ * AdminUserController
+ * 
+ * Handles admin user management including:
+ * - User listing with filtering and search
+ * - Role-based user filtering
+ * - User booking statistics
+ * - User profile management
+ */
 class AdminUserController extends Controller
 {
     public function index(Request $request)

@@ -1,3 +1,15 @@
+{{--
+/**
+ * Booking Confirmation Page
+ * 
+ * Final booking review and confirmation including:
+ * - Movie and showtime details summary
+ * - Selected seats and pricing breakdown
+ * - Payment method selection
+ * - Terms and conditions
+ * - Final booking submission
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'Confirm Booking')
@@ -70,11 +82,11 @@
     <script src="{{ asset('js/booking-countdown.js') }}"></script>
     <script src="{{ asset('js/booking-confirm.js') }}"></script>
     <script>
-        // Clear old localStorage keys trước khi init countdown mới
+        // Clear old localStorage keys before initializing new countdown
         Object.keys(localStorage).forEach(key => {
             if (key.startsWith('booking_expiry_time')) {
                 const expiry = parseInt(localStorage.getItem(key));
-                // Xóa nếu đã hết hạn hoặc không phải booking này
+                // Delete if expired or not this booking
                 if (!key.includes('{{ $showtime_id }}_{{ implode("_", array_column($seatDetails, "id")) }}') || expiry < Date.now()) {
                     localStorage.removeItem(key);
                 }

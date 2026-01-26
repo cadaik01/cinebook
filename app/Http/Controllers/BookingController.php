@@ -10,6 +10,16 @@ use App\Models\Room;
 use App\Models\Seat;
 use App\Models\Booking;
 
+/**
+ * BookingController
+ * 
+ * Handles movie booking operations including:
+ * - Seat map display with availability status
+ * - Booking process and seat selection
+ * - Booking confirmation and validation
+ * - Session management for booking flow
+ * - Seat reservation and release logic
+ */
 class BookingController extends Controller
 {
     //Display seat map for a specific showtime
@@ -34,7 +44,7 @@ class BookingController extends Controller
             ->orderBy('seat_number', 'asc')
             ->get();
         
-        // Auto-clean expired reserved seats (không cần scheduler!)
+        // Auto-clean expired reserved seats (no scheduler needed!)
         DB::table('showtime_seats')
             ->where('status', 'reserved')
             ->where('reserved_until', '<', now())

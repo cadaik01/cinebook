@@ -1,3 +1,15 @@
+{{--
+/**
+ * Admin Seat Types Pricing
+ * 
+ * Seat pricing management including:
+ * - Seat type price configuration
+ * - Bulk pricing updates
+ * - Price history tracking
+ * - Seasonal pricing options
+ * - Save and reset functionality
+ */
+--}}
 @extends('layouts.admin')
 
 @section('title', 'Seat Type Prices')

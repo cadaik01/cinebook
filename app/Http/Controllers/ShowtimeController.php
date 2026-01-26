@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Showtime;
 use App\Models\Movie;
 use App\Models\Room;
+
+/**
+ * ShowtimeController
+ * 
+ * Handles movie showtime operations including:
+ * - Showtime listing for specific movies
+ * - Date and time filtering
+ * - Room and movie relationship management
+ * - Showtime availability checking
+ */
 class ShowtimeController extends Controller
 {
     //1. showtimes function to fetch showtimes for a specific movie using relationships
@@ -16,7 +26,7 @@ class ShowtimeController extends Controller
         $movie = Movie::find($id);
         $now = now();
         
-        $showtimes = Showtime::with('room.screenType')
+        $showtimes = Showtime::with(['room', 'room.screenType'])
             ->where('movie_id', $id)
             ->where(function($query) use ($now) {
                 // Chỉ lấy suất chiếu trong tương lai

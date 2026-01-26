@@ -1,3 +1,16 @@
+{{--
+/**
+ * Alternative Admin Layout Template
+ * 
+ * Secondary admin layout with simplified structure:
+ * - Bootstrap Icons integration
+ * - User authentication display
+ * - Clean admin navigation menu
+ * - Fixed sidebar with admin functions
+ * - Responsive design without toggle functionality
+ */
+--}}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -76,7 +89,8 @@
                     <li class="admin-layout-sidebar-item">
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
-                            <button type="submit" class="admin-layout-sidebar-link w-100" style="border: none; background: none;">
+                            <button type="submit" class="admin-layout-sidebar-link w-100"
+                                style="border: none; background: none;">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Logout</span>
                             </button>
@@ -93,9 +107,6 @@
             @endphp
             <nav class="admin-layout-navbar">
                 <div class="d-flex align-items-center justify-content-between">
-                    <button class="btn btn-link p-0" id="sidebarToggle" aria-label="Toggle sidebar">
-                        <i class="bi bi-list fs-4"></i>
-                    </button>
                     <div class="admin-layout-navbar-right">
                         <div class="admin-layout-user-info">
                             <i class="bi bi-person-circle"></i>
@@ -114,14 +125,6 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-    // Sidebar toggle
-    document.getElementById('sidebarToggle').addEventListener('click', function() {
-        document.getElementById('sidebar').classList.toggle('collapsed');
-        document.getElementById('main-content').classList.toggle('expanded');
-    });
-    </script>
 
     @stack('scripts')
 </body>

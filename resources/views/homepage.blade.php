@@ -1,3 +1,15 @@
+{{--
+/**
+ * Homepage View
+ * 
+ * Main landing page displaying:
+ * - Hero banner with featured content
+ * - Now showing movies carousel
+ * - Upcoming movies section
+ * - Interactive movie filtering and search
+ * - Homepage-specific styling and scripts
+ */
+--}}
 @extends('layouts.main')
 
 @section('title', 'TCA Cine - Home')
@@ -21,7 +33,7 @@
 
 <!-- Featured Movies -->
 <div class="featured-movies">
-    <h2 class="section-title">🎬 Featured Movies</h2>
+    <h2 class="section-title">🔥 Featured Movies</h2>
 
     @if(isset($movies) && count($movies) > 0)
     <div class="movies-container">
@@ -82,7 +94,7 @@
 
     <div class="btn-view-all-container">
         <a href="{{ route('now_showing') }}" class="btn-view-all">
-            View All Featured Movies →
+            View All Now Showing Movies →
         </a>
     </div>
     @else
@@ -130,7 +142,8 @@
                         <span class="duration">⏱️ {{ $movie->duration ?? '120' }} min</span>
                     </div>
 
-                    @if(isset($movie->rating_avg) && $movie->rating_avg > 0)
+                    {{-- Only show rating for movies that are not coming soonb  --}}
+                    @if(isset($movie->rating_avg) && $movie->rating_avg > 0 && ($movie->status ?? '') !== 'coming_soon')
                     <div class="movie-rating">
                         <span class="rating-value">⭐ {{ $movie->rating_avg }}/5</span>
                     </div>

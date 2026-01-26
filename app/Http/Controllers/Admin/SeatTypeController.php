@@ -6,6 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\SeatType;
 use Illuminate\Http\Request;
 
+/**
+ * SeatTypeController
+ * 
+ * Handles seat type management including:
+ * - Seat type price configuration
+ * - Seat category management
+ * - Pricing updates for different seat types
+ */
 class SeatTypeController extends Controller
 {
     public function editPrices()
