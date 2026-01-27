@@ -47,24 +47,25 @@ class ReviewController extends Controller
             return redirect()->back()->with('error', 'You have already reviewed this movie.');
         }
 
-        // If is admin then skip checking if movie was watched
-        $isAdmin = Auth::user() && Auth::user()->role === 'admin';
-        if (!$isAdmin) {
-            // Check if user has a paid booking for this movie AND the showtime has ended
-            // Showtime ends = show_date + show_time + movie.duration
-            $hasWatched = DB::table('booking_seats')
-                ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
-                ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
-                ->join('movies', 'showtimes.movie_id', '=', 'movies.id')
-                ->where('bookings.user_id', $userId)
-                ->where('showtimes.movie_id', $movieId)
-                ->where('bookings.payment_status', 'paid')
-                ->whereRaw('DATE_ADD(CONCAT(showtimes.show_date, " ", showtimes.show_time), INTERVAL movies.duration MINUTE) < NOW()')
-                ->exists();
+        // Block admins from writing reviews
+        if (Auth::user() && Auth::user()->role === 'admin') {
+            return redirect()->back()->with('error', 'Admins cannot write reviews.');
+        }
 
-            if (!$hasWatched) {
-                return redirect()->back()->with('error', 'You can only review movies after the showtime has ended.');
-            }
+        // Check if user has a paid booking for this movie AND the showtime has ended
+        // Showtime ends = show_date + show_time + movie.duration
+        $hasWatched = DB::table('booking_seats')
+            ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
+            ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
+            ->join('movies', 'showtimes.movie_id', '=', 'movies.id')
+            ->where('bookings.user_id', $userId)
+            ->where('showtimes.movie_id', $movieId)
+            ->where('bookings.payment_status', 'paid')
+            ->whereRaw('DATE_ADD(CONCAT(showtimes.show_date, " ", showtimes.show_time), INTERVAL movies.duration MINUTE) < NOW()')
+            ->exists();
+
+        if (!$hasWatched) {
+            return redirect()->back()->with('error', 'You can only review movies after the showtime has ended.');
         }
 
         // Create and save the review
