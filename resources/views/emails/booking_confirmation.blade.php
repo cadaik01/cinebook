@@ -341,8 +341,8 @@
                             // Use Endroid QR Code with GD writer (no Imagick required)
                             $qrCode_obj = \Endroid\QrCode\Builder\Builder::create()
                                 ->data($qrCode)
-                                ->size(220)
-                                ->margin(10)
+                                ->size(250)
+                                ->margin(15)
                                 ->build();
                             
                             $qrImage = base64_encode($qrCode_obj->getString());
@@ -357,12 +357,26 @@
                         }
                     @endphp
                     
-                    @if($qrSuccess)
-                        <img src="data:image/png;base64,{{ $qrImage }}" alt="QR Code - {{ $seats->map(fn($s) => $s->seat->seat_code)->join(', ') }}" style="max-width: 220px; display: block; margin: 10px auto;">
-                    @else
-                        <p style="color: #dc3545;">Unable to generate QR code. Please contact support.</p>
-                        <p style="color: #6c757d; font-size: 12px;">QR: {{ substr($qrCode, 0, 40) }}...</p>
-                    @endif
+                    <div style="text-align: center; padding: 15px; background: #fff; border: 3px solid #008080; border-radius: 8px; margin: 10px 0;">
+                        @if($qrSuccess && $qrImage)
+                            <img src="data:image/png;base64,{{ $qrImage }}" 
+                                 alt="QR Code for {{ $seats->map(fn($s) => $s->seat->seat_code)->join(', ') }}" 
+                                 width="250" 
+                                 height="250"
+                                 style="max-width: 250px; display: block; margin: 0 auto; border: 2px solid #ddd;">
+                        @else
+                            <div style="width: 250px; height: 250px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; margin: 0 auto; border: 2px dashed #999;">
+                                <p style="color: #666; font-size: 14px;">QR Code</p>
+                            </div>
+                        @endif
+                        
+                        <p style="margin-top: 15px; color: #666; font-size: 13px; font-style: italic;">
+                            If QR code doesn't display, present this code at check-in:
+                        </p>
+                        <p style="font-family: 'Courier New', monospace; font-size: 11px; color: #333; background: #f9f9f9; padding: 10px; border-radius: 4px; word-break: break-all; margin: 10px auto; max-width: 90%;">
+                            {{ $qrCode }}
+                        </p>
+                    </div>
                     
                     <p class="qr-text">{{ $qrCode }}</p>
                 </div>
