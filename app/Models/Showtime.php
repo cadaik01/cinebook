@@ -71,12 +71,51 @@ class Showtime extends Model
     public function getStatusAttribute(): string
     {
         if ($this->isEnded()) {
-            return 'ended';
+            return 'done';
         }
         if ($this->isPlaying()) {
-            return 'playing';
+            return 'ongoing';
         }
         return 'upcoming';
+    }
+
+    /**
+     * Get the status class for badges
+     */
+    public function getStatusClassAttribute(): string
+    {
+        return match($this->status) {
+            'done' => 'bg-secondary',
+            'ongoing' => 'bg-warning',
+            'upcoming' => 'bg-success',
+            default => 'bg-secondary'
+        };
+    }
+
+    /**
+     * Get seat statistics for this showtime
+     */
+    public function getSeatStatsAttribute(): array
+    {
+        $this->load('showtimeSeats');
+        
+        $totalRoomSeats = $this->room->seats->count();
+        $showtimeSeats = $this->showtimeSeats;
+        
+        $bookedSeats = $showtimeSeats->where('status', 'booked')->count();
+        $availableSeats = $showtimeSeats->where('status', 'available')->count();
+        
+        // If showtime seats don't match room seats count, calculate available seats
+        if ($showtimeSeats->count() !== $totalRoomSeats) {
+            $availableSeats = $totalRoomSeats - $bookedSeats;
+        }
+        
+        return [
+            'total' => $totalRoomSeats,
+            'booked' => $bookedSeats,
+            'available' => $availableSeats,
+            'booked_percentage' => $totalRoomSeats > 0 ? round(($bookedSeats / $totalRoomSeats) * 100, 1) : 0
+        ];
     }
 
     /**
