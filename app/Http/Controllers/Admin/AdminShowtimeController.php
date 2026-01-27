@@ -100,14 +100,21 @@ class AdminShowtimeController extends Controller
 
         DB::beginTransaction();
         try {
-            // Check if showtime already exists
-            $exists = Showtime::where('room_id', $request->room_id)
-                ->where('show_date', $request->show_date)
-                ->where('show_time', $request->show_time)
-                ->exists();
+            // Get movie duration to calculate end time
+            $movie = Movie::findOrFail($request->movie_id);
 
-            if ($exists) {
-                return back()->with('error', 'This showtime slot is already taken!');
+            // Calculate start and end datetime for the new showtime
+            $startDatetime = Carbon::parse($request->show_date . ' ' . $request->show_time);
+            $endDatetime = $startDatetime->copy()->addMinutes($movie->duration);
+
+            // Check for overlapping showtimes in the same room
+            if (Showtime::hasOverlap($request->room_id, $startDatetime, $endDatetime)) {
+                $overlapping = Showtime::getOverlappingShowtimes($request->room_id, $startDatetime, $endDatetime);
+                $conflictInfo = $overlapping->map(function ($s) {
+                    return $s->movie->title . ' (' . $s->start_datetime->format('H:i') . ' - ' . $s->end_datetime->format('H:i') . ')';
+                })->join(', ');
+
+                return back()->with('error', 'Showtime overlaps with existing schedule: ' . $conflictInfo);
             }
 
             // Create showtime
@@ -172,15 +179,21 @@ class AdminShowtimeController extends Controller
 
         DB::beginTransaction();
         try {
-            // Check if showtime slot is taken (excluding current showtime)
-            $exists = Showtime::where('room_id', $request->room_id)
-                ->where('show_date', $request->show_date)
-                ->where('show_time', $request->show_time)
-                ->where('id', '!=', $showtime->id)
-                ->exists();
+            // Get movie duration to calculate end time
+            $movie = Movie::findOrFail($request->movie_id);
 
-            if ($exists) {
-                return back()->with('error', 'This showtime slot is already taken!');
+            // Calculate start and end datetime for the updated showtime
+            $startDatetime = Carbon::parse($request->show_date . ' ' . $request->show_time);
+            $endDatetime = $startDatetime->copy()->addMinutes($movie->duration);
+
+            // Check for overlapping showtimes in the same room (excluding current showtime)
+            if (Showtime::hasOverlap($request->room_id, $startDatetime, $endDatetime, $showtime->id)) {
+                $overlapping = Showtime::getOverlappingShowtimes($request->room_id, $startDatetime, $endDatetime, $showtime->id);
+                $conflictInfo = $overlapping->map(function ($s) {
+                    return $s->movie->title . ' (' . $s->start_datetime->format('H:i') . ' - ' . $s->end_datetime->format('H:i') . ')';
+                })->join(', ');
+
+                return back()->with('error', 'Showtime overlaps with existing schedule: ' . $conflictInfo);
             }
 
             // Update showtime

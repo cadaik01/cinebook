@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
+use App\Mail\WelcomeMail;
 
 /**
  * LoginController
@@ -94,7 +96,16 @@ class LoginController extends Controller
             'phone' => $phone,
             'role' => 'user' // default role
         ]);
-        //5. log the user in using Laravel Auth
+
+        //5. send welcome email
+        try {
+            Mail::to($user->email)->send(new WelcomeMail($user));
+        } catch (\Exception $e) {
+            // Log error but don't stop registration
+            \Log::error('Failed to send welcome email: ' . $e->getMessage());
+        }
+
+        //6. log the user in using Laravel Auth
         Auth::login($user);
         // Also keep session for backward compatibility
         Session::put('user_id', $user->id);

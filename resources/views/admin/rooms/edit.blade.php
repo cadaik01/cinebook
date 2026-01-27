@@ -15,7 +15,7 @@
 @section('title', 'Edit Room & Seats')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/admin-room-edit.css') }}">
+@vite(['resources/css/admin-room-edit.css'])
 @endpush
 
 @section('content')

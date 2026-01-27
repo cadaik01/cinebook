@@ -50,23 +50,20 @@ class ReviewController extends Controller
         // If is admin then skip checking if movie was watched
         $isAdmin = Auth::user() && Auth::user()->role === 'admin';
         if (!$isAdmin) {
+            // Check if user has a paid booking for this movie AND the showtime has ended
+            // Showtime ends = show_date + show_time + movie.duration
             $hasWatched = DB::table('booking_seats')
                 ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
                 ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
+                ->join('movies', 'showtimes.movie_id', '=', 'movies.id')
                 ->where('bookings.user_id', $userId)
                 ->where('showtimes.movie_id', $movieId)
                 ->where('bookings.payment_status', 'paid')
-                ->where(function($query) {
-                    $query->where('showtimes.show_date', '<', now()->toDateString())
-                        ->orWhere(function($q) {
-                            $q->where('showtimes.show_date', '=', now()->toDateString())
-                              ->where('showtimes.show_time', '<', now()->toTimeString());
-                        });
-                })
+                ->whereRaw('DATE_ADD(CONCAT(showtimes.show_date, " ", showtimes.show_time), INTERVAL movies.duration MINUTE) < NOW()')
                 ->exists();
 
             if (!$hasWatched) {
-                return redirect()->back()->with('error', 'You can only review movies you have watched.');
+                return redirect()->back()->with('error', 'You can only review movies after the showtime has ended.');
             }
         }
 
@@ -111,20 +108,16 @@ class ReviewController extends Controller
             return false;
         }
 
-        // Check if user has watched this movie
+        // Check if user has watched this movie (showtime must have ended)
+        // Showtime ends = show_date + show_time + movie.duration
         $hasWatched = DB::table('booking_seats')
             ->join('showtimes', 'booking_seats.showtime_id', '=', 'showtimes.id')
             ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
+            ->join('movies', 'showtimes.movie_id', '=', 'movies.id')
             ->where('bookings.user_id', $userId)
             ->where('showtimes.movie_id', $movieId)
             ->where('bookings.payment_status', 'paid')
-            ->where(function($query) {
-                $query->where('showtimes.show_date', '<', now()->toDateString())
-                    ->orWhere(function($q) {
-                        $q->where('showtimes.show_date', '=', now()->toDateString())
-                          ->where('showtimes.show_time', '<', now()->toTimeString());
-                    });
-            })
+            ->whereRaw('DATE_ADD(CONCAT(showtimes.show_date, " ", showtimes.show_time), INTERVAL movies.duration MINUTE) < NOW()')
             ->exists();
 
         return $hasWatched;

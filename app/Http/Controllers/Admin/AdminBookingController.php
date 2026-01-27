@@ -7,6 +7,8 @@ use App\Models\Booking;
 use App\Models\ShowtimeSeat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BookingCancellationMail;
 use Carbon\Carbon;
 
 /**
@@ -82,7 +84,7 @@ class AdminBookingController extends Controller
     }
 
     // Cancel Booking + Release Seats
-    public function cancel(Booking $booking)
+    public function cancel(Request $request, Booking $booking)
     {
         if ($booking->status === 'cancelled' || $booking->status === 'expired') {
             return back()->with('error', 'Booking is already cancelled or expired!');
@@ -90,6 +92,10 @@ class AdminBookingController extends Controller
 
         DB::beginTransaction();
         try {
+            // Get cancellation reason and refund amount from request
+            $reason = $request->input('reason', 'Cancelled by administrator');
+            $refundAmount = $booking->payment_status === 'paid' ? $booking->total_price : 0;
+
             // Update booking status
             $booking->update(['status' => 'cancelled']);
 
@@ -102,7 +108,16 @@ class AdminBookingController extends Controller
             }
 
             DB::commit();
-            return back()->with('success', 'Booking cancelled successfully!');
+
+            // Send cancellation email
+            try {
+                $booking->load(['user', 'showtime.movie', 'showtime.room', 'bookingSeats.seat']);
+                Mail::to($booking->user->email)->send(new BookingCancellationMail($booking, $reason, $refundAmount));
+            } catch (\Exception $e) {
+                \Log::error('Failed to send cancellation email: ' . $e->getMessage());
+            }
+
+            return back()->with('success', 'Booking cancelled successfully! Customer has been notified via email.');
 
         } catch (\Exception $e) {
             DB::rollBack();

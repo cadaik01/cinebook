@@ -10,11 +10,14 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'showtime_id', 'total_price', 'status', 'payment_status', 'booking_date'
+        'user_id', 'showtime_id', 'total_price', 'status', 'payment_status', 'booking_date',
+        'reminder_sent_at', 'review_request_sent_at'
     ];
 
     protected $casts = [
         'booking_date' => 'datetime',
+        'reminder_sent_at' => 'datetime',
+        'review_request_sent_at' => 'datetime',
     ];
 
     public function bookingSeats()

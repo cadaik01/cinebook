@@ -193,13 +193,14 @@
                         <div class="review-content">
                             <p>{{ $review->comment }}</p>
                         </div>
-                        <!-- Delete Button (user or admin) -->
+                        <!-- Delete Button (admin only) -->
                         @auth
-                        @if($review->user_id === Auth::id() || (Auth::user() && Auth::user()->role === 'admin'))
+                        @if(Auth::user() && Auth::user()->role === 'admin')
                         <div class="review-actions">
-                            <form action="{{ route('reviews.destroy', $review->id) }}" method="POST"
+                            <form action="{{ route('admin.reviews.destroy', $review->id) }}" method="POST"
                                 class="review-actions-inline">
                                 @csrf
+                                @method('DELETE')
                                 <button type="submit" class="review-delete-btn"
                                     onclick="return confirm('Are you sure you want to delete this review?')">
                                     <i class="fas fa-trash"></i> Delete

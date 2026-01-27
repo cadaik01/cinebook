@@ -15,7 +15,7 @@
 @section('title', 'Add New Room')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/admin-room-create.css') }}">
+@vite(['resources/css/admin-room-create.css'])
 @endpush
 
 @section('content')

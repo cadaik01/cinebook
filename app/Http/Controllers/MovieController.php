@@ -141,6 +141,9 @@ class MovieController extends Controller
     }
     public function show(Request $request, $id)
     {
+        // Auto-update movie statuses based on real-time
+        $this->updateMovieStatuses();
+
         // Use Eloquent Model instead of DB::table to enable relationships
         $movie = Movie::with('genres','reviews.user')->findOrFail($id);
 

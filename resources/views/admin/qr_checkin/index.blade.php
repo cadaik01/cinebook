@@ -15,7 +15,7 @@
 @section('title', 'QR Check-in')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/qr_checkin.css') }}">
+@vite(['resources/css/qr_checkin.css'])
 @endpush
 
 @section('content')
