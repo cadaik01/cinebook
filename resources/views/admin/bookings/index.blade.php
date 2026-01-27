@@ -123,13 +123,35 @@
                     </select>
                 </div>
                 <div class="col-md-3">
+                    <label class="form-label">Showtime</label>
+                    <select name="showtime_id" class="form-select">
+                        <option value="">All Showtimes</option>
+                        @foreach($showtimes as $showtime)
+                        <option value="{{ $showtime->id }}"
+                            {{ request('showtime_id') == $showtime->id ? 'selected' : '' }}>
+                            {{ $showtime->movie->title }} -
+                            {{ \Carbon\Carbon::parse($showtime->show_date)->format('M j') }}
+                            {{ \Carbon\Carbon::parse($showtime->show_time)->format('H:i') }}
+                            ({{ $showtime->room->name }})
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
                     <label class="form-label">Booking Date</label>
                     <input type="date" name="date" class="form-control" value="{{ request('date') }}">
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
+            </div>
+            <div class="row g-3 mt-2">
+                <div class="col-md-3 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary-cinebook w-100">
                         <i class="bi bi-search"></i> Filter
                     </button>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <a href="{{ route('admin.bookings.index') }}" class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-arrow-clockwise"></i> Clear
+                    </a>
                 </div>
             </div>
         </form>

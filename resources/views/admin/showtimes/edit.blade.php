@@ -33,6 +33,13 @@
             </div>
         @endif
 
+        @if($hasBookings)
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i>
+                <strong>Pricing Only Mode:</strong> Only peak hour pricing can be modified for showtimes. Other details are locked for data integrity.
+            </div>
+        @endif
+
         <form action="{{ route('admin.showtimes.update', $showtime) }}" method="POST">
             @csrf
             @method('PUT')
@@ -40,7 +47,8 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Movie <span class="text-danger">*</span></label>
-                    <select name="movie_id" class="form-select @error('movie_id') is-invalid @enderror" required>
+                    <select name="movie_id" class="form-select @error('movie_id') is-invalid @enderror" 
+                            {{ $hasBookings ? 'disabled' : 'required' }}>
                         <option value="">Select Movie</option>
                         @foreach($movies as $movie)
                             <option value="{{ $movie->id }}" {{ old('movie_id', $showtime->movie_id) == $movie->id ? 'selected' : '' }}>
@@ -48,6 +56,9 @@
                             </option>
                         @endforeach
                     </select>
+                    @if($hasBookings)
+                        <input type="hidden" name="movie_id" value="{{ $showtime->movie_id }}">
+                    @endif
                     @error('movie_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -55,7 +66,8 @@
 
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Room <span class="text-danger">*</span></label>
-                    <select name="room_id" class="form-select @error('room_id') is-invalid @enderror" required>
+                    <select name="room_id" class="form-select @error('room_id') is-invalid @enderror" 
+                            {{ $hasBookings ? 'disabled' : 'required' }}>
                         <option value="">Select Room</option>
                         @foreach($rooms as $room)
                             <option value="{{ $room->id }}" {{ old('room_id', $showtime->room_id) == $room->id ? 'selected' : '' }}>
@@ -63,17 +75,12 @@
                             </option>
                         @endforeach
                     </select>
+                    @if($hasBookings)
+                        <input type="hidden" name="room_id" value="{{ $showtime->room_id }}">
+                    @endif
                     @error('room_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                    @php
-                        $hasBookings = $showtime->showtimeSeats()->where('status', '!=', 'available')->exists();
-                    @endphp
-                    @if($hasBookings)
-                        <small class="text-warning">
-                            <i class="bi bi-exclamation-triangle"></i> Cannot change room - there are existing bookings
-                        </small>
-                    @endif
                 </div>
             </div>
 
@@ -81,7 +88,11 @@
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Show Date <span class="text-danger">*</span></label>
                     <input type="date" name="show_date" class="form-control @error('show_date') is-invalid @enderror"
-                           value="{{ old('show_date', $showtime->show_date->format('Y-m-d')) }}" required>
+                           value="{{ old('show_date', $showtime->show_date->format('Y-m-d')) }}" 
+                           {{ $hasBookings ? 'disabled' : 'required' }}>
+                    @if($hasBookings)
+                        <input type="hidden" name="show_date" value="{{ $showtime->show_date->format('Y-m-d') }}">
+                    @endif
                     @error('show_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -89,7 +100,8 @@
 
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Show Time <span class="text-danger">*</span></label>
-                    <select name="show_time" class="form-select @error('show_time') is-invalid @enderror" required>
+                    <select name="show_time" class="form-select @error('show_time') is-invalid @enderror" 
+                            {{ $hasBookings ? 'disabled' : 'required' }}>
                         <option value="">Select Time</option>
                         @php
                             $currentTime = \Carbon\Carbon::parse($showtime->show_time)->format('H:i:s');
@@ -100,6 +112,9 @@
                         <option value="18:00:00" {{ old('show_time', $currentTime) == '18:00:00' ? 'selected' : '' }}>06:00 PM</option>
                         <option value="21:00:00" {{ old('show_time', $currentTime) == '21:00:00' ? 'selected' : '' }}>09:00 PM</option>
                     </select>
+                    @if($hasBookings)
+                        <input type="hidden" name="show_time" value="{{ $currentTime }}">
+                    @endif
                     @error('show_time')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

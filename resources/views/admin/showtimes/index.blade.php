@@ -165,15 +165,27 @@
                                 class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil"></i>
                             </a>
-                            <form action="{{ route('admin.showtimes.destroy', $showtime) }}" method="POST"
-                                class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('Are you sure you want to delete this showtime?')">
+                            
+                            @php
+                                $hasBookings = $showtime->bookings()->exists() || 
+                                              $showtime->showtimeSeats()->whereIn('status', ['booked', 'reserved'])->exists();
+                            @endphp
+                            
+                            @if($hasBookings)
+                                <button type="button" class="btn btn-sm btn-outline-secondary" disabled title="Cannot delete - has bookings">
                                     <i class="bi bi-trash"></i>
                                 </button>
-                            </form>
+                            @else
+                                <form action="{{ route('admin.showtimes.destroy', $showtime) }}" method="POST"
+                                    class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Are you sure you want to delete this showtime?')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                     @endforeach

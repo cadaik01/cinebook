@@ -83,7 +83,7 @@ class AdminMovieController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'director' => 'nullable|string|max:255',
+            'director' => 'required|string|max:255',
             'cast' => 'nullable|string',
             'genres' => 'nullable|array',
             'genres.*' => 'exists:genres,id',
@@ -96,6 +96,17 @@ class AdminMovieController extends Controller
             'status' => 'required|in:now_showing,coming_soon,ended',
             'description' => 'nullable|string',
         ]);
+
+        // Check for duplicate movie (same title and release date)
+        $existingMovie = Movie::where('title', $validated['title'])
+                             ->where('release_date', $validated['release_date'])
+                             ->first();
+        
+        if ($existingMovie) {
+            return back()->withErrors([
+                'title' => 'A movie with this title and release date already exists.'
+            ])->withInput();
+        }
 
         // Validate status based on release date and real time
         $releaseDate = Carbon::parse($validated['release_date']);
@@ -145,7 +156,7 @@ class AdminMovieController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'director' => 'nullable|string|max:255',
+            'director' => 'required|string|max:255',
             'cast' => 'nullable|string',
             'genres' => 'nullable|array',
             'genres.*' => 'exists:genres,id',
@@ -158,6 +169,18 @@ class AdminMovieController extends Controller
             'status' => 'required|in:now_showing,coming_soon,ended',
             'description' => 'nullable|string',
         ]);
+
+        // Check for duplicate movie (same title and release date) excluding current movie
+        $existingMovie = Movie::where('title', $validated['title'])
+                             ->where('release_date', $validated['release_date'])
+                             ->where('id', '!=', $movie->id)
+                             ->first();
+        
+        if ($existingMovie) {
+            return back()->withErrors([
+                'title' => 'A movie with this title and release date already exists.'
+            ])->withInput();
+        }
 
         // Validate status based on release date and real time
         $releaseDate = Carbon::parse($validated['release_date']);
