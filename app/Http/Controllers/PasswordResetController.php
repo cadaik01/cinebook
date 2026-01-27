@@ -56,7 +56,7 @@ class PasswordResetController extends Controller
         DB::table('password_reset_tokens')->insert([
             'email' => $request->email,
             'token' => $token,
-            'created_at' => now(),
+            'created_at' => Carbon::now(),
         ]);
 
         // Send email with token link
@@ -84,7 +84,10 @@ class PasswordResetController extends Controller
         }
         
         // Check if token is expired (60 minutes)
-        if (Carbon::parse($resetRecord->created_at)->addMinutes(60)->isPast()) {
+        $createdAt = Carbon::parse($resetRecord->created_at);
+        $expiresAt = $createdAt->addMinutes(60);
+        
+        if (Carbon::now()->isAfter($expiresAt)) {
             DB::table('password_reset_tokens')->where('email', $email)->delete();
             return redirect('/password/forgot')
                 ->withErrors(['token' => 'Password reset link has expired. Please request again.']);
@@ -117,7 +120,10 @@ class PasswordResetController extends Controller
         }
 
         // Check if token is expired (valid for 60 minutes)
-        if (Carbon::parse($resetRecord->created_at)->addMinutes(60)->isPast()) {
+        $createdAt = Carbon::parse($resetRecord->created_at);
+        $expiresAt = $createdAt->addMinutes(60);
+        
+        if (Carbon::now()->isAfter($expiresAt)) {
             return back()->withErrors(['token' => 'Token has expired. Please request a new password reset.']);
         }
 

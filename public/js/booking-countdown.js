@@ -40,7 +40,7 @@ class BookingCountDown{
             const timeLeft = Math.floor((expiryTime - Date.now()) / 1000);
             console.log('⏰ Time left from storage:', timeLeft, 'seconds');
             
-            // Nếu đã hết hạn, tạo mới
+            // iF time has expired, create new
             if (timeLeft <= 0) {
                 console.warn('⚠️ Stored time expired, creating new countdown');
                 localStorage.removeItem(this.storageKey);
