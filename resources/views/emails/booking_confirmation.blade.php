@@ -314,16 +314,30 @@
                     {{-- Generate QR Code Image with error handling --}}
                     @php
                         try {
-                            $qrImage = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(220)->margin(1)->generate($qrCode));
+                            // Use BaconQrCode with GD renderer (no Imagick required)
+                            $renderer = new \BaconQrCode\Renderer\ImageRenderer(
+                                new \BaconQrCode\Renderer\RendererStyle\RendererStyle(220, 1),
+                                new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
+                            );
+                            $writer = new \BaconQrCode\Writer($renderer);
+                            $qrImage = base64_encode($writer->writeString($qrCode));
+                            $qrImageType = 'svg+xml';
                         } catch (\Exception $e) {
+                            \Log::error('QR Code generation failed: ' . $e->getMessage(), [
+                                'booking_id' => $booking->id,
+                                'qr_code' => $qrCode,
+                                'exception' => $e->getTraceAsString()
+                            ]);
                             $qrImage = '';
+                            $qrImageType = 'png';
                         }
                     @endphp
                     
                     @if($qrImage)
-                        <img src="data:image/png;base64,{{ $qrImage }}" alt="QR Code - {{ $seats->map(fn($s) => $s->seat->seat_code)->join(', ') }}">
+                        <img src="data:image/{{ $qrImageType }};base64,{{ $qrImage }}" alt="QR Code - {{ $seats->map(fn($s) => $s->seat->seat_code)->join(', ') }}">
                     @else
                         <p style="color: #dc3545;">Unable to generate QR code. Please contact support.</p>
+                        <p style="color: #6c757d; font-size: 12px;">Error logged for booking #{{ $booking->id }}</p>
                     @endif
                     
                     <p class="qr-text">{{ $qrCode }}</p>
