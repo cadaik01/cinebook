@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Đăng ký alias middleware kiểm tra quyền
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
+            'auth.redirect' => \App\Http\Middleware\AuthRedirect::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

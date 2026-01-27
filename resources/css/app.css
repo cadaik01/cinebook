@@ -8,6 +8,37 @@
 @import 'now_showing.css';
 @import 'upcoming_movies.css';
 
+/* Search Results Styles */
+.search-header {
+    margin-bottom: 30px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--deep-teal);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: var(--deep-space-blue);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: white;
+    text-decoration: none;
+}
+
+.back-btn i {
+    font-size: 14px;
+}
+
 /* Genre Styles */
 .genre-tag {
     background: linear-gradient(135deg, var(--deep-teal), var(--deep-space-blue));

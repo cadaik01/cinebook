@@ -48,8 +48,8 @@ Route::get('/coming-soon', function () {
 })->name('coming_soon');
 
 // Login Routes
-Route::get('/login', [LoginController::class, 'showLoginForm']);
-Route::post('/login',[LoginController::class, 'login'])->name('login');
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login',[LoginController::class, 'login'])->name('login.post');
 // Logout Route
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
@@ -68,28 +68,41 @@ Route::post('register',[LoginController::class, 'register'])->name('register');
 Route::get('/movies/{id}/showtimes', [ShowtimeController::class, 'showtimes'])->name('movies.showtimes');
 
 //**Booking Controller */
-// Seatmap Page
+// Seatmap Page - No auth required, anyone can view seatmap
 Route::get('/showtimes/{showtime_id}/seats', [BookingController::class, 'seatMap'])->name('booking.seatmap');
-// Book Seats Page
-Route::post('/showtimes/{showtime_id}/book', [BookingController::class, 'bookSeats'])->name('booking.book');
-// Cancel Reserved Seats
-Route::post('/booking/cancel-reserved', [BookingController::class, 'cancelReservedSeats'])->name('booking.cancel-reserved');
-// Cancel Entire Booking
-Route::post('/booking/cancel', [BookingController::class, 'cancelBooking'])->name('booking.cancel');
-// Select Seats Page
-Route::post('/showtimes/{showtime_id}/seats/select', [ShowtimeController::class, 'selectSeats'])->name('movies.selectseats');
-// Confirm Booking
-Route::get('/booking/confirm/{booking_id}', [BookingController::class, 'confirmBooking'])->name('booking.confirm');
-// Booking Success
-Route::get('/booking/success/{booking_id}', [BookingController::class, 'bookingSuccess'])->name('booking.success');
+
+// Handle direct GET access to booking route - redirect to seatmap
+Route::get('/showtimes/{showtime_id}/book', function($showtime_id) {
+    return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
+                     ->with('info', 'Please select your seats first.');
+});
+
+// Routes requiring authentication with redirect
+Route::middleware('auth.redirect')->group(function () {
+    // Book Seats Page
+    Route::post('/showtimes/{showtime_id}/book', [BookingController::class, 'bookSeats'])->name('booking.book');
+    // Cancel Reserved Seats
+    Route::post('/booking/cancel-reserved', [BookingController::class, 'cancelReservedSeats'])->name('booking.cancel-reserved');
+    // Cancel Entire Booking
+    Route::post('/booking/cancel', [BookingController::class, 'cancelBooking'])->name('booking.cancel');
+    // Select Seats Page
+    Route::post('/showtimes/{showtime_id}/seats/select', [ShowtimeController::class, 'selectSeats'])->name('movies.selectseats');
+    // Confirm Booking
+    Route::get('/booking/confirm/{booking_id}', [BookingController::class, 'confirmBooking'])->name('booking.confirm');
+    // Booking Success
+    Route::get('/booking/success/{booking_id}', [BookingController::class, 'bookingSuccess'])->name('booking.success');
+});
 
 //** Payment Controller */
-// Process Booking & Payment
-Route::post('/booking/process', [PaymentController::class, 'processBooking'])->name('booking.process');
-// Mock Payment Gateway
-Route::get('payment/mock/{booking_id}', [PaymentController::class, 'showMockPayment'])->name('payment.mock');
-// Confirm Payment
-Route::post('payment/confirm/{booking_id}', [PaymentController::class, 'confirmPayment'])->name('payment.confirm');
+// Routes requiring authentication with redirect
+Route::middleware('auth.redirect')->group(function () {
+    // Process Booking & Payment
+    Route::post('/booking/process', [PaymentController::class, 'processBooking'])->name('booking.process');
+    // Mock Payment Gateway
+    Route::get('payment/mock/{booking_id}', [PaymentController::class, 'showMockPayment'])->name('payment.mock');
+    // Confirm Payment
+    Route::post('payment/confirm/{booking_id}', [PaymentController::class, 'confirmPayment'])->name('payment.confirm');
+});
 
 //** User Profile - Protected by auth middleware */
 Route::middleware('auth')->group(function () {

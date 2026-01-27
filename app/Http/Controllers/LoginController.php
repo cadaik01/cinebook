@@ -44,8 +44,12 @@ class LoginController extends Controller
             // Also keep session for backward compatibility with existing code
             Session::put('user_id', $user->id);
             Session::put('user_name', $user->name);
-            //5. redirect to homepage
-            return redirect()->intended('/');
+            
+            //5. redirect to intended URL or homepage
+            $intendedUrl = session('intended_url', '/');
+            session()->forget('intended_url'); // Clear intended URL after use
+            
+            return redirect($intendedUrl);
         } else {
             //6. redirect back with error
             return redirect('/login')->with('error', 'Invalid credentials');
@@ -110,7 +114,11 @@ class LoginController extends Controller
         // Also keep session for backward compatibility
         Session::put('user_id', $user->id);
         Session::put('user_name', $user->name);
-        //6. redirect to homepage
-        return redirect('/');
+        
+        //7. redirect to intended URL or homepage
+        $intendedUrl = session('intended_url', '/');
+        session()->forget('intended_url'); // Clear intended URL after use
+        
+        return redirect($intendedUrl);
     }
 }
