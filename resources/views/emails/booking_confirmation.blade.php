@@ -289,7 +289,7 @@
             </div>
             
             <div class="total-price">
-                Total: ${{ number_format($booking->total_price / 1000, 2) }} USD
+                Total: {{ number_format($booking->total_price) }} VND
             </div>
         </div>
 
