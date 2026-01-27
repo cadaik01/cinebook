@@ -40,8 +40,10 @@ class PasswordResetController extends Controller
             'email.exists' => 'The email address does not exist.',
         ]);
 
+        $email = trim($request->email);
+
         // Find user by email
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $email)->first();
         if (!$user) {
             return back()->withErrors(['email' => 'The email address does not exist.']);
         }
@@ -50,17 +52,17 @@ class PasswordResetController extends Controller
         $token = Str::random(60);
 
         // Delete existing tokens
-        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+        DB::table('password_reset_tokens')->where('email', $email)->delete();
 
         // Insert new token
         DB::table('password_reset_tokens')->insert([
-            'email' => $request->email,
+            'email' => $email,
             'token' => $token,
             'created_at' => Carbon::now(),
         ]);
 
         // Send email with token link
-        Mail::to($request->email)->send(new PasswordResetMail($token, $request->email));
+        Mail::to($email)->send(new PasswordResetMail($token, $email));
 
         // Redirect back with success message
         return back()->with('success', 'Password reset link has been sent to your email!');
@@ -107,12 +109,17 @@ class PasswordResetController extends Controller
         $request->validate([
             'token' => 'required',
             'email' => 'required|email|exists:users,email',
-            'password' => 'required|confirmed|min:8',
+            'password' => 'required|confirmed|min:8|regex:/^\S+$/',
+        ], [
+            'password.regex' => 'Password cannot contain spaces.',
         ]);
+
+        $email = trim($request->email);
+        $password = $request->password;
 
         // Verify token
         $resetRecord = DB::table('password_reset_tokens')
-            ->where('email', $request->email)
+            ->where('email', $email)
             ->where('token', $request->token)
             ->first();
 
@@ -130,11 +137,11 @@ class PasswordResetController extends Controller
         }
 
         // Update password
-        User::where('email', $request->email)
-            ->update(['password' => Hash::make($request->password)]);
+        User::where('email', $email)
+            ->update(['password' => Hash::make($password)]);
 
         // Delete used token
-        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+        DB::table('password_reset_tokens')->where('email', $email)->delete();
 
         // Redirect to login with success message
         return redirect('/login')->with('success', 'Password has been reset successfully! Please login.');

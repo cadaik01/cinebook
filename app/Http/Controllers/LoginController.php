@@ -32,9 +32,15 @@ class LoginController extends Controller
     //Handle login request
     public function login(Request $request)
     {
-        //take data from request
-        $email = $request->input('email');
-        $password = $request->input('password');
+        // Validate input
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        // Trim whitespace
+        $email = trim($validated['email']);
+        $password = $validated['password'];
         //2. find user in database with email
         $user = User::where('email', $email)->first();
         //3. check if user exists and password matches
@@ -71,12 +77,25 @@ class LoginController extends Controller
     //Handle registration request
     public function register(Request $request)
     {
-        //take data from request
-        $name = $request->input('name');
-        $email= $request->input('email');
-        $password = $request->input('password');
-        $city = $request->input('city');
-        $phone = $request->input('phone');
+        // Validate and sanitize input
+        $validated = $request->validate([
+            'name' => 'required|string|max:100|regex:/^[^\s].*[^\s]$/|regex:/^(?!.*\s{2}).*$/',
+            'email' => 'required|email|max:150',
+            'password' => 'required|string|min:8|regex:/^\S+$/',
+            'city' => 'nullable|string|max:100',
+            'phone' => 'nullable|string|max:20',
+        ], [
+            'name.regex' => 'Name cannot start or end with spaces, or contain consecutive spaces.',
+            'password.regex' => 'Password cannot contain spaces.',
+            'email.email' => 'Please enter a valid email address.',
+        ]);
+
+        // Trim whitespace from inputs
+        $name = trim($validated['name']);
+        $email = trim($validated['email']);
+        $password = $validated['password']; // No trim needed due to regex validation
+        $city = isset($validated['city']) ? trim($validated['city']) : null;
+        $phone = isset($validated['phone']) ? trim($validated['phone']) : null;
         //2. check if user with email already exists
         $existingUser = User::where('email', $email)->first();
         if ($existingUser) {

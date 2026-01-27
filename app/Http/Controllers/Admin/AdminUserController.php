@@ -71,15 +71,23 @@ class AdminUserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|regex:/^[^\s].*[^\s]$/|regex:/^(?!.*\s{2}).*$/',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'phone' => 'nullable|string|max:20',
             'city' => 'nullable|string|max:100',
             'role' => 'required|in:user,admin',
+        ], [
+            'name.regex' => 'Name cannot start or end with spaces, or contain consecutive spaces.',
         ]);
 
-        $user->update($request->only(['name', 'email', 'phone', 'city', 'role']));
+        // Trim inputs
+        $validated['name'] = trim($validated['name']);
+        $validated['email'] = trim($validated['email']);
+        if (isset($validated['phone'])) $validated['phone'] = trim($validated['phone']);
+        if (isset($validated['city'])) $validated['city'] = trim($validated['city']);
+
+        $user->update($validated);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'User updated successfully!');
