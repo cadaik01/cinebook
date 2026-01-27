@@ -108,6 +108,12 @@ class AdminBookingController extends Controller
             return back()->with('error', 'Booking is already cancelled or expired!');
         }
 
+        // Check if showtime has ended - cannot cancel booking for ended showtimes
+        $booking->load('showtime.movie');
+        if ($booking->showtime->status === 'done') {
+            return back()->with('error', 'Cannot cancel booking - the showtime has already ended!');
+        }
+
         DB::beginTransaction();
         try {
             // Get cancellation reason and refund amount from request

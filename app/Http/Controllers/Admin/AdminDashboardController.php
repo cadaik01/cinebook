@@ -46,8 +46,10 @@ class AdminDashboardController extends Controller
             ->where('payment_status', 'paid')
             ->sum('total_price');
 
-        // Active showtimes (future showtimes)
-        $activeShowtimes = Showtime::where('show_date', '>=', $today)->count();
+        // Active showtimes (only ongoing and upcoming)
+        $activeShowtimes = Showtime::with('movie')->get()->filter(function($showtime) {
+            return in_array($showtime->status, ['ongoing', 'upcoming']);
+        })->count();
 
         // Highest and lowest revenue movies (show all movies, even if revenue is 0)
         $movieRevenue = Movie::leftJoin('showtimes', 'movies.id', '=', 'showtimes.movie_id')

@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const seatId2 = button.getAttribute("data-seat-id2");
         const seatCode1 = button.getAttribute("data-seat-code");
         const seatCode2 = button.getAttribute("data-seat-code2");
-        // Nếu đã chọn thì bỏ chọn cả cặp
+        // if both seats are selected, deselect both; else select both
         if (
             selectedSeats.find((seat) => seat.id === seatId1) &&
             selectedSeats.find((seat) => seat.id === seatId2)

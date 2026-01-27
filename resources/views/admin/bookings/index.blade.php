@@ -238,14 +238,26 @@
                                 <i class="bi bi-eye"></i>
                             </a>
                             @if($booking->status == 'confirmed' || $booking->status == 'pending')
-                            <form action="{{ route('admin.bookings.cancel', $booking) }}" method="POST"
-                                class="d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Cancel Booking"
-                                    onclick="return confirm('Are you sure you want to cancel this booking?')">
-                                    <i class="bi bi-x-circle"></i>
-                                </button>
-                            </form>
+                                @php
+                                    // Check if showtime has ended
+                                    $showtimeEnded = $booking->showtime->status === 'done';
+                                @endphp
+                                
+                                @if($showtimeEnded)
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" disabled 
+                                            title="Cannot cancel - showtime has ended">
+                                        <i class="bi bi-x-circle"></i>
+                                    </button>
+                                @else
+                                    <form action="{{ route('admin.bookings.cancel', $booking) }}" method="POST"
+                                        class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Cancel Booking"
+                                            onclick="return confirm('Are you sure you want to cancel this booking?')">
+                                            <i class="bi bi-x-circle"></i>
+                                        </button>
+                                    </form>
+                                @endif
                             @endif
                         </td>
                     </tr>

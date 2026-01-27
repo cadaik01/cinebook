@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Mail\PasswordResetMail;
-use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
 /**
@@ -83,8 +82,8 @@ class PasswordResetController extends Controller
                 ->withErrors(['token' => 'Password reset link is invalid or expired. Please request again.']);
         }
         
-        // Check if token is expired (60 minutes)
-        if (Carbon::parse($resetRecord->created_at)->addMinutes(60)->isPast()) {
+        // Check if token is expired (10 minutes)
+        if (Carbon::parse($resetRecord->created_at)->addMinutes(10)->isPast()) {
             DB::table('password_reset_tokens')->where('email', $email)->delete();
             return redirect('/password/forgot')
                 ->withErrors(['token' => 'Password reset link has expired. Please request again.']);
@@ -116,14 +115,14 @@ class PasswordResetController extends Controller
             return back()->withErrors(['token' => 'Invalid token!']);
         }
 
-        // Check if token is expired (valid for 60 minutes)
-        if (Carbon::parse($resetRecord->created_at)->addMinutes(60)->isPast()) {
+        // Check if token is expired (valid for 10 minutes)
+        if (Carbon::parse($resetRecord->created_at)->addMinutes(10)->isPast()) {
             return back()->withErrors(['token' => 'Token has expired. Please request a new password reset.']);
         }
 
         // Update password
         User::where('email', $request->email)
-            ->update(['password' => Hash::make($request->password)]);
+            ->update(['password' => $request->password]);
 
         // Delete used token
         DB::table('password_reset_tokens')->where('email', $request->email)->delete();
