@@ -82,11 +82,8 @@ class BookingController extends Controller
     */
     public function bookSeats(Request $request, $showtime_id)
     {
-        //1. Check if user is logged in
+        // User authentication is handled by middleware now
         $user_id = Session::get('user_id');
-        if (!$user_id) {
-            return redirect('/login')->with('error', 'Please log in to book seats.');
-        }
         
         //2. Get selected seats from request (support both array and JSON string)
         $seatsInput = $request->input('seats', '[]');

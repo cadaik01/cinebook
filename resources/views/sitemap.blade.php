@@ -16,135 +16,7 @@
 @section('title', 'Sitemap - TCA Cine')
 
 @push('styles')
-<style>
-    /* ==================== Sitemap Page Styles ==================== */
-    .sitemap-container {
-        max-width: 1200px;
-        margin: 40px auto;
-        padding: 20px;
-    }
-
-    .sitemap-header {
-        text-align: center;
-        margin-bottom: 50px;
-    }
-
-    .sitemap-header h1 {
-        font-size: 2.5rem;
-        color: var(--color-primary, #1a2233);
-        margin-bottom: 10px;
-    }
-
-    .sitemap-header p {
-        font-size: 1.1rem;
-        color: #666;
-    }
-
-    /* Sitemap Grid Layout */
-    .sitemap-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 30px;
-        margin-bottom: 40px;
-    }
-
-    /* Section Card */
-    .sitemap-section {
-        background: #fff;
-        border: 2px solid #e0e0e0;
-        border-radius: 12px;
-        padding: 25px;
-        transition: all 0.3s;
-    }
-
-    .sitemap-section:hover {
-        border-color: var(--color-accent, #f7c873);
-        box-shadow: 0 4px 20px rgba(247, 200, 115, 0.2);
-        transform: translateY(-3px);
-    }
-
-    .sitemap-section h2 {
-        font-size: 1.5rem;
-        color: var(--color-primary, #1a2233);
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        border-bottom: 2px solid var(--color-accent, #f7c873);
-        padding-bottom: 10px;
-    }
-
-    .sitemap-section .icon {
-        font-size: 1.8rem;
-    }
-
-    /* Link List */
-    .sitemap-links {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .sitemap-links li {
-        margin-bottom: 12px;
-    }
-
-    .sitemap-links a {
-        color: #555;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        border-radius: 6px;
-        transition: all 0.2s;
-    }
-
-    .sitemap-links a:hover {
-        background: var(--color-accent, #f7c873);
-        color: var(--color-primary, #1a2233);
-        padding-left: 16px;
-    }
-
-    .sitemap-links a i {
-        font-size: 0.9rem;
-        width: 16px;
-    }
-
-    /* Subsection */
-    .sitemap-subsection {
-        margin-top: 15px;
-        padding-left: 20px;
-        border-left: 2px solid #e0e0e0;
-    }
-
-    .sitemap-subsection h3 {
-        font-size: 1.1rem;
-        color: #008080;
-        margin-bottom: 10px;
-    }
-
-    /* Special Admin Section */
-    .admin-section {
-        background: linear-gradient(135deg, #fff9e6 0%, #fff 100%);
-        border-color: #ffc107;
-    }
-
-    .admin-section:hover {
-        border-color: #ff9800;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .sitemap-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .sitemap-header h1 {
-            font-size: 2rem;
-        }
-    }
-</style>
+@vite('resources/css/sitemap.css')
 @endpush
 
 @section('content')
@@ -152,6 +24,8 @@
     <div class="sitemap-header">
         <h1>🗺️ Site Map</h1>
         <p>Complete navigation guide to all pages and features of TCA Cine</p>
+        </br>
+        <p>Please login with your <strong>admin account </strong> to be able to access all website features.</p>
     </div>
 
     <div class="sitemap-grid">
@@ -161,7 +35,8 @@
             <ul class="sitemap-links">
                 <li><a href="{{ route('homepage') }}"><i class="fas fa-home"></i> Homepage</a></li>
                 <li><a href="{{ route('now_showing') }}"><i class="fas fa-film"></i> Now Showing</a></li>
-                <li><a href="{{ route('upcoming_movies') }}"><i class="fas fa-calendar-alt"></i> Upcoming Movies</a></li>
+                <li><a href="{{ route('upcoming_movies') }}"><i class="fas fa-calendar-alt"></i> Upcoming Movies</a>
+                </li>
                 <li><a href="{{ route('promotions') }}"><i class="fas fa-gift"></i> Promotions & Offers</a></li>
                 <li><a href="{{ route('sitemap') }}"><i class="fas fa-sitemap"></i> Sitemap</a></li>
             </ul>
@@ -203,7 +78,8 @@
                 <li><a href="{{ route('user.bookings.list') }}"><i class="fas fa-ticket-alt"></i> My Bookings</a></li>
                 <li><a href="{{ route('user.reviews.list') }}"><i class="fas fa-comment"></i> My Reviews</a></li>
                 <li><a href="{{ route('user.profile.edit') }}"><i class="fas fa-edit"></i> Edit Profile</a></li>
-                <li><a href="{{ route('user.profile.change-password') }}"><i class="fas fa-key"></i> Change Password</a></li>
+                <li><a href="{{ route('user.profile.change-password') }}"><i class="fas fa-key"></i> Change Password</a>
+                </li>
                 @endauth
             </ul>
             <div class="sitemap-subsection">
@@ -224,10 +100,14 @@
             <div class="sitemap-subsection">
                 <h3>Categories</h3>
                 <ul class="sitemap-links">
-                    <li><a href="{{ route('promotions') }}#cinema-gifts"><i class="fas fa-gift"></i> Cinema Gifts</a></li>
-                    <li><a href="{{ route('promotions') }}#member-rewards"><i class="fas fa-crown"></i> Member Rewards</a></li>
-                    <li><a href="{{ route('promotions') }}#student-deals"><i class="fas fa-graduation-cap"></i> Student Deals</a></li>
-                    <li><a href="{{ route('promotions') }}#seasonal"><i class="fas fa-calendar-check"></i> Seasonal Offers</a></li>
+                    <li><a href="{{ route('promotions') }}#cinema-gifts"><i class="fas fa-gift"></i> Cinema Gifts</a>
+                    </li>
+                    <li><a href="{{ route('promotions') }}#member-rewards"><i class="fas fa-crown"></i> Member
+                            Rewards</a></li>
+                    <li><a href="{{ route('promotions') }}#student-deals"><i class="fas fa-graduation-cap"></i> Student
+                            Deals</a></li>
+                    <li><a href="{{ route('promotions') }}#seasonal"><i class="fas fa-calendar-check"></i> Seasonal
+                            Offers</a></li>
                 </ul>
             </div>
         </div>
@@ -235,7 +115,7 @@
         @php
         $currentUser = session('user_id') ? \App\Models\User::find(session('user_id')) : null;
         @endphp
-        
+
         @if($currentUser && $currentUser->role === 'admin')
         <!-- Admin Panel -->
         <div class="sitemap-section admin-section">
@@ -244,12 +124,15 @@
                 <li><a href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 <li><a href="{{ route('admin.movies.index') }}"><i class="fas fa-film"></i> Manage Movies</a></li>
                 <li><a href="{{ route('admin.rooms.index') }}"><i class="fas fa-door-open"></i> Manage Rooms</a></li>
-                <li><a href="{{ route('admin.showtimes.index') }}"><i class="fas fa-clock"></i> Manage Showtimes</a></li>
-                <li><a href="{{ route('admin.bookings.index') }}"><i class="fas fa-ticket-alt"></i> Manage Bookings</a></li>
+                <li><a href="{{ route('admin.showtimes.index') }}"><i class="fas fa-clock"></i> Manage Showtimes</a>
+                </li>
+                <li><a href="{{ route('admin.bookings.index') }}"><i class="fas fa-ticket-alt"></i> Manage Bookings</a>
+                </li>
                 <li><a href="{{ route('admin.users.index') }}"><i class="fas fa-users"></i> Manage Users</a></li>
                 <li><a href="{{ route('admin.reviews.index') }}"><i class="fas fa-comments"></i> Manage Reviews</a></li>
                 <li><a href="{{ route('admin.qr.index') }}"><i class="fas fa-qrcode"></i> QR Check-in</a></li>
-                <li><a href="{{ route('admin.seat_types.edit_prices') }}"><i class="fas fa-dollar-sign"></i> Seat Pricing</a></li>
+                <li><a href="{{ route('admin.seat_types.edit_prices') }}"><i class="fas fa-dollar-sign"></i> Seat
+                        Pricing</a></li>
             </ul>
         </div>
         @endif
@@ -268,7 +151,8 @@
 
     <!-- Back to Top -->
     <div style="text-align: center; margin-top: 40px;">
-        <a href="#" style="display: inline-block; background: var(--color-accent, #f7c873); color: var(--color-primary, #1a2233); padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+        <a href="#"
+            style="display: inline-block; background: var(--color-accent, #f7c873); color: var(--color-primary, #1a2233); padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             <i class="fas fa-arrow-up"></i> Back to Top
         </a>
     </div>

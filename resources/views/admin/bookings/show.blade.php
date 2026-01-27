@@ -31,21 +31,21 @@
                 <!-- Status Badges -->
                 <div class="mb-4">
                     @if($booking->status == 'confirmed')
-                        <span class="badge bg-success fs-6">Confirmed</span>
+                    <span class="badge bg-success fs-6">Confirmed</span>
                     @elseif($booking->status == 'pending')
-                        <span class="badge bg-warning fs-6">Pending</span>
+                    <span class="badge bg-warning fs-6">Pending</span>
                     @elseif($booking->status == 'cancelled')
-                        <span class="badge bg-danger fs-6">Cancelled</span>
+                    <span class="badge bg-danger fs-6">Cancelled</span>
                     @else
-                        <span class="badge bg-secondary fs-6">{{ ucfirst($booking->status) }}</span>
+                    <span class="badge bg-secondary fs-6">{{ ucfirst($booking->status) }}</span>
                     @endif
 
                     @if($booking->payment_status == 'paid')
-                        <span class="badge bg-success fs-6">Paid</span>
+                    <span class="badge bg-success fs-6">Paid</span>
                     @elseif($booking->payment_status == 'refunded')
-                        <span class="badge bg-info fs-6">Refunded</span>
+                    <span class="badge bg-info fs-6">Refunded</span>
                     @else
-                        <span class="badge bg-warning fs-6">{{ ucfirst($booking->payment_status) }}</span>
+                    <span class="badge bg-warning fs-6">{{ ucfirst($booking->payment_status) }}</span>
                     @endif
                 </div>
 
@@ -53,8 +53,7 @@
                 <div class="row mb-4">
                     <div class="col-md-4">
                         <img src="{{ $booking->showtime->movie->poster_url }}"
-                             alt="{{ $booking->showtime->movie->title }}"
-                             class="img-fluid rounded">
+                            alt="{{ $booking->showtime->movie->title }}" class="img-fluid rounded">
                     </div>
                     <div class="col-md-8">
                         <h4 style="color: var(--prussian-blue)">{{ $booking->showtime->movie->title }}</h4>
@@ -62,11 +61,15 @@
                         <div class="row mt-3">
                             <div class="col-6 mb-2">
                                 <p class="text-muted mb-1"><small>SHOW DATE</small></p>
-                                <p class="mb-0"><strong>{{ $booking->showtime->show_date->format('l, M d, Y') }}</strong></p>
+                                <p class="mb-0">
+                                    <strong>{{ $booking->showtime->show_date->format('l, M d, Y') }}</strong>
+                                </p>
                             </div>
                             <div class="col-6 mb-2">
                                 <p class="text-muted mb-1"><small>SHOW TIME</small></p>
-                                <p class="mb-0"><strong>{{ \Carbon\Carbon::parse($booking->showtime->show_time)->format('h:i A') }}</strong></p>
+                                <p class="mb-0">
+                                    <strong>{{ \Carbon\Carbon::parse($booking->showtime->show_time)->format('h:i A') }}</strong>
+                                </p>
                             </div>
                             <div class="col-6 mb-2">
                                 <p class="text-muted mb-1"><small>ROOM</small></p>
@@ -76,12 +79,12 @@
                                 <p class="text-muted mb-1"><small>SCREEN TYPE</small></p>
                                 <p class="mb-0">
                                     @php
-                                        $screenTypeBg = match($booking->showtime->room->screenType->name) {
-                                            '2D' => 'bg-primary',
-                                            '3D' => 'bg-success',
-                                            'IMAX' => 'bg-danger',
-                                            default => 'bg-secondary'
-                                        };
+                                    $screenTypeBg = match($booking->showtime->room->screenType->name) {
+                                    '2D' => 'bg-primary',
+                                    '3D' => 'bg-success',
+                                    'IMAX' => 'bg-danger',
+                                    default => 'bg-secondary'
+                                    };
                                     @endphp
                                     <span class="badge {{ $screenTypeBg }}">
                                         {{ $booking->showtime->room->screenType->name }}
@@ -98,15 +101,16 @@
                 <h5 style="color: var(--prussian-blue)"><i class="bi bi-grid-3x3"></i> Booked Seats</h5>
                 <div class="row">
                     @foreach($booking->bookingSeats as $bookingSeat)
-                        <div class="col-md-3 mb-3">
-                            <div class="card">
-                                <div class="card-body text-center">
-                                    <h3 class="mb-1" style="color: var(--deep-teal)">{{ $bookingSeat->seat->seat_code }}</h3>
-                                    <small class="text-muted">{{ ucfirst($bookingSeat->seat->seatType->name) }}</small>
-                                    <p class="mb-0 mt-2"><strong>{{ number_format($bookingSeat->price) }}₫</strong></p>
-                                </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h3 class="mb-1" style="color: var(--deep-teal)">{{ $bookingSeat->seat->seat_code }}
+                                </h3>
+                                <small class="text-muted">{{ ucfirst($bookingSeat->seat->seatType->name) }}</small>
+                                <p class="mb-0 mt-2"><strong>{{ number_format($bookingSeat->price) }}₫</strong></p>
                             </div>
                         </div>
+                    </div>
                     @endforeach
                 </div>
 
@@ -122,7 +126,9 @@
                             </tr>
                             <tr class="table-active">
                                 <td><strong>Total</strong></td>
-                                <td class="text-end"><strong class="text-success h5">{{ number_format($booking->total_price) }}₫</strong></td>
+                                <td class="text-end"><strong
+                                        class="text-success h5">{{ number_format($booking->total_price) }}₫</strong>
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -141,10 +147,10 @@
                 <p class="mb-2"><strong>Name:</strong><br>{{ $booking->user->name }}</p>
                 <p class="mb-2"><strong>Email:</strong><br>{{ $booking->user->email }}</p>
                 @if($booking->user->phone)
-                    <p class="mb-2"><strong>Phone:</strong><br>{{ $booking->user->phone }}</p>
+                <p class="mb-2"><strong>Phone:</strong><br>{{ $booking->user->phone }}</p>
                 @endif
                 @if($booking->user->city)
-                    <p class="mb-0"><strong>City:</strong><br>{{ $booking->user->city }}</p>
+                <p class="mb-0"><strong>City:</strong><br>{{ $booking->user->city }}</p>
                 @endif
             </div>
         </div>
@@ -162,11 +168,11 @@
                 <p class="mb-2">
                     <strong>Status:</strong><br>
                     @if($booking->payment_status == 'paid')
-                        <span class="badge bg-success">Paid</span>
+                    <span class="badge bg-success">Paid</span>
                     @elseif($booking->payment_status == 'refunded')
-                        <span class="badge bg-info">Refunded</span>
+                    <span class="badge bg-info">Refunded</span>
                     @else
-                        <span class="badge bg-warning">{{ ucfirst($booking->payment_status) }}</span>
+                    <span class="badge bg-warning">{{ ucfirst($booking->payment_status) }}</span>
                     @endif
                 </p>
                 <p class="mb-0">
@@ -191,10 +197,10 @@
                     <code>{{ $booking->qr_code }}</code>
                 </p>
                 @if($booking->expired_at)
-                    <p class="mb-2">
-                        <strong>Expired At:</strong><br>
-                        {{ $booking->expired_at->format('M d, Y h:i A') }}
-                    </p>
+                <p class="mb-2">
+                    <strong>Expired At:</strong><br>
+                    {{ $booking->expired_at->format('M d, Y h:i A') }}
+                </p>
                 @endif
                 <p class="mb-0">
                     <strong>Last Updated:</strong><br>
@@ -205,18 +211,34 @@
 
         <!-- Actions -->
         @if($booking->status == 'confirmed' || $booking->status == 'pending')
-            <div class="card mt-4 border-danger">
-                <div class="card-body">
-                    <h6 class="text-danger">Admin Actions</h6>
-                    <form action="{{ route('admin.bookings.cancel', $booking) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-danger w-100"
-                                onclick="return confirm('Are you sure you want to cancel this booking? This will refund the customer if payment was made.')">
-                            <i class="bi bi-x-circle"></i> Cancel Booking
-                        </button>
-                    </form>
+        @php
+        // Check if showtime has ended
+        $showtimeEnded = $booking->showtime->status === 'done';
+        @endphp
+
+        <div class="card mt-4 border-danger">
+            <div class="card-body">
+                <h6 class="text-danger">Admin Actions</h6>
+
+                @if($showtimeEnded)
+                <div class="alert alert-warning mb-3">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <strong>Showtime Ended:</strong> Cannot cancel booking as the showtime has already finished.
                 </div>
+                <button type="button" class="btn btn-secondary w-100" disabled>
+                    <i class="bi bi-x-circle"></i> Cancel Booking (Not Available)
+                </button>
+                @else
+                <form action="{{ route('admin.bookings.cancel', $booking) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-danger w-100"
+                        onclick="return confirm('Are you sure you want to cancel this booking? This will refund the customer if payment was made.')">
+                        <i class="bi bi-x-circle"></i> Cancel Booking
+                    </button>
+                </form>
+                @endif
             </div>
+        </div>
         @endif
     </div>
 </div>

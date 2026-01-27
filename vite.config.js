@@ -25,6 +25,7 @@ export default defineConfig({
                 "resources/css/profile_reviews.css",
                 "resources/css/root.css",
                 "resources/css/qr_checkin.css",
+                "resources/css/sitemap.css",
                 "resources/css/admin-room-create.css",
                 "resources/css/admin-room-edit.css",
                 "resources/css/admin-room-index.css",

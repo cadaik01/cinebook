@@ -97,6 +97,7 @@
                         <th>Screen Type</th>
                         <th>Date</th>
                         <th>Time</th>
+                        <th>Status</th>
                         <th>Seats Status</th>
                         <th>Actions</th>
                     </tr>
@@ -104,22 +105,7 @@
                 <tbody>
                     @foreach($showtimes as $showtime)
                     @php
-                    // Refresh showtime seats after ensuring they exist
-                    $showtime->load('showtimeSeats');
-
-                    $totalRoomSeats = $showtime->room->seats->count();
-                    $showtimeSeats = $showtime->showtimeSeats;
-
-                    $bookedSeats = $showtimeSeats->where('status', 'booked')->count();
-                    $lockedSeats = $showtimeSeats->where('status', 'locked')->count();
-                    $availableSeats = $showtimeSeats->where('status', 'available')->count();
-
-                    // If showtime seats don't match room seats count, show total room seats
-                    if ($showtimeSeats->count() !== $totalRoomSeats) {
-                    $availableSeats = $totalRoomSeats - $bookedSeats - $lockedSeats;
-                    }
-
-                    $totalSeats = $totalRoomSeats;
+                    $seatStats = $showtime->seat_stats;
                     @endphp
                     <tr>
                         <td>{{ $showtime->id }}</td>
@@ -144,17 +130,19 @@
                         <td>{{ $showtime->show_date->format('M d, Y') }}</td>
                         <td>{{ \Carbon\Carbon::parse($showtime->show_time)->format('h:i A') }}</td>
                         <td>
+                            <span class="badge {{ $showtime->status_class }}">
+                                {{ ucfirst($showtime->status) }}
+                            </span>
+                        </td>
+                        <td>
                             <small>
-                                <span class="text-success">{{ $availableSeats }} available</span> /
-                                <span class="text-warning">{{ $lockedSeats }} locked</span> /
-                                <span class="text-danger">{{ $bookedSeats }} booked</span>
+                                <span class="text-success">{{ $seatStats['available'] }} available</span> /
+                                <span class="text-danger">{{ $seatStats['booked'] }} booked</span>
                             </small>
-                            @if($totalSeats > 0)
+                            @if($seatStats['total'] > 0)
                             <div class="progress mt-1" style="height: 5px;">
                                 <div class="progress-bar bg-danger"
-                                    style="width: {{ ($bookedSeats/$totalSeats)*100 }}%"></div>
-                                <div class="progress-bar bg-warning"
-                                    style="width: {{ ($lockedSeats/$totalSeats)*100 }}%"></div>
+                                    style="width: {{ $seatStats['booked_percentage'] }}%"></div>
                             </div>
                             @else
                             <div class="text-muted small mt-1">No seats configured</div>
@@ -165,6 +153,18 @@
                                 class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil"></i>
                             </a>
+
+                            @php
+                            $hasBookings = $showtime->bookings()->exists() ||
+                            $showtime->showtimeSeats()->whereIn('status', ['booked', 'reserved'])->exists();
+                            @endphp
+
+                            @if($hasBookings)
+                            <button type="button" class="btn btn-sm btn-outline-secondary" disabled
+                                title="Cannot delete - has bookings">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                            @else
                             <form action="{{ route('admin.showtimes.destroy', $showtime) }}" method="POST"
                                 class="d-inline">
                                 @csrf
@@ -174,6 +174,7 @@
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                     @endforeach

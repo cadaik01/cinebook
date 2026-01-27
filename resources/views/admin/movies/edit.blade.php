@@ -41,9 +41,9 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Director</label>
+                    <label class="form-label">Director <span style="color: red;">*</span></label>
                     <input type="text" name="director" class="form-control @error('director') is-invalid @enderror" 
-                           value="{{ old('director', $movie->director) }}">
+                           value="{{ old('director', $movie->director) }}" required>
                     @error('director')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

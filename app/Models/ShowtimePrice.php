@@ -12,4 +12,20 @@ class ShowtimePrice extends Model
     public $timestamps = false;
 
     protected $fillable = ['showtime_id', 'seat_type_id', 'price'];
+
+    /**
+     * Get the showtime that this price belongs to
+     */
+    public function showtime()
+    {
+        return $this->belongsTo(Showtime::class);
+    }
+
+    /**
+     * Get the seat type for this price
+     */
+    public function seatType()
+    {
+        return $this->belongsTo(SeatType::class);
+    }
 }

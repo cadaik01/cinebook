@@ -154,14 +154,6 @@
                                             <i class="bi bi-pencil"></i>
                                         </a>
                                         @if($user->id !== auth()->id())
-                                            <form action="{{ route('admin.users.toggle-role', $user) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                <button type="submit" class="btn btn-sm btn-outline-warning"
-                                                        title="Toggle Role ({{ $user->role === 'admin' ? 'Make User' : 'Make Admin' }})"
-                                                        onclick="return confirm('Are you sure you want to change this user\'s role?')">
-                                                    <i class="bi bi-arrow-repeat"></i>
-                                                </button>
-                                            </form>
                                             <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')

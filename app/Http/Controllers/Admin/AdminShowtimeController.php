@@ -159,53 +159,28 @@ class AdminShowtimeController extends Controller
     public function edit(Showtime $showtime)
     {
         $showtime->load(['movie', 'room.screenType', 'showtimePrices.seatType', 'showtimeSeats']);
+        
+        // Always restrict to pricing only
+        $hasBookings = true; // Force restriction mode
+        
         $movies = Movie::where('status', 'now_showing')->orderBy('title')->get();
         $rooms = Room::with('screenType')->orderBy('name')->get();
         $seatTypes = SeatType::all();
 
-        return view('admin.showtimes.edit', compact('showtime', 'movies', 'rooms', 'seatTypes'));
+        return view('admin.showtimes.edit', compact('showtime', 'movies', 'rooms', 'seatTypes', 'hasBookings'));
     }
 
     public function update(Request $request, Showtime $showtime)
     {
+        // Only allow pricing updates - no other fields can be modified
         $request->validate([
-            'movie_id' => 'required|exists:movies,id',
-            'room_id' => 'required|exists:rooms,id',
-            'show_date' => 'required|date',
-            'show_time' => 'required',
             'seat_type_prices' => 'required|array',
             'seat_type_prices.*' => 'required|numeric|min:0'
         ]);
-
+        
         DB::beginTransaction();
         try {
-            // Get movie duration to calculate end time
-            $movie = Movie::findOrFail($request->movie_id);
-
-            // Calculate start and end datetime for the updated showtime
-            $startDatetime = Carbon::parse($request->show_date . ' ' . $request->show_time);
-            $endDatetime = $startDatetime->copy()->addMinutes($movie->duration);
-
-            // Check for overlapping showtimes in the same room (excluding current showtime)
-            if (Showtime::hasOverlap($request->room_id, $startDatetime, $endDatetime, $showtime->id)) {
-                $overlapping = Showtime::getOverlappingShowtimes($request->room_id, $startDatetime, $endDatetime, $showtime->id);
-                $conflictInfo = $overlapping->map(function ($s) {
-                    return $s->movie->title . ' (' . $s->start_datetime->format('H:i') . ' - ' . $s->end_datetime->format('H:i') . ')';
-                })->join(', ');
-
-                return back()->with('error', 'Showtime overlaps with existing schedule: ' . $conflictInfo);
-            }
-
-            // Update showtime
-            $oldRoomId = $showtime->room_id;
-            $showtime->update([
-                'movie_id' => $request->movie_id,
-                'room_id' => $request->room_id,
-                'show_date' => $request->show_date,
-                'show_time' => $request->show_time,
-            ]);
-
-            // Update showtime prices
+            // Update showtime prices only
             foreach ($request->seat_type_prices as $seatTypeId => $price) {
                 ShowtimePrice::updateOrCreate(
                     [
@@ -215,36 +190,14 @@ class AdminShowtimeController extends Controller
                     ['price' => $price]
                 );
             }
-
-            // If room changed, update showtime seats
-            if ($oldRoomId != $request->room_id) {
-                // Check if there are any bookings first
-                if ($showtime->bookings()->exists()) {
-                    DB::rollBack();
-                    return back()->with('error', 'Cannot change room for showtime with existing bookings!');
-                }
-
-                // Delete old showtime seats
-                ShowtimeSeat::where('showtime_id', $showtime->id)->delete();
-
-                // Create new showtime seats for the new room
-                $newRoom = Room::with('seats')->find($request->room_id);
-                foreach ($newRoom->seats as $seat) {
-                    ShowtimeSeat::create([
-                        'showtime_id' => $showtime->id,
-                        'seat_id' => $seat->id,
-                        'status' => 'available',
-                    ]);
-                }
-            }
-
+            
             DB::commit();
             return redirect()->route('admin.showtimes.index')
-                ->with('success', 'Showtime updated successfully!');
-
+                ->with('success', 'Peak hour pricing updated successfully!');
+                
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Failed to update showtime: ' . $e->getMessage());
+            return back()->with('error', 'Failed to update pricing: ' . $e->getMessage());
         }
     }
 
@@ -252,12 +205,21 @@ class AdminShowtimeController extends Controller
     {
         DB::beginTransaction();
         try {
-            // Check if there are any bookings
+            // Check if there are any confirmed bookings
             if ($showtime->bookings()->exists()) {
-                return back()->with('error', 'Cannot delete showtime with existing bookings!');
+                return back()->with('error', 'Cannot delete showtime - there are existing customer bookings!');
             }
 
-            // Delete showtime seats
+            // Check if there are any seats that are booked or reserved
+            $hasBookedSeats = $showtime->showtimeSeats()
+                ->whereIn('status', ['booked', 'reserved'])
+                ->exists();
+                
+            if ($hasBookedSeats) {
+                return back()->with('error', 'Cannot delete showtime - there are booked or reserved seats!');
+            }
+
+            // Delete showtime seats (only available ones should remain at this point)
             $showtime->showtimeSeats()->delete();
 
             // Delete showtime prices

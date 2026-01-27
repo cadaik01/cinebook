@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Mail\PasswordResetMail;
-use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
 /**
@@ -86,7 +85,7 @@ class PasswordResetController extends Controller
         }
         
         // Check if token is expired (configurable in config/auth.php)
-        $expireMinutes = config('auth.passwords.users.expire', 10);
+        $expireMinutes = config('auth.passwords.users.expire', 60);
         $createdAt = Carbon::parse($resetRecord->created_at);
         $expiresAt = $createdAt->addMinutes($expireMinutes);
         
@@ -128,7 +127,7 @@ class PasswordResetController extends Controller
         }
 
         // Check if token is expired (configurable in config/auth.php)
-        $expireMinutes = config('auth.passwords.users.expire', 10);
+        $expireMinutes = config('auth.passwords.users.expire', 60);
         $createdAt = Carbon::parse($resetRecord->created_at);
         $expiresAt = $createdAt->addMinutes($expireMinutes);
         
@@ -138,7 +137,7 @@ class PasswordResetController extends Controller
 
         // Update password
         User::where('email', $email)
-            ->update(['password' => Hash::make($password)]);
+            ->update(['password' => $password]);
 
         // Delete used token
         DB::table('password_reset_tokens')->where('email', $email)->delete();

@@ -42,6 +42,11 @@ class AdminBookingController extends Controller
             $query->whereDate('booking_date', $request->date);
         }
 
+        // Filter by showtime
+        if ($request->showtime_id) {
+            $query->where('showtime_id', $request->showtime_id);
+        }
+
         // Search by user email or booking ID
         if ($request->search) {
             $search = $request->search;
@@ -54,7 +59,20 @@ class AdminBookingController extends Controller
             });
         }
 
-        $bookings = $query->orderBy('created_at', 'desc')->paginate(20);
+        // Sort by showtime date and time, then by created_at
+        $bookings = $query->join('showtimes', 'bookings.showtime_id', '=', 'showtimes.id')
+                         ->orderBy('showtimes.show_date', 'desc')
+                         ->orderBy('showtimes.show_time', 'desc')
+                         ->orderBy('bookings.created_at', 'desc')
+                         ->select('bookings.*')
+                         ->paginate(20);
+
+        // Get showtimes for filter dropdown (only future and recent showtimes)
+        $showtimes = \App\Models\Showtime::with(['movie', 'room'])
+                    ->where('show_date', '>=', now()->subDays(7))
+                    ->orderBy('show_date', 'desc')
+                    ->orderBy('show_time', 'desc')
+                    ->get();
 
         // Statistics
         $stats = [
@@ -67,7 +85,7 @@ class AdminBookingController extends Controller
             'today_bookings' => Booking::whereDate('created_at', Carbon::today())->count(),
         ];
 
-        return view('admin.bookings.index', compact('bookings', 'stats'));
+        return view('admin.bookings.index', compact('bookings', 'showtimes', 'stats'));
     }
 
     // Booking Detail Page
@@ -88,6 +106,12 @@ class AdminBookingController extends Controller
     {
         if ($booking->status === 'cancelled' || $booking->status === 'expired') {
             return back()->with('error', 'Booking is already cancelled or expired!');
+        }
+
+        // Check if showtime has ended - cannot cancel booking for ended showtimes
+        $booking->load('showtime.movie');
+        if ($booking->showtime->status === 'done') {
+            return back()->with('error', 'Cannot cancel booking - the showtime has already ended!');
         }
 
         DB::beginTransaction();
