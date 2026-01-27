@@ -225,3 +225,17 @@ CREATE TABLE reviews (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE
 );
+
+--PROMOTIONS
+CREATE TABLE promotions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    image VARCHAR(255),
+    status ENUM('active', 'upcoming', 'ended') DEFAULT 'upcoming',
+    
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    INDEX idx_status (status)
+);
