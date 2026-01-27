@@ -338,30 +338,30 @@
                     {{-- Generate QR Code Image with error handling --}}
                     @php
                         try {
-                            // Use BaconQrCode with SVG backend (no Imagick required)
-                            $renderer = new \BaconQrCode\Renderer\ImageRenderer(
-                                new \BaconQrCode\Renderer\RendererStyle\RendererStyle(220, 1),
-                                new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
-                            );
-                            $writer = new \BaconQrCode\Writer($renderer);
-                            $qrImage = base64_encode($writer->writeString($qrCode));
-                            $qrImageType = 'svg+xml';
+                            // Use Endroid QR Code with GD writer (no Imagick required)
+                            $qrCode_obj = \Endroid\QrCode\Builder\Builder::create()
+                                ->data($qrCode)
+                                ->size(220)
+                                ->margin(10)
+                                ->build();
+                            
+                            $qrImage = base64_encode($qrCode_obj->getString());
+                            $qrSuccess = true;
                         } catch (\Exception $e) {
                             \Log::error('QR Code generation failed: ' . $e->getMessage(), [
                                 'booking_id' => $booking->id,
                                 'qr_code' => $qrCode,
-                                'exception' => $e->getTraceAsString()
                             ]);
                             $qrImage = '';
-                            $qrImageType = 'svg+xml';
+                            $qrSuccess = false;
                         }
                     @endphp
                     
-                    @if($qrImage)
-                        <img src="data:image/{{ $qrImageType }};base64,{{ $qrImage }}" alt="QR Code - {{ $seats->map(fn($s) => $s->seat->seat_code)->join(', ') }}">
+                    @if($qrSuccess)
+                        <img src="data:image/png;base64,{{ $qrImage }}" alt="QR Code - {{ $seats->map(fn($s) => $s->seat->seat_code)->join(', ') }}" style="max-width: 220px; display: block; margin: 10px auto;">
                     @else
                         <p style="color: #dc3545;">Unable to generate QR code. Please contact support.</p>
-                        <p style="color: #6c757d; font-size: 12px;">Error logged for booking #{{ $booking->id }}</p>
+                        <p style="color: #6c757d; font-size: 12px;">QR: {{ substr($qrCode, 0, 40) }}...</p>
                     @endif
                     
                     <p class="qr-text">{{ $qrCode }}</p>
