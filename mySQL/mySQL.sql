@@ -229,13 +229,22 @@ CREATE TABLE reviews (
 --PROMOTIONS
 CREATE TABLE promotions (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    category ENUM('cinema-gifts', 'member-rewards', 'student-deals', 'seasonal') NOT NULL,
+    icon VARCHAR(10) NOT NULL,
     title VARCHAR(200) NOT NULL,
-    description TEXT,
-    image VARCHAR(255),
-    status ENUM('active', 'upcoming', 'ended') DEFAULT 'upcoming',
+    description TEXT NOT NULL,
+    details_title VARCHAR(100),
+    details_items JSON,
+    cta_text VARCHAR(50) NOT NULL,
+    cta_link VARCHAR(255) NOT NULL,
+    validity_text VARCHAR(100),
+    status ENUM('active', 'upcoming', 'ended') DEFAULT 'active',
+    display_order INT DEFAULT 0,
     
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     
-    INDEX idx_status (status)
+    INDEX idx_category (category),
+    INDEX idx_status (status),
+    INDEX idx_display_order (display_order)
 );

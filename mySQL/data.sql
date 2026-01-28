@@ -42,35 +42,35 @@ INSERT INTO genres (id, name) VALUES
 INSERT INTO movies (id, title, language, director, cast, duration, release_date, age_rating, status, poster_url, trailer_url, description, rating_avg) VALUES
 
 -- ================= NOW SHOWING (15 phim) =================
-(1, 'Avengers: Endgame', 'English', 'Anthony Russo, Joe Russo', 'Robert Downey Jr., Chris Evans, Chris Hemsworth, Scarlett Johansson, Mark Ruffalo', 181, '2025-12-20', 'T13', 'now_showing', 'https://i.postimg.cc/NGPSNkJj/Avengers-Endgame.jpg', 'https://www.youtube.com/watch?v=TcMBFSGVi1c', 'After the devastating events caused by Thanos, the universe is left in ruins. With half of all life erased, the remaining Avengers struggle to cope with loss, guilt, and failure. When a new opportunity emerges to reverse the catastrophe, the team reunites for one final mission. This emotional and action-packed conclusion delivers epic battles, heartfelt sacrifices, and a powerful farewell to beloved heroes, serving as the culmination of over a decade of storytelling in the Marvel Cinematic Universe.', 4.8),
+(1, 'Avengers: Endgame', 'English', 'Anthony Russo, Joe Russo', 'Robert Downey Jr., Chris Evans, Chris Hemsworth, Scarlett Johansson, Mark Ruffalo', 181, '2026-01-31', 'T13', 'now_showing', 'https://i.postimg.cc/NGPSNkJj/Avengers-Endgame.jpg', 'https://www.youtube.com/watch?v=TcMBFSGVi1c', 'After the devastating events caused by Thanos, the universe is left in ruins. With half of all life erased, the remaining Avengers struggle to cope with loss, guilt, and failure. When a new opportunity emerges to reverse the catastrophe, the team reunites for one final mission. This emotional and action-packed conclusion delivers epic battles, heartfelt sacrifices, and a powerful farewell to beloved heroes, serving as the culmination of over a decade of storytelling in the Marvel Cinematic Universe.', 4.8),
 
-(2, 'John Wick: Chapter 4', 'English', 'Chad Stahelski', 'Keanu Reeves, Donnie Yen, Bill Skarsgård, Laurence Fishburne, Ian McShane', 169, '2026-01-05', 'T18', 'now_showing', 'https://i.postimg.cc/zvJdvVGY/John_Wick_Chapter_4.jpg', 'https://www.youtube.com/watch?v=qEVUtrk8_B4', 'John Wick uncovers a path to defeating the High Table, but before earning his freedom, he must confront a powerful new enemy with alliances spanning the globe. From New York to Paris, the assassin faces relentless battles that push his skills and endurance to the limit. With breathtaking choreography, intense gun-fu action, and deeper exploration of John\'s code and motivations, this chapter elevates the franchise to its most ambitious level yet.', 4.7),
+(2, 'John Wick: Chapter 4', 'English', 'Chad Stahelski', 'Keanu Reeves, Donnie Yen, Bill Skarsgård, Laurence Fishburne, Ian McShane', 169, '2026-01-31', 'T18', 'now_showing', 'https://i.postimg.cc/zvJdvVGY/John_Wick_Chapter_4.jpg', 'https://www.youtube.com/watch?v=qEVUtrk8_B4', 'John Wick uncovers a path to defeating the High Table, but before earning his freedom, he must confront a powerful new enemy with alliances spanning the globe. From New York to Paris, the assassin faces relentless battles that push his skills and endurance to the limit. With breathtaking choreography, intense gun-fu action, and deeper exploration of John\'s code and motivations, this chapter elevates the franchise to its most ambitious level yet.', 4.7),
 
-(3, 'Parasite', 'Korean', 'Bong Joon-ho', 'Song Kang-ho, Lee Sun-kyun, Cho Yeo-jeong, Choi Woo-shik, Park So-dam', 132, '2025-12-10', 'T16', 'now_showing', 'https://i.postimg.cc/N0fZJCc9/Parasite.jpg', 'https://www.youtube.com/watch?v=5xH0HfJHsaY', 'Greed and class discrimination threaten the symbiotic relationship between the wealthy Park family and the struggling Kim family. As deception deepens, tensions escalate into shocking consequences. Blending dark comedy, suspense, and social commentary, this Oscar-winning film offers a sharp and unsettling reflection on inequality in modern society.', 4.9),
+(3, 'Parasite', 'Korean', 'Bong Joon-ho', 'Song Kang-ho, Lee Sun-kyun, Cho Yeo-jeong, Choi Woo-shik, Park So-dam', 132, '2026-01-31', 'T16', 'now_showing', 'https://i.postimg.cc/N0fZJCc9/Parasite.jpg', 'https://www.youtube.com/watch?v=5xH0HfJHsaY', 'Greed and class discrimination threaten the symbiotic relationship between the wealthy Park family and the struggling Kim family. As deception deepens, tensions escalate into shocking consequences. Blending dark comedy, suspense, and social commentary, this Oscar-winning film offers a sharp and unsettling reflection on inequality in modern society.', 4.9),
 
-(4, 'Train to Busan', 'Korean', 'Yeon Sang-ho', 'Gong Yoo, Ma Dong-seok, Jung Yu-mi, Kim Su-an, Choi Woo-shik', 118, '2025-12-18', 'T18', 'now_showing', 'https://i.postimg.cc/65JgJpXY/Train_to_Busan.jpg', 'https://www.youtube.com/watch?v=pyWuHv2-Abk', 'As a zombie outbreak spreads rapidly across South Korea, passengers trapped on a high-speed train to Busan must fight for survival. Amid the chaos, personal sacrifices and human compassion emerge. The film combines intense action, emotional storytelling, and social critique, redefining the zombie genre with heart and urgency.', 4.6),
+(4, 'Train to Busan', 'Korean', 'Yeon Sang-ho', 'Gong Yoo, Ma Dong-seok, Jung Yu-mi, Kim Su-an, Choi Woo-shik', 118, '2026-01-31', 'T18', 'now_showing', 'https://i.postimg.cc/65JgJpXY/Train_to_Busan.jpg', 'https://www.youtube.com/watch?v=pyWuHv2-Abk', 'As a zombie outbreak spreads rapidly across South Korea, passengers trapped on a high-speed train to Busan must fight for survival. Amid the chaos, personal sacrifices and human compassion emerge. The film combines intense action, emotional storytelling, and social critique, redefining the zombie genre with heart and urgency.', 4.6),
 
-(5, 'The Dark Knight', 'English', 'Christopher Nolan', 'Christian Bale, Heath Ledger, Aaron Eckhart, Gary Oldman, Michael Caine', 152, '2025-12-25', 'T16', 'now_showing', 'https://i.postimg.cc/d0HpzRs7/The_Dark_Knight.jpg', 'https://www.youtube.com/watch?v=EXeTwQWrcwY', 'Batman faces his greatest psychological and moral challenge when the Joker emerges, spreading chaos throughout Gotham City. As lines between heroism and vigilantism blur, the Dark Knight must confront the true cost of justice. Featuring an iconic performance by Heath Ledger, this film is a profound exploration of order, chaos, and sacrifice.', 4.9),
+(5, 'The Dark Knight', 'English', 'Christopher Nolan', 'Christian Bale, Heath Ledger, Aaron Eckhart, Gary Oldman, Michael Caine', 152, '2026-01-31', 'T16', 'now_showing', 'https://i.postimg.cc/d0HpzRs7/The_Dark_Knight.jpg', 'https://www.youtube.com/watch?v=EXeTwQWrcwY', 'Batman faces his greatest psychological and moral challenge when the Joker emerges, spreading chaos throughout Gotham City. As lines between heroism and vigilantism blur, the Dark Knight must confront the true cost of justice. Featuring an iconic performance by Heath Ledger, this film is a profound exploration of order, chaos, and sacrifice.', 4.9),
 
-(6, 'Avatar', 'English', 'James Cameron', 'Sam Worthington, Zoe Saldana, Sigourney Weaver, Stephen Lang, Michelle Rodriguez', 162, '2025-12-15', 'T13', 'now_showing', 'https://i.postimg.cc/kD3y0GRB/Avatar.jpg', 'https://www.youtube.com/watch?v=5PSNL1qE6VY', 'Jake Sully, a paraplegic former Marine, is sent to the distant moon Pandora as part of the Avatar Program. As he becomes immersed in the Na\'vi culture, he finds himself torn between his mission and protecting a world he grows to love. With groundbreaking visuals and an immersive alien ecosystem, Avatar delivers a powerful message about colonialism, environmentalism, and identity.', 4.6),
+(6, 'Avatar', 'English', 'James Cameron', 'Sam Worthington, Zoe Saldana, Sigourney Weaver, Stephen Lang, Michelle Rodriguez', 162, '2026-01-31', 'T13', 'now_showing', 'https://i.postimg.cc/kD3y0GRB/Avatar.jpg', 'https://www.youtube.com/watch?v=5PSNL1qE6VY', 'Jake Sully, a paraplegic former Marine, is sent to the distant moon Pandora as part of the Avatar Program. As he becomes immersed in the Na\'vi culture, he finds himself torn between his mission and protecting a world he grows to love. With groundbreaking visuals and an immersive alien ecosystem, Avatar delivers a powerful message about colonialism, environmentalism, and identity.', 4.6),
 
-(7, 'La La Land', 'English', 'Damien Chazelle', 'Ryan Gosling, Emma Stone, John Legend, Rosemarie DeWitt, J.K. Simmons', 128, '2026-01-10', 'T13', 'now_showing', 'https://i.postimg.cc/GmRWYhgB/La_La_Land.jpg', 'https://www.youtube.com/watch?v=0pdqf4P9MB8', 'Set in modern-day Los Angeles, this musical romance follows a jazz pianist and an aspiring actress as they fall in love while pursuing their dreams. As ambition and reality collide, the film explores the sacrifices required to achieve success and the bittersweet nature of love.', 4.5),
+(7, 'La La Land', 'English', 'Damien Chazelle', 'Ryan Gosling, Emma Stone, John Legend, Rosemarie DeWitt, J.K. Simmons', 128, '2026-01-31', 'T13', 'now_showing', 'https://i.postimg.cc/GmRWYhgB/La_La_Land.jpg', 'https://www.youtube.com/watch?v=0pdqf4P9MB8', 'Set in modern-day Los Angeles, this musical romance follows a jazz pianist and an aspiring actress as they fall in love while pursuing their dreams. As ambition and reality collide, the film explores the sacrifices required to achieve success and the bittersweet nature of love.', 4.5),
 
-(8, 'Your Name', 'Japanese', 'Makoto Shinkai', 'Ryunosuke Kamiki, Mone Kamishiraishi, Masami Nagasawa, Etsuko Ichihara, Ryo Narita', 112, '2025-12-22', 'T13', 'now_showing', 'https://i.postimg.cc/NfqSqjc7/Your_Name.jpg', 'https://www.youtube.com/watch?v=xU47nhruN-Q', 'Two teenagers living in different parts of Japan mysteriously begin swapping bodies. As they struggle to understand this strange connection, a deeper bond forms across time and space. Visually stunning and emotionally resonant, the film blends romance, fantasy, and destiny.', 4.7),
+(8, 'Your Name', 'Japanese', 'Makoto Shinkai', 'Ryunosuke Kamiki, Mone Kamishiraishi, Masami Nagasawa, Etsuko Ichihara, Ryo Narita', 112, '2026-01-31', 'T13', 'now_showing', 'https://i.postimg.cc/NfqSqjc7/Your_Name.jpg', 'https://www.youtube.com/watch?v=xU47nhruN-Q', 'Two teenagers living in different parts of Japan mysteriously begin swapping bodies. As they struggle to understand this strange connection, a deeper bond forms across time and space. Visually stunning and emotionally resonant, the film blends romance, fantasy, and destiny.', 4.7),
 
-(9, 'Spirited Away', 'Japanese', 'Hayao Miyazaki', 'Rumi Hiiragi, Miyu Irino, Mari Natsuki, Takashi Naito, Yasuko Sawaguchi', 125, '2025-12-28', 'P', 'now_showing', 'https://i.postimg.cc/hGPNyZBq/Spirited_Away.jpg', 'https://www.youtube.com/watch?v=ByXuk9QqQkk', 'Chihiro wanders into a mysterious spirit world ruled by gods, witches, and strange creatures. Forced to work in a bathhouse to save her parents, she embarks on a journey of courage and self-discovery. A timeless animated masterpiece filled with imagination and emotional depth.', 4.8),
+(9, 'Spirited Away', 'Japanese', 'Hayao Miyazaki', 'Rumi Hiiragi, Miyu Irino, Mari Natsuki, Takashi Naito, Yasuko Sawaguchi', 125, '2026-01-31', 'P', 'now_showing', 'https://i.postimg.cc/hGPNyZBq/Spirited_Away.jpg', 'https://www.youtube.com/watch?v=ByXuk9QqQkk', 'Chihiro wanders into a mysterious spirit world ruled by gods, witches, and strange creatures. Forced to work in a bathhouse to save her parents, she embarks on a journey of courage and self-discovery. A timeless animated masterpiece filled with imagination and emotional depth.', 4.8),
 
-(10, 'Intouchables', 'French', 'Olivier Nakache, Éric Toledano', 'François Cluzet, Omar Sy, Anne Le Ny, Audrey Fleurot, Clotilde Mollet', 112, '2026-01-12', 'P', 'now_showing', 'https://i.postimg.cc/jSTpNd3S/Intouchables.jpg', 'https://www.youtube.com/watch?v=34WIbmXkewU', 'Based on a true story, this heartwarming comedy follows the unlikely friendship between a wealthy quadriplegic and his caregiver from a disadvantaged background. Through humor and honesty, the film explores dignity, empathy, and the joy of human connection.', 4.6),
+(10, 'Intouchables', 'French', 'Olivier Nakache, Éric Toledano', 'François Cluzet, Omar Sy, Anne Le Ny, Audrey Fleurot, Clotilde Mollet', 112, '2026-01-31', 'P', 'now_showing', 'https://i.postimg.cc/jSTpNd3S/Intouchables.jpg', 'https://www.youtube.com/watch?v=34WIbmXkewU', 'Based on a true story, this heartwarming comedy follows the unlikely friendship between a wealthy quadriplegic and his caregiver from a disadvantaged background. Through humor and honesty, the film explores dignity, empathy, and the joy of human connection.', 4.6),
 
-(11, 'Toy Story', 'English', 'John Lasseter', 'Tom Hanks, Tim Allen, Don Rickles, Jim Varney, Annie Potts', 81, '2025-12-20', 'P', 'now_showing', 'https://i.postimg.cc/1RN2jNLg/Toy_Story.jpg', 'https://www.youtube.com/watch?v=KYz2wyBy3kc', 'When a new toy named Buzz Lightyear arrives, Woody feels threatened and jealous. As rivalry turns into friendship, the toys learn about loyalty and teamwork. Toy Story marked the beginning of a new era in animation with its charm, humor, and heartfelt storytelling.', 4.6),
+(11, 'Toy Story', 'English', 'John Lasseter', 'Tom Hanks, Tim Allen, Don Rickles, Jim Varney, Annie Potts', 81, '2026-01-31', 'P', 'now_showing', 'https://i.postimg.cc/1RN2jNLg/Toy_Story.jpg', 'https://www.youtube.com/watch?v=KYz2wyBy3kc', 'When a new toy named Buzz Lightyear arrives, Woody feels threatened and jealous. As rivalry turns into friendship, the toys learn about loyalty and teamwork. Toy Story marked the beginning of a new era in animation with its charm, humor, and heartfelt storytelling.', 4.6),
 
-(12, 'The Conjuring', 'English', 'James Wan', 'Vera Farmiga, Patrick Wilson, Lili Taylor, Ron Livingston, Shanley Caswell', 112, '2026-01-08', 'T18', 'now_showing', 'https://i.postimg.cc/25cMPdk8/The_Conjuring.jpg', 'https://www.youtube.com/watch?v=k10ETZ41q5o', 'Paranormal investigators Ed and Lorraine Warren assist a family terrorized by a dark presence in their farmhouse. Drawing from real-life case files, the film delivers relentless suspense, atmospheric dread, and masterful horror storytelling.', 4.5),
+(12, 'The Conjuring', 'English', 'James Wan', 'Vera Farmiga, Patrick Wilson, Lili Taylor, Ron Livingston, Shanley Caswell', 112, '2026-01-31', 'T18', 'now_showing', 'https://i.postimg.cc/25cMPdk8/The_Conjuring.jpg', 'https://www.youtube.com/watch?v=k10ETZ41q5o', 'Paranormal investigators Ed and Lorraine Warren assist a family terrorized by a dark presence in their farmhouse. Drawing from real-life case files, the film delivers relentless suspense, atmospheric dread, and masterful horror storytelling.', 4.5),
 
-(13, 'Furie', 'Vietnamese', 'Le Van Kiet', 'Ngo Thanh Van, Phan Thanh Nhien, Pham Anh Khoa, Mai Cat Vi, Nguyen Thanh Hoa', 98, '2025-12-18', 'T18', 'now_showing', 'https://i.postimg.cc/Ghv0HsQZ/Furie.jpg', 'https://www.youtube.com/watch?v=XiS8wL8jz3k', 'A former gangster living a quiet life is forced back into the criminal underworld when her daughter is kidnapped. Featuring intense hand-to-hand combat and emotional stakes, Furie showcases Vietnamese action cinema on an international level.', 4.4),
+(13, 'Furie', 'Vietnamese', 'Le Van Kiet', 'Ngo Thanh Van, Phan Thanh Nhien, Pham Anh Khoa, Mai Cat Vi, Nguyen Thanh Hoa', 98, '2026-01-31', 'T18', 'now_showing', 'https://i.postimg.cc/Ghv0HsQZ/Furie.jpg', 'https://www.youtube.com/watch?v=XiS8wL8jz3k', 'A former gangster living a quiet life is forced back into the criminal underworld when her daughter is kidnapped. Featuring intense hand-to-hand combat and emotional stakes, Furie showcases Vietnamese action cinema on an international level.', 4.4),
 
-(14, 'Forrest Gump', 'English', 'Robert Zemeckis', 'Tom Hanks, Robin Wright, Gary Sinise, Sally Field, Mykelti Williamson', 142, '2025-12-05', 'P', 'now_showing', 'https://i.postimg.cc/Fs0t7JZB/Forrest_Gump.jpg', 'https://www.youtube.com/watch?v=bLvqoHBptjg', 'Through innocence and perseverance, Forrest Gump experiences extraordinary moments across several decades of American history. The film is a heartfelt exploration of destiny, love, and the simple truths that shape a meaningful life.', 4.7),
+(14, 'Forrest Gump', 'English', 'Robert Zemeckis', 'Tom Hanks, Robin Wright, Gary Sinise, Sally Field, Mykelti Williamson', 142, '2026-01-31', 'P', 'now_showing', 'https://i.postimg.cc/Fs0t7JZB/Forrest_Gump.jpg', 'https://www.youtube.com/watch?v=bLvqoHBptjg', 'Through innocence and perseverance, Forrest Gump experiences extraordinary moments across several decades of American history. The film is a heartfelt exploration of destiny, love, and the simple truths that shape a meaningful life.', 4.7),
 
-(15, 'Train to Busan', 'Korean', 'Yeon Sang-ho', 'Gong Yoo, Ma Dong-seok, Jung Yu-mi, Kim Su-an, Choi Woo-shik', 118, '2026-01-02', 'T18', 'now_showing', 'https://i.postimg.cc/65JgJpXY/Train_to_Busan.jpg', 'https://www.youtube.com/watch?v=pyWuHv2-Abk', 'During a sudden zombie outbreak, passengers aboard a train fight desperately for survival while confronting moral choices and personal sacrifice. The film combines relentless action with emotional depth, redefining the zombie genre.', 4.6),
+(15, 'Train to Busan', 'Korean', 'Yeon Sang-ho', 'Gong Yoo, Ma Dong-seok, Jung Yu-mi, Kim Su-an, Choi Woo-shik', 118, '2026-01-31', 'T18', 'now_showing', 'https://i.postimg.cc/65JgJpXY/Train_to_Busan.jpg', 'https://www.youtube.com/watch?v=pyWuHv2-Abk', 'During a sudden zombie outbreak, passengers aboard a train fight desperately for survival while confronting moral choices and personal sacrifice. The film combines relentless action with emotional depth, redefining the zombie genre.', 4.6),
 
 -- ================= COMING SOON (10 phim) =================
 (16, 'Dune: Part Two', 'English', 'Denis Villeneuve', 'Timothée Chalamet, Zendaya, Rebecca Ferguson, Josh Brolin, Austin Butler', 165, '2026-02-15', 'T13', 'coming_soon', 'https://i.postimg.cc/KvtXRgNp/Dune.jpg', 'https://www.youtube.com/watch?v=n9xhJrPXop4', 'Paul Atreides embraces his destiny among the Fremen while leading a resistance against the forces that destroyed his family. As political intrigue, prophecy, and war collide, Paul must choose between love and the fate of the universe. The film expands the rich world-building of Arrakis with breathtaking visuals, complex characters, and epic scale, continuing one of the most ambitious science-fiction sagas of modern cinema.', 4.6),
@@ -445,87 +445,6 @@ INSERT INTO users (name, email, password, role) VALUES
 ('User Twelve', 'user12@gmail.com', '123456', 'user');
 
 -- showtimes
-INSERT INTO showtimes (movie_id, room_id, show_date, show_time)
-VALUES
--- Movie 1
-(1, 1, '2025-01-10', '10:00:00'),
-(1, 1, '2025-01-10', '13:00:00'),
-(1, 2, '2025-01-10', '16:00:00'),
-(1, 2, '2025-01-11', '18:30:00'),
-(1, 1, '2025-01-12', '20:45:00'),
-
--- Movie 2
-(2, 1, '2025-01-10', '11:00:00'),
-(2, 2, '2025-01-10', '14:30:00'),
-(2, 1, '2025-01-11', '17:00:00'),
-(2, 2, '2025-01-11', '19:30:00'),
-(2, 1, '2025-01-12', '21:00:00');
-
--- Movie 3
-(3, 1, '2025-01-10', '12:00:00'),
-(3, 2, '2025-01-11', '15:00:00'),
-(3, 1, '2025-01-12', '18:00:00'),
-
--- Movie 4
-(4, 2, '2025-01-10', '13:30:00'),
-(4, 2, '2025-01-11', '16:30:00'),
-(4, 1, '2025-01-12', '19:30:00'),
-
--- Movie 5
-(5, 1, '2025-01-10', '14:00:00'),
-(5, 2, '2025-01-11', '17:00:00'),
-(5, 1, '2025-01-12', '20:00:00'),
-
--- Movie 6
-(6, 3, '2025-01-10', '15:00:00'),
-(6, 3, '2025-01-11', '18:00:00'),
-(6, 3, '2025-01-12', '21:00:00'),
-
--- Movie 7
-(7, 1, '2025-01-10', '16:00:00'),
-(7, 2, '2025-01-11', '19:00:00'),
-(7, 1, '2025-01-12', '22:00:00'),
-
--- Movie 8
-(8, 2, '2025-01-10', '17:00:00'),
-(8, 2, '2025-01-11', '20:00:00'),
-(8, 1, '2025-01-12', '23:00:00'),
-
--- Movie 9
-(9, 1, '2025-01-10', '18:00:00'),
-(9, 2, '2025-01-11', '21:00:00'),
-(9, 1, '2025-01-12', '10:00:00'),
-
--- Movie 10
-(10, 2, '2025-01-10', '19:00:00'),
-(10, 2, '2025-01-11', '22:00:00'),
-(10, 1, '2025-01-12', '11:00:00'),
-
--- Movie 11
-(11, 1, '2025-01-10', '20:00:00'),
-(11, 2, '2025-01-11', '13:00:00'),
-(11, 1, '2025-01-12', '12:00:00'),
-
--- Movie 12
-(12, 2, '2025-01-10', '21:00:00'),
-(12, 2, '2025-01-11', '14:00:00'),
-(12, 1, '2025-01-12', '13:00:00'),
-
--- Movie 13
-(13, 1, '2025-01-10', '22:00:00'),
-(13, 2, '2025-01-11', '15:00:00'),
-(13, 1, '2025-01-12', '14:00:00'),
-
--- Movie 14
-(14, 2, '2025-01-10', '23:00:00'),
-(14, 2, '2025-01-11', '16:00:00'),
-(14, 1, '2025-01-12', '15:00:00'),
-
--- Movie 15
-(15, 1, '2025-01-10', '10:30:00'),
-(15, 2, '2025-01-11', '17:30:00'),
-(15, 1, '2025-01-12', '16:30:00');
-
 INSERT INTO showtimes (movie_id, room_id, show_date, show_time) VALUES
 -- ================== 2026-01-23 ==================
 (3, 1, '2026-01-23', '10:00:00'),
@@ -623,36 +542,6 @@ SELECT
     'available' as status
 FROM showtimes st
 JOIN seats s ON st.room_id = s.room_id;
-
-INSERT INTO bookings (user_id, showtime_id, status, payment_status, total_price, created_at, updated_at) VALUES
-(2, 1, 'confirmed', 'paid', 240000, NOW(), NOW()),
-(3, 2, 'pending', 'pending', 160000, NOW(), NOW()),
-(7, 3, 'cancelled', 'pending', 120000, NOW(), NOW()),
-(8, 4, 'confirmed', 'paid', 320000, NOW(), NOW()),
-(9, 5, 'confirmed', 'paid', 160000, NOW(), NOW()),
-(2, 6, 'pending', 'pending', 240000, NOW(), NOW()),
-(3, 7, 'confirmed', 'paid', 360000, NOW(), NOW()),
-(7, 8, 'cancelled', 'pending', 120000, NOW(), NOW()),
-(8, 9, 'confirmed', 'paid', 200000, NOW(), NOW()),
-(9, 10, 'pending', 'pending', 280000, NOW(), NOW());
-
--- booking_seats (sample data for bookings)
-INSERT INTO booking_seats (booking_id, showtime_id, seat_id, price, qr_code, qr_status) VALUES
--- Booking 1 (2 seats)
-(1, 1, 1, 120000, 'QR-1-1-1', 'active'),
-(1, 1, 2, 120000, 'QR-1-1-2', 'active'),
--- Booking 2 (2 seats)
-(2, 2, 3, 80000, 'QR-2-2-3', 'active'),
-(2, 2, 4, 80000, 'QR-2-2-4', 'active'),
--- Booking 3 (1 seat)
-(3, 3, 5, 120000, 'QR-3-3-5', 'cancelled'),
--- Booking 4 (3 seats)
-(4, 4, 6, 100000, 'QR-4-4-6', 'checked'),
-(4, 4, 7, 100000, 'QR-4-4-7', 'checked'),
-(4, 4, 8, 120000, 'QR-4-4-8', 'checked'),
--- Booking 5 (2 seats)
-(5, 5, 9, 80000, 'QR-5-5-9', 'active'),
-(5, 5, 10, 80000, 'QR-5-5-10', 'active');
 
 -- ================= SHOWTIMES FOR NOW SHOWING MOVIES (29/1/2026 - 01/2/2026) =================
 -- Room 1: 2D, Room 2: 2D, Room 3: 3D, Room 4: IMAX 4D
@@ -754,4 +643,35 @@ INSERT INTO showtimes (movie_id, room_id, show_date, show_time) VALUES
 (15, 3, '2026-01-29', '20:00:00'),
 (15, 1, '2026-01-30', '21:30:00'),
 (15, 4, '2026-01-31', '18:00:00'),
-(15, 2, '2026-02-01', '20:30:00');
+(15, 2, '2026-02-01', '20:30:00');-- PROMOTIONS DATA
+-- Insert promotion data based on promotions.blade.php
+
+INSERT INTO promotions (category, icon, title, description, details_title, details_items, cta_text, cta_link, validity_text, status, display_order) VALUES
+
+-- CINEMA GIFTS
+('cinema-gifts', '🍿', 'Free Premium Popcorn Combo', 'Get a free premium popcorn combo with every ticket purchase!', 'What\'s Included:', '["Large Popcorn (Butter or Caramel)", "2 Medium Soft Drinks", "Movie Snack Coupon for next visit"]', 'Claim Now', '/now-showing', 'Valid until: March 31, 2026', 'active', 1),
+
+('cinema-gifts', '🎬', 'Exclusive Movie Merchandise', 'Buy 2 tickets and get 1 free collectible item from our exclusive merchandise collection!', 'Available Items:', '["Limited Edition Movie Posters", "Character Figurines", "Branded T-Shirts", "Movie Soundtrack CDs"]', 'Shop Now', '/now-showing', 'Limited stock available', 'active', 2),
+
+('cinema-gifts', '🎁', 'Weekend Combo Deal', 'Special combo packages for weekend movie marathons!', 'Package Includes:', '["2 Movie Tickets (Any showtime)", "Family Size Popcorn", "4 Soft Drinks", "Free Parking Pass"]', 'Get Deal', '/now-showing', 'Available: Friday - Sunday', 'active', 3),
+
+-- MEMBER REWARDS
+('member-rewards', '🎂', 'Birthday Special', 'Celebrate your birthday with us! Get a free movie ticket on your special day.', 'Birthday Benefits:', '["1 Free Movie Ticket (Any movie, any time)", "Free Medium Popcorn & Drink", "20% off on additional tickets", "Priority Seat Selection"]', 'Register Now', '/register', 'Valid for 7 days around your birthday', 'active', 4),
+
+('member-rewards', '⭐', 'VIP Membership', 'Join our VIP program and enjoy exclusive benefits year-round!', 'VIP Perks:', '["10% off all ticket purchases", "Free seat upgrades (subject to availability)", "Early access to new releases", "Exclusive member-only screenings", "Free snack vouchers monthly"]', 'Join VIP', '/register', 'Annual membership: 200.000d', 'active', 5),
+
+('member-rewards', '🎯', 'Loyalty Points', 'Earn points with every purchase and redeem for free tickets and snacks!', 'How It Works:', '["Earn 1 point per 10.000 spent", "100 points = Free movie ticket", "50 points = Free snack combo", "Double points on your birthday month"]', 'Start Earning', '/register', 'Points never expire', 'active', 6),
+
+-- STUDENT DEALS
+('student-deals', '🎓', 'Student Discount', 'Show your student ID and enjoy 20% off every Tuesday and Wednesday!', 'Eligibility:', '["Valid student ID required", "High school and college students", "Applies to all showtimes", "Can be combined with matinee pricing"]', 'Get Student Card', '/now-showing', 'Available: Every Tuesday & Wednesday', 'active', 7),
+
+('student-deals', '📚', 'Study Break Special', 'Take a break from studying! Special pricing for students during exam season.', 'Special Offer:', '["40.000d tickets for all movies before 5 PM", "Free study room rental (2 hours)", "Discounted coffee and snacks", "Valid during midterm and finals weeks"]', 'Book Now', '/now-showing', 'During academic exam periods', 'active', 8),
+
+('student-deals', '👥', 'Student Group Discount', 'Bring your friends! Groups of 5+ students get additional 15% off.', 'Group Benefits:', '["Minimum 5 students required", "15% off regular student price", "Reserved group seating", "Group snack packages available"]', 'Book Group', '/now-showing', 'Advance booking required', 'active', 9),
+
+-- SEASONAL OFFERS
+('seasonal', '🎃', 'Holiday Special', 'Celebrate holidays with special movie packages and themed events!', 'Holiday Perks:', '["Buy 1 Get 1 Free on major holidays", "Special themed movie marathons", "Holiday-themed snack combos", "Free photo booth access"]', 'View Events', '/upcoming-movies', 'Major holidays throughout the year', 'active', 10),
+
+('seasonal', '❄️', 'Winter Season Pass', 'Stay warm with unlimited movies during winter season!', 'Pass Includes:', '["Unlimited movie tickets (Dec - Feb)", "20% off all concessions", "Priority booking for blockbusters", "Exclusive winter-themed events"]', 'Buy Pass', '/register', 'Season pass: 700.000d', 'active', 11),
+
+('seasonal', '💝', 'Valentine\'s Special', 'Perfect date package for couples this Valentine\'s Day!', 'Romance Package:', '["2 Premium Couple Seats", "Champagne & Chocolate Box", "Complimentary roses", "Private theater experience available"]', 'Book Romance', '/now-showing', 'February 10-16, 2026', 'active', 12);

@@ -6,6 +6,7 @@ use App\Http\Controllers\SearchController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ShowtimeController;
@@ -34,11 +35,7 @@ Route::get('/now-showing', [MovieController::class, 'nowShowing'])->name('now_sh
 // Upcoming Movies Route
 Route::get('/upcoming-movies', [MovieController::class, 'upcomingMovies'])->name('upcoming_movies');
 // Promotions Route
-Route::get('/promotions', [MovieController::class, 'promotions'])->name('promotions');
-// Sitemap Route
-Route::get('/sitemap', [MovieController::class, 'sitemap'])->name('sitemap');
-// Promotions Route
-Route::get('/promotions', [MovieController::class, 'promotions'])->name('promotions');
+Route::get('/promotions', [PromotionController::class, 'index'])->name('promotions');
 // Sitemap Route
 Route::get('/sitemap', [MovieController::class, 'sitemap'])->name('sitemap');
 
