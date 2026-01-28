@@ -50,8 +50,10 @@ class AdminBookingController extends Controller
         // Search by user email or booking ID
         if ($request->search) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('id', $search)
+            // Remove # prefix if searching by booking ID (e.g., "#17" -> "17")
+            $searchId = preg_replace('/^#/', '', $search);
+            $query->where(function($q) use ($search, $searchId) {
+                $q->where('bookings.id', $searchId)
                   ->orWhereHas('user', function($q2) use ($search) {
                       $q2->where('email', 'like', "%{$search}%")
                          ->orWhere('name', 'like', "%{$search}%");
