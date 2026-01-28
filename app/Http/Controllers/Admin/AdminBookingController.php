@@ -75,6 +75,7 @@ class AdminBookingController extends Controller
                     ->get();
 
         // Statistics
+        $today = Carbon::today();
         $stats = [
             'total' => Booking::count(),
             'confirmed' => Booking::where('status', 'confirmed')->count(),
@@ -82,7 +83,8 @@ class AdminBookingController extends Controller
             'cancelled' => Booking::where('status', 'cancelled')->count(),
             'expired' => Booking::where('status', 'expired')->count(),
             'total_revenue' => Booking::where('payment_status', 'paid')->sum('total_price'),
-            'today_bookings' => Booking::whereDate('created_at', Carbon::today())->count(),
+            'today_bookings' => Booking::whereDate('created_at', $today)->count(),
+            'cancelled_today' => Booking::whereDate('updated_at', $today)->where('status', 'cancelled')->count(),
         ];
 
         return view('admin.bookings.index', compact('bookings', 'showtimes', 'stats'));

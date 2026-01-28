@@ -71,7 +71,7 @@
 </div>
 
 <div class="row mb-4">
-    <div class="col-md-6 mb-3">
+    <div class="col-md-4 mb-3">
         <div class="card">
             <div class="card-body">
                 <h6 class="text-muted">Total Revenue (Paid)</h6>
@@ -79,11 +79,19 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6 mb-3">
+    <div class="col-md-4 mb-3">
         <div class="card">
             <div class="card-body">
                 <h6 class="text-muted">Today's Bookings</h6>
                 <h3 class="mb-0" style="color: var(--deep-teal)">{{ $stats['today_bookings'] }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card border-warning">
+            <div class="card-body">
+                <h6 class="text-muted">Cancelled Today</h6>
+                <h3 class="text-warning mb-0">{{ $stats['cancelled_today'] }}</h3>
             </div>
         </div>
     </div>

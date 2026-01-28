@@ -65,17 +65,35 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label class="form-label">Date</label>
                     <input type="date" name="date" class="form-control" value="{{ request('date') }}">
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary-cinebook w-100">
-                        <i class="bi bi-search"></i> Filter
+                <div class="col-md-2">
+                    <label class="form-label">Filter</label>
+                    <select name="filter" class="form-select">
+                        <option value="">All Showtimes</option>
+                        <option value="empty" {{ request('filter') === 'empty' ? 'selected' : '' }}>
+                            Empty (No Bookings)
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-1 d-flex align-items-end gap-1">
+                    <button type="submit" class="btn btn-primary-cinebook">
+                        <i class="bi bi-search"></i>
                     </button>
+                    <a href="{{ route('admin.showtimes.index') }}" class="btn btn-outline-secondary" title="Clear filters">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
                 </div>
             </div>
         </form>
+        @if(request('filter') === 'empty')
+        <div class="alert alert-warning mt-3 mb-0">
+            <i class="bi bi-exclamation-triangle"></i>
+            <strong>Showing upcoming empty showtimes only</strong> - Future showtimes with no bookings (sorted by date, earliest first).
+        </div>
+        @endif
     </div>
 </div>
 
@@ -185,7 +203,7 @@
         <div class="cine-pagination-wrapper">
             <nav aria-label="Showtimes pagination">
                 <ul class="cine-pagination">
-                    @foreach ($showtimes->getUrlRange(1, $showtimes->lastPage()) as $page => $url)
+                    @foreach ($showtimes->appends(request()->query())->getUrlRange(1, $showtimes->lastPage()) as $page => $url)
                     <li class="cine-page-item {{ $page == $showtimes->currentPage() ? 'is-active' : '' }}">
                         <a class="cine-page-link" href="{{ $url }}">{{ $page }}</a>
                     </li>

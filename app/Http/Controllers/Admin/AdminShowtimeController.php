@@ -44,9 +44,27 @@ class AdminShowtimeController extends Controller
             $query->whereDate('show_date', $request->date);
         }
 
-        $showtimes = $query->orderBy('show_date', 'desc')
-            ->orderBy('show_time', 'desc')
-            ->paginate(20);
+        // Filter empty showtimes (no bookings) - only future showtimes
+        if ($request->filter === 'empty') {
+            $now = Carbon::now();
+            $query->whereDoesntHave('showtimeSeats', function ($q) {
+                $q->where('status', 'booked');
+            })
+            // Only include upcoming showtimes (not ended)
+            ->whereRaw("CONCAT(show_date, ' ', show_time) > ?", [$now->format('Y-m-d H:i:s')]);
+        }
+
+        // Sort order based on filter
+        if ($request->filter === 'empty') {
+            // Empty showtimes: sort by date ASC (earliest first - most urgent)
+            $showtimes = $query->orderBy('show_date', 'asc')
+                ->orderBy('show_time', 'asc')
+                ->paginate(20);
+        } else {
+            $showtimes = $query->orderBy('show_date', 'desc')
+                ->orderBy('show_time', 'desc')
+                ->paginate(20);
+        }
 
         // Ensure all showtimes have showtime seats created
         foreach ($showtimes as $showtime) {
