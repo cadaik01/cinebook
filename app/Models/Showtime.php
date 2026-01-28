@@ -192,14 +192,14 @@ class Showtime extends Model
         }
 
         $showtimes = $query->get();
-        $overlapping = [];
+        $overlapping = collect();
 
         foreach ($showtimes as $showtime) {
             $existingStart = $showtime->start_datetime;
             $existingEnd = $showtime->end_datetime;
 
             if ($startTime->lt($existingEnd) && $existingStart->lt($endTime)) {
-                $overlapping[] = $showtime;
+                $overlapping->push($showtime);
             }
         }
 
