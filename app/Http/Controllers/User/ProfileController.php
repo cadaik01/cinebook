@@ -74,7 +74,7 @@ class ProfileController extends Controller
             'city' => 'nullable|string|max:100',
             'avatar' => 'nullable|image|max:2048',
         ], [
-            'name.regex' => 'Name cannot start or end with spaces, or contain consecutive spaces.',
+            'name.regex' => 'Name cannot start or end with spaces, or contain consecutive spaces',
         ]);
 
         $user->name = trim($validated['name']);
@@ -86,7 +86,7 @@ class ProfileController extends Controller
         }
         $user->save();
                 
-        return redirect()->route('user.profile')->with('success', 'Profile updated successfully.');
+        return redirect()->route('user.profile')->with('success', 'Profile updated successfully');
     }
     /**
      * Change user password
@@ -105,24 +105,24 @@ class ProfileController extends Controller
             'current_password' => 'required|string',
             'new_password' => 'required|string|min:8|confirmed|regex:/^\S+$/',
         ], [
-            'new_password.regex' => 'Password cannot contain spaces.',
+            'new_password.regex' => 'Password cannot contain spaces',
         ]);
 
         // Check if current password matches (plain text comparison)
         if ($user->password !== $validated['current_password']) {
-            return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.']);
+            return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect']);
         }
         
         //check new password is different from current password
         if ($validated['new_password'] === $validated['current_password']) {
-            return redirect()->back()->withErrors(['new_password' => 'New password must be different from the current password.']);
+            return redirect()->back()->withErrors(['new_password' => 'New password must be different from the current password']);
         }
         
         // Update to new password (store as plain text)
         $user->password = $validated['new_password'];
         $user->save();
 
-        return redirect()->route('user.profile')->with('success', 'Password changed successfully.');
+        return redirect()->route('user.profile')->with('success', 'Password changed successfully');
     }
 
     /**

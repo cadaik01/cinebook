@@ -62,6 +62,6 @@ class AdminReviewController extends Controller
         $movie = Movie::find($movieId);
         $movie->updateAverageRating();
 
-        return redirect()->back()->with('success', 'Review deleted successfully.');
+        return redirect()->back()->with('success', 'Review deleted successfully');
     }
 }

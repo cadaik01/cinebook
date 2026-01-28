@@ -157,9 +157,9 @@ CREATE TABLE bookings (
     user_id INT NOT NULL,
     showtime_id INT NOT NULL,
     booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    total_price INT NOT NULL,
+    total_price INT,
     status ENUM('pending','confirmed','cancelled','expired') DEFAULT 'pending',
-    payment_method ENUM('momo','vnpay'),
+    payment_method ENUM('momo','vnpay') NOT NULL,
     payment_status ENUM('pending','paid','refunded') DEFAULT 'pending',
     expired_at TIMESTAMP NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -180,7 +180,7 @@ CREATE TABLE booking_seats (
     showtime_id INT NOT NULL,
     seat_id INT NOT NULL,
 
-    price INT NOT NULL,
+    price INT,
 
     qr_code VARCHAR(255) NOT NULL,
     qr_status ENUM('active','checked','cancelled') DEFAULT 'active',

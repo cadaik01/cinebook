@@ -92,7 +92,7 @@ class AdminRoomController extends Controller
 
             DB::commit();
             return redirect()->route('admin.rooms.index')
-                ->with('success', 'Room created successfully with ' . ($validated['total_rows'] * $validated['seats_per_row']) . ' seats!');
+                ->with('success', 'Room created successfully with ' . ($validated['total_rows'] * $validated['seats_per_row']) . ' seats');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -125,7 +125,7 @@ class AdminRoomController extends Controller
         $room->update($validated);
 
         return redirect()->route('admin.rooms.index')
-            ->with('success', 'Room updated successfully!');
+            ->with('success', 'Room updated successfully');
     }
 
     public function updateSeats(Request $request, Room $room)
@@ -155,7 +155,7 @@ class AdminRoomController extends Controller
             }
 
             DB::commit();
-            return back()->with('success', 'Seat types updated successfully!');
+            return back()->with('success', 'Seat types updated successfully');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -170,7 +170,7 @@ class AdminRoomController extends Controller
         try {
             $room->delete();
             return redirect()->route('admin.rooms.index')
-                ->with('success', 'Room deleted successfully!');
+                ->with('success', 'Room deleted successfully');
         } catch (\Exception $e) {
             return back()->with('error', 'Cannot delete room: ' . $e->getMessage());
         }

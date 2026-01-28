@@ -52,13 +52,13 @@ class ShowtimeController extends Controller
         // Check if user is logged in
         $user_id = Session::get('user_id');
         if (!$user_id) {
-            return redirect('/login')->with('error', 'Please log in to book seats.');
+            return redirect('/login')->with('error', 'Please log in to book seats');
         }
         
         // Validate selected seats input by checking if it's empty or not an array
         if (empty($selectedSeats) || !is_array($selectedSeats)) {
             return redirect()->route('movies.seatmap', ['showtime_id' => $showtime_id])//redirect back with error
-                           ->with('error', 'No seats selected.');
+                           ->with('error', 'No seats selected');
         }
         
         // start transaction for booking seats for data integrity
@@ -74,7 +74,7 @@ class ShowtimeController extends Controller
                 if (!$seat) {
                     DB::rollback();// Rollback transaction
                     return redirect()->route('movies.seatmap', ['showtime_id' => $showtime_id])//redirect back with error
-                                   ->with('error', 'Invalid seat selected.');
+                                   ->with('error', 'Invalid seat selected');
                 }
                 
                 // Check if the seat is already booked for this showtime
@@ -109,12 +109,12 @@ class ShowtimeController extends Controller
             }
             // Redirect back with success message
             return redirect()->route('movies.seatmap', ['showtime_id' => $showtime_id])
-                           ->with('success', $message ?: 'Seats booked successfully.');
+                           ->with('success', $message ?: 'Seats booked successfully');
         // catch block to handle exceptions                   
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->route('movies.seatmap', ['showtime_id' => $showtime_id])
-                           ->with('error', 'An error occurred while booking seats. Please try again.');
+                           ->with('error', 'An error occurred while booking seats. Please try again');
         }
     }
     }

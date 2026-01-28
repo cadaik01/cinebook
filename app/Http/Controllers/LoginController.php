@@ -90,9 +90,9 @@ class LoginController extends Controller
             'city' => 'nullable|string|max:100',
             'phone' => 'nullable|string|max:20',
         ], [
-            'name.regex' => 'Name cannot start or end with spaces, or contain consecutive spaces.',
-            'password.regex' => 'Password cannot contain spaces.',
-            'email.email' => 'Please enter a valid email address.',
+            'name.regex' => 'Name cannot start or end with spaces, or contain consecutive spaces',
+            'password.regex' => 'Password cannot contain spaces',
+            'email.email' => 'Please enter a valid email address',
         ]);
 
         // Trim whitespace from inputs
