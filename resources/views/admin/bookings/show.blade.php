@@ -210,12 +210,11 @@
         </div>
 
         <!-- Actions -->
-        @if($booking->status == 'confirmed' || $booking->status == 'pending')
         @php
         // Check if showtime has ended
         $showtimeEnded = $booking->showtime->status === 'done';
         @endphp
-
+        @if($booking->status == 'confirmed' || $booking->status == 'pending')
         <div class="card mt-4 border-danger">
             <div class="card-body">
                 <h6 class="text-danger">Admin Actions</h6>
@@ -229,17 +228,102 @@
                     <i class="bi bi-x-circle"></i> Cancel Booking (Not Available)
                 </button>
                 @else
-                <form action="{{ route('admin.bookings.cancel', $booking) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-danger w-100"
-                        onclick="return confirm('Are you sure you want to cancel this booking? This will refund the customer if payment was made.')">
-                        <i class="bi bi-x-circle"></i> Cancel Booking
-                    </button>
-                </form>
+                <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#cancelBookingModal">
+                    <i class="bi bi-x-circle"></i> Cancel Booking
+                </button>
                 @endif
             </div>
         </div>
         @endif
     </div>
 </div>
+
+<!-- Cancel Booking Modal -->
+@if(($booking->status == 'confirmed' || $booking->status == 'pending') && !$showtimeEnded)
+<div class="modal fade" id="cancelBookingModal" tabindex="-1" aria-labelledby="cancelBookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="cancelBookingModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Cancel Booking #{{ $booking->id }}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('admin.bookings.cancel', $booking) }}" method="POST" id="cancelBookingForm">
+                @csrf
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>Warning:</strong> This action cannot be undone. The customer will be notified via email with the cancellation reason.
+                        @if($booking->payment_status === 'paid')
+                        <br><br>
+                        <i class="bi bi-cash"></i> <strong>Refund Amount:</strong> {{ number_format($booking->total_price) }}₫
+                        @endif
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="cancelReason" class="form-label"><strong>Cancellation Reason</strong> <span class="text-danger">*</span></label>
+                        <textarea
+                            class="form-control"
+                            id="cancelReason"
+                            name="reason"
+                            rows="4"
+                            placeholder="Please provide a reason for cancelling this booking (e.g., showtime cancelled, customer request, technical issues...)"
+                            required
+                            minlength="10"
+                        ></textarea>
+                        <div class="form-text">This reason will be sent to the customer via email.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Booking Details:</strong></label>
+                        <ul class="list-unstyled mb-0" style="font-size: 0.9em;">
+                            <li><i class="bi bi-person"></i> <strong>Customer:</strong> {{ $booking->user->name }} ({{ $booking->user->email }})</li>
+                            <li><i class="bi bi-film"></i> <strong>Movie:</strong> {{ $booking->showtime->movie->title }}</li>
+                            <li><i class="bi bi-calendar"></i> <strong>Showtime:</strong> {{ $booking->showtime->show_date->format('M d, Y') }} at {{ \Carbon\Carbon::parse($booking->showtime->show_time)->format('h:i A') }}</li>
+                            <li><i class="bi bi-grid-3x3"></i> <strong>Seats:</strong> {{ $booking->bookingSeats->pluck('seat.seat_code')->join(', ') }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x"></i> Close
+                    </button>
+                    <button type="submit" class="btn btn-danger" id="confirmCancelBtn">
+                        <i class="bi bi-x-circle"></i> Confirm Cancellation
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cancelForm = document.getElementById('cancelBookingForm');
+    const cancelReason = document.getElementById('cancelReason');
+    const confirmBtn = document.getElementById('confirmCancelBtn');
+
+    cancelForm.addEventListener('submit', function(e) {
+        const reason = cancelReason.value.trim();
+
+        if (reason.length < 10) {
+            e.preventDefault();
+            alert('Please provide a cancellation reason (at least 10 characters).');
+            cancelReason.focus();
+            return false;
+        }
+
+        if (!confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) {
+            e.preventDefault();
+            return false;
+        }
+
+        // Disable button to prevent double submission
+        confirmBtn.disabled = true;
+        confirmBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+    });
+});
+</script>
+@endif
 @endsection

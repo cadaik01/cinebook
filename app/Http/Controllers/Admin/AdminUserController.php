@@ -93,23 +93,6 @@ class AdminUserController extends Controller
             ->with('success', 'User updated successfully');
     }
 
-    public function destroy(User $user)
-    {
-        // Check if user has bookings
-        if ($user->bookings()->exists()) {
-            return back()->with('error', 'Cannot delete user with existing bookings');
-        }
-
-        // Prevent deleting yourself
-        if ($user->id === (int) auth()->id()) {
-            return back()->with('error', 'You cannot delete your own account');
-        }
-
-        $user->delete();
-
-        return back()->with('success', 'User deleted successfully');
-    }
-
     public function toggleRole(User $user)
     {
         // Prevent changing your own role

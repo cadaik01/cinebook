@@ -24,8 +24,6 @@
     <div class="sitemap-header">
         <h1>🗺️ Site Map</h1>
         <p>Complete navigation guide to all pages and features of TCA Cine</p>
-        </br>
-        <p>Please login with your <strong>admin account </strong> to be able to access all website features.</p>
     </div>
 
     <div class="sitemap-grid">

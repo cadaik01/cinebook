@@ -21,18 +21,32 @@
 </div>
 
 <div class="container-fluid">
-    <!-- Row 1: Main Stats -->
+    <!-- Row 1: Business Pulse -->
+    <h5 class="text-muted mb-3"><i class="bi bi-activity"></i> Business Pulse</h5>
     <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Tickets Sold Today</h6>
+                            <h2 class="mb-0">{{ $ticketsSoldToday }}</h2>
+                        </div>
+                        <i class="bi bi-ticket-perforated fs-1"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-md-3 mb-3">
             <div class="card text-white"
                 style="background: linear-gradient(135deg, var(--deep-teal), var(--deep-space-blue));">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="card-title">Total Users</h6>
-                            <h2 class="mb-0">{{ $totalUsers }}</h2>
+                            <h6 class="card-title">Revenue Today</h6>
+                            <h2 class="mb-0">{{ number_format($revenueToday) }}₫</h2>
                         </div>
-                        <i class="bi bi-people fs-1"></i>
+                        <i class="bi bi-currency-dollar fs-1"></i>
                     </div>
                 </div>
             </div>
@@ -42,23 +56,10 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="card-title">Total Movies</h6>
-                            <h2 class="mb-0">{{ $totalMovies }}</h2>
+                            <h6 class="card-title">Showtimes With Bookings</h6>
+                            <h2 class="mb-0">{{ $showtimesWithBookingsToday }}</h2>
                         </div>
-                        <i class="bi bi-film fs-1"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="card text-white bg-success">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title">Tickets Today</h6>
-                            <h2 class="mb-0">{{ $ticketsSoldToday }}</h2>
-                        </div>
-                        <i class="bi bi-ticket-perforated fs-1"></i>
+                        <i class="bi bi-collection-play fs-1"></i>
                     </div>
                 </div>
             </div>
@@ -78,84 +79,112 @@
         </div>
     </div>
 
-    <!-- Row 2: Revenue Stats -->
+    <!-- Row 2: Risk & Future -->
+    <h5 class="text-muted mb-3"><i class="bi bi-exclamation-triangle"></i> Risk & Future</h5>
     <div class="row mb-4">
-        <div class="col-md-4 mb-3">
-            <div class="card border-success">
-                <div class="card-body">
-                    <h6 class="text-muted mb-2">Today's Revenue</h6>
-                    <h3 class="text-success mb-0">{{ number_format($revenueToday) }}₫</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-6 mb-3">
             <div class="card border-primary">
                 <div class="card-body">
-                    <h6 class="text-muted mb-2">This Month's Revenue</h6>
-                    <h3 class="text-primary mb-0">{{ number_format($revenueThisMonth) }}₫</h3>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-2">Revenue at risk (24h)</h6>
+                            <h3 class="text-primary mb-0">{{ number_format($upcomingRevenue24h) }}₫</h3>
+                        </div>
+                        <i class="bi bi-clock-history fs-1 text-primary"></i>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-3">
-            <div class="card border-info">
+        <div class="col-md-6 mb-3">
+            <div class="card border-danger">
                 <div class="card-body">
-                    <h6 class="text-muted mb-2">Total Revenue</h6>
-                    <h3 class="text-info mb-0">{{ number_format($totalRevenue) }}₫</h3>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-2">Refund Amount This Month</h6>
+                            <h3 class="text-danger mb-0">{{ number_format($refundAmountThisMonth) }}₫</h3>
+                        </div>
+                        <i class="bi bi-arrow-return-left fs-1 text-danger"></i>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Row 3: Movie Stats and Recent Bookings -->
+    <!-- Row 3: Performance -->
+    <h5 class="text-muted mb-3"><i class="bi bi-trophy"></i> Performance</h5>
     <div class="row mb-4">
         <div class="col-md-6 mb-3">
-            <div class="card h-100">
-                <div class="card-header" style="background-color: var(--deep-teal); color: white;">
-                    <h5 class="mb-0"><i class="bi bi-graph-up"></i> Movie Statistics</h5>
+            <div class="card h-100 border-success">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0"><i class="bi bi-star"></i> Top Movie by Revenue</h6>
                 </div>
                 <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-4">
-                            <div class="p-3">
-                                <i class="bi bi-play-circle fs-1 text-success"></i>
-                                <h4 class="mt-2">{{ $nowShowingMovies }}</h4>
-                                <p class="text-muted mb-0">Now Showing</p>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="p-3">
-                                <i class="bi bi-clock-history fs-1 text-warning"></i>
-                                <h4 class="mt-2">{{ $comingSoonMovies }}</h4>
-                                <p class="text-muted mb-0">Coming Soon</p>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="p-3">
-                                <i class="bi bi-film fs-1 text-primary"></i>
-                                <h4 class="mt-2">{{ $totalMovies }}</h4>
-                                <p class="text-muted mb-0">Total Movies</p>
-                            </div>
-                        </div>
-                    </div>
+                    @if($topMovieByRevenue && $topMovieByRevenue->revenue > 0)
+                    <h5 class="card-title">{{ $topMovieByRevenue->title }}</h5>
+                    <p class="text-success fs-4 mb-0">{{ number_format($topMovieByRevenue->revenue) }}₫</p>
+                    @else
+                    <p class="text-muted mb-0">No revenue data yet</p>
+                    @endif
                 </div>
             </div>
         </div>
-
         <div class="col-md-6 mb-3">
-            <div class="card h-100 d-flex flex-column">
-                <div class="card-header" style="background-color: var(--burnt-peach); color: white;">
-                    <h5 class="mb-0"><i class="bi bi-trophy"></i> Top Revenue Movies</h5>
+            <div class="card h-100 border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0"><i class="bi bi-graph-up-arrow"></i> Top Showtime Today</h6>
                 </div>
-                <div class="card-body d-flex flex-column">
-                    @if($highestRevenueMovie)
-                    <div class="mb-3">
-                        <h6 class="text-success mb-1"><i class="bi bi-arrow-up-circle"></i> Highest Revenue</h6>
-                        <strong>{{ $highestRevenueMovie->title }}</strong>
-                        <p class="text-success mb-0 fs-5">{{ number_format($highestRevenueMovie->revenue) }}₫</p>
-                    </div>
+                <div class="card-body">
+                    @if($topShowtimeToday && $topShowtimeToday->booked_count > 0)
+                    <h5 class="card-title">{{ $topShowtimeToday->movie->title }}</h5>
+                    <p class="text-muted mb-1">
+                        {{ \Carbon\Carbon::parse($topShowtimeToday->show_time)->format('h:i A') }} -
+                        {{ $topShowtimeToday->room->name }}
+                    </p>
+                    <p class="text-primary fs-5 mb-0">{{ $topShowtimeToday->booked_count }} tickets sold</p>
                     @else
-                    <p class="text-muted mb-0">No revenue data available yet.</p>
+                    <p class="text-muted mb-0">No bookings for today's showtimes yet</p>
                     @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Stats -->
+    <h5 class="text-muted mb-3"><i class="bi bi-bar-chart"></i> Overview</h5>
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card border-secondary">
+                <div class="card-body text-center">
+                    <i class="bi bi-people fs-1 text-secondary"></i>
+                    <h4 class="mt-2">{{ $totalUsers }}</h4>
+                    <p class="text-muted mb-0">Total Users</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card border-secondary">
+                <div class="card-body text-center">
+                    <i class="bi bi-film fs-1 text-secondary"></i>
+                    <h4 class="mt-2">{{ $totalMovies }}</h4>
+                    <p class="text-muted mb-0">Total Movies</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card border-info">
+                <div class="card-body text-center">
+                    <i class="bi bi-cash-stack fs-1 text-info"></i>
+                    <h4 class="mt-2 text-info">{{ number_format($revenueThisMonth) }}₫</h4>
+                    <p class="text-muted mb-0">This Month's Revenue</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card border-success">
+                <div class="card-body text-center">
+                    <i class="bi bi-wallet2 fs-1 text-success"></i>
+                    <h4 class="mt-2 text-success">{{ number_format($totalRevenue) }}₫</h4>
+                    <p class="text-muted mb-0">Total Revenue</p>
                 </div>
             </div>
         </div>

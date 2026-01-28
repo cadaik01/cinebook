@@ -122,16 +122,6 @@
                             {{ $user->role === 'admin' ? 'Make Regular User' : 'Make Administrator' }}
                         </button>
                     </form>
-                    @if(!$user->bookings()->exists())
-                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger w-100"
-                                    onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
-                                <i class="bi bi-trash"></i> Delete User
-                            </button>
-                        </form>
-                    @endif
                 </div>
             </div>
         @endif
