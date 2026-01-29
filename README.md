@@ -22,6 +22,14 @@
 
 The system also provides a dedicated **Admin Panel** to manage the entire cinema operation, including movies, screening rooms, showtimes, tickets, and users.
 
+## 📂 Documentation
+The following resources are included in the Documents folder:
+- File Review
+- Installation Guide: Full instructions for setting up the project
+- Database Source: mySQL.sql
+- Sample data: data.sql
+Video Demonstration: [https://youtu.be/eqw89cXJm-U?si=MSJvpBmaf4UA3a0_](https://www.youtube.com/watch?v=G6epcu_tSh4)
+
 ### ✨ Key Features
 
 #### For Customers
@@ -96,7 +104,7 @@ The system includes sample accounts for testing:
 
 You can log in with these accounts to explore both the customer and admin experiences.
 
-## 📂 Documentation & Structure
+## 📂 Folder Structure
 
 The project is organized following standard Laravel conventions, for example:
 
@@ -107,7 +115,7 @@ The project is organized following standard Laravel conventions, for example:
 - **resources/**: Blade views, source CSS, and JavaScript  
 - **routes/**: application routes definition  
 
-You can refer to additional documentation files inside the repository (for example, a separate setup guide) for more in‑depth configuration and extension details.
+You can refer to additional documentation files inside the repository for more in‑depth configuration and extension details.
 
 ## 🎯 Core Functionality
 
