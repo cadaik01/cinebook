@@ -26,8 +26,7 @@ The system also provides a dedicated **Admin Panel** to manage the entire cinema
 The following resources are included in the DOCUMENT folder:
 - File Review
 - Installation Guide: Full instructions for setting up the project
-- Database Source: mySQL.sql
-- Sample data: data.sql
+- Powerpoint File
 Video Demonstration: [https://youtu.be/eqw89cXJm-U?si=MSJvpBmaf4UA3a0_](https://www.youtube.com/watch?v=G6epcu_tSh4)
 
 ### ✨ Key Features
@@ -56,7 +55,7 @@ Video Demonstration: [https://youtu.be/eqw89cXJm-U?si=MSJvpBmaf4UA3a0_](https://
 ## 🏗 Project Components
 
 - **Backend**: Laravel 12 (RESTful, MVC, Eloquent ORM)  
-- **Frontend**: Blade templates with JavaScript, powered by Vite  
+- **Frontend**: Blade templates with JavaScript  
 - **Database**: MySQL (schema and sample data stored in the `mySQL/` folder)  
 - **QR Code System**: Generates and manages QR codes for each ticket  
 
@@ -68,7 +67,6 @@ To run CineBook locally, you should have:
 
 - PHP version 8.2 or higher  
 - Composer for managing PHP dependencies  
-- Node.js (version 18 or higher) and npm for the Vite frontend  
 - MySQL 8.0 or higher for the database  
 - XAMPP or a similar environment to run the web server and database  
 
