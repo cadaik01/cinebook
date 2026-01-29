@@ -23,7 +23,7 @@
 The system also provides a dedicated **Admin Panel** to manage the entire cinema operation, including movies, screening rooms, showtimes, tickets, and users.
 
 ## 📂 Documentation
-The following resources are included in the Documents folder:
+The following resources are included in the DOCUMENT folder:
 - File Review
 - Installation Guide: Full instructions for setting up the project
 - Database Source: mySQL.sql
