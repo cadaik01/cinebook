@@ -87,6 +87,7 @@ CREATE TABLE promotions (
     description TEXT,
     image VARCHAR(255),
     status ENUM('active', 'upcoming', 'ended') DEFAULT 'upcoming',
+    display_order INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_status (status)

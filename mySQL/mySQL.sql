@@ -240,7 +240,6 @@ CREATE TABLE promotions (
     validity_text VARCHAR(100),
     status ENUM('active', 'upcoming', 'ended') DEFAULT 'active',
     display_order INT DEFAULT 0,
-    
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     
