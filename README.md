@@ -1,228 +1,192 @@
 # 🎬 CineBook - Cinema Booking System
 
-A modern cinema booking application built with Laravel 12 and Vue.js.
+### FPT Aptech
 
-![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=flat-square&logo=laravel)
-![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat-square&logo=php)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat-square&logo=mysql)
-![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?style=flat-square&logo=vite)
+**Tech Stack**: Laravel 12, PHP 8.2, MySQL 8, Vite, Blade, JavaScript, CSS3
 
-## 📖 About CineBook
+## 👥 Team Members
 
-CineBook is a comprehensive cinema ticket booking platform that allows users to browse movies, select seats, and make online payments. The system includes an admin panel for managing movies, showtimes, bookings, and QR code check-ins.
+- TRẦN LÊ MINH ANH – Student1686151 - Team Leader
+- ĐINH LÊ HOÀNG CHÂU – Student1685484 - Team Member
+- TĂNG HUỲNH TUẤN TÚ – Student1685504 - Team Member
+
+
+## 📖 Project Overview
+
+**CineBook** is a modern cinema ticket booking platform that allows users to:
+
+- Browse lists of **Now Showing** and **Upcoming** movies  
+- View detailed information for each movie  
+- Select showtimes, rooms, and seats  
+- Make online payments and receive e-tickets in the form of QR codes  
+
+The system also provides a dedicated **Admin Panel** to manage the entire cinema operation, including movies, screening rooms, showtimes, tickets, and users.
 
 ### ✨ Key Features
 
 #### For Customers
-- 🎥 Browse **Now Showing** and **Upcoming Movies**
-- 🎫 Interactive seat selection with real-time availability
-- 💳 Online payment integration (VNPay & MoMo)
-- ⏰ 10-minute countdown timer for booking confirmation
-- 📱 QR code generation for each seat/couple seat pair
-- ⭐ Movie reviews and ratings
-- 👤 User profile with booking history
+
+- Browse currently showing and upcoming movies  
+- View showtimes by date, time, and screening room  
+- Choose seats via an interactive seat map with real-time status  
+- Use a 10‑minute countdown timer for each booking session  
+- Make online payments (simulated gateways such as VNPay or MoMo)  
+- Automatically receive QR codes for each seat or seat pair  
+- Rate and review movies  
+- Manage booking history in a personal profile  
 
 #### For Admin
-- 🎬 Movie management (CRUD operations)
-- 🏢 Room and seat configuration
-- 📅 Showtime scheduling
-- 📊 Booking management and analytics
-- 🔍 QR code scanner for check-in
-- 💬 Review moderation
-- 👥 User management
 
-## 🚀 Quick Start
+- Full movie management: create, update, delete movie information  
+- Screening room and seat layout configuration  
+- Showtimes management by date, time, room, and movie  
+- Booking management and overview of ticket sales  
+- QR code scanning for check‑in at the cinema  
+- Review and comment moderation  
+- User account management  
 
-### Prerequisites
+## 🏗 Project Components
 
-- PHP >= 8.2
-- Composer
-- Node.js >= 18 & NPM
-- MySQL >= 8.0
-- XAMPP (recommended)
+- **Backend**: Laravel 12 (RESTful, MVC, Eloquent ORM)  
+- **Frontend**: Blade templates with JavaScript, powered by Vite  
+- **Database**: MySQL (schema and sample data stored in the `mySQL/` folder)  
+- **QR Code System**: Generates and manages QR codes for each ticket  
 
-### Installation
+## 🚀 Installation & Usage Guide
 
-1. **Clone the repository**
-```bash
-git clone https://github.com/yourusername/cinebook.git
-cd cinebook
-```
+### 1. Requirements
 
-2. **Copy environment file**
-```bash
-copy .env.example .env
-```
+To run CineBook locally, you should have:
 
-3. **Configure database** in `.env`
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=cinebook
-DB_USERNAME=root
-DB_PASSWORD=
-```
+- PHP version 8.2 or higher  
+- Composer for managing PHP dependencies  
+- Node.js (version 18 or higher) and npm for the Vite frontend  
+- MySQL 8.0 or higher for the database  
+- XAMPP or a similar environment to run the web server and database  
 
-4. **Install dependencies**
-```bash
-composer install
-npm install
-```
+### 2. Setup Overview
 
-5. **Generate application key**
-```bash
-php artisan key:generate
-```
+The typical setup flow is:
 
-6. **Create database and import data**
-```bash
-# Create database
-mysql -u root -e "CREATE DATABASE cinebook;"
+1. Clone the project repository to your local machine  
+2. Create an environment configuration file from the provided example and update your database and app settings  
+3. Install backend and frontend dependencies using Composer and npm  
+4. Create a MySQL database named `cinebook` and import:
+   - The database schema file  
+   - The sample data file  
+5. Create the storage link so that uploaded files are accessible publicly  
+6. Start the Laravel development server and the Vite dev server  
+7. Access the application through your browser  
 
-# Import schema
-mysql -u root cinebook < mySQL/mySQL.sql
+(Concrete commands and configuration details are available inside the original project; this README keeps the instructions at a descriptive level and deliberately does not include code blocks.)
 
-# Import sample data
-mysql -u root cinebook < mySQL/data.sql
-```
+## 🔑 Default Accounts
 
-7. **Link storage**
-```bash
-php artisan storage:link
-```
-
-8. **Run the application**
-```bash
-# Terminal 1 - Laravel server
-php artisan serve
-
-# Terminal 2 - Vite dev server
-npm run dev
-```
-
-9. **Access the application**
-- Frontend: http://localhost:8000
-- Admin Panel: http://localhost:8000/admin
-
-## 👤 Default Credentials
+The system includes sample accounts for testing:
 
 ### Admin Account
-- Email: `admin@cinebook.com`
-- Password: `admin123`
+
+- Email: `admin@cinebook.com`  
+- Password: `123456`  
 
 ### User Account
-- Email: `user@cinebook.com`
-- Password: `user123`
 
-## 📁 Project Structure
+- Email: `user1@cinebook.com`  
+- Password: `123456`  
 
-```
-cinebook/
-├── app/
-│   ├── Http/Controllers/     # Application controllers
-│   │   ├── Admin/           # Admin panel controllers
-│   │   ├── BookingController.php
-│   │   ├── PaymentController.php
-│   │   └── ...
-│   └── Models/              # Eloquent models
-├── database/
-│   ├── migrations/          # Database migrations
-│   └── seeders/             # Database seeders
-├── mySQL/
-│   ├── mySQL.sql           # Database schema
-│   └── data.sql            # Sample data
-├── public/
-│   ├── css/                # Compiled CSS
-│   ├── js/                 # JavaScript utilities
-│   │   ├── seat_map.js    # Seat selection logic
-│   │   ├── booking-countdown.js
-│   │   └── qr_checkin.js  # QR scanner
-│   └── images/            # Static images
-├── resources/
-│   ├── css/               # Source CSS files
-│   ├── js/                # Source JavaScript
-│   └── views/             # Blade templates
-│       ├── admin/         # Admin panel views
-│       ├── booking/       # Booking flow views
-│       ├── payment/       # Payment views
-│       └── ...
-└── routes/
-    └── web.php            # Application routes
-```
+You can log in with these accounts to explore both the customer and admin experiences.
+
+## 📂 Documentation & Structure
+
+The project is organized following standard Laravel conventions, for example:
+
+- **app/**: application logic, including controllers and models  
+- **database/**: migrations and seeders for the database  
+- **mySQL/**: SQL files for database schema and sample data (such as `mySQL.sql` and `data.sql`)  
+- **public/**: compiled CSS, JavaScript utilities, and public images  
+- **resources/**: Blade views, source CSS, and JavaScript  
+- **routes/**: application routes definition  
+
+You can refer to additional documentation files inside the repository (for example, a separate setup guide) for more in‑depth configuration and extension details.
 
 ## 🎯 Core Functionality
 
 ### Booking Flow
-1. **Select Movie** → Browse now showing or upcoming movies
-2. **Choose Showtime** → Select date and time
-3. **Pick Seats** → Interactive seat map with color-coded types
-4. **Confirm Booking** → 10-minute countdown timer starts
-5. **Payment** → QR code for VNPay/MoMo (mock)
-6. **Success** → Receive QR codes for each seat/couple pair
+
+1. The user selects a movie from the “Now Showing” or “Upcoming” list  
+2. The user chooses a showtime based on date, time, and screening room  
+3. The user selects seats using an interactive seat map with visual seat states  
+4. Once the booking is confirmed, a 10‑minute countdown timer starts  
+5. The user completes payment using the configured payment method  
+6. On successful payment, the system generates and displays QR codes for the booked seats  
 
 ### QR Code System
-- Each regular seat gets **1 unique QR code**
-- Couple seats (2 adjacent seats) share **1 QR code**
-- QR codes are displayed on booking success page
-- Admin can scan QR codes for check-in verification
-- Status tracking: `active` → `checked` → `cancelled`
+
+- Each single seat receives one unique QR code  
+- Couple seats or seat pairs can share a single QR code  
+- QR codes are used at the cinema entrance for check‑in  
+- Ticket status can move between states such as “active”, “checked”, and “cancelled”  
 
 ### Countdown Timer
-- Starts at booking confirmation (10 minutes)
-- Persists across pages using localStorage
-- Warning style when < 1 minute remaining
-- Auto-redirects on expiration
-- Cleared on successful payment
 
-## 🛠️ Technologies Used
+- The countdown starts when the user confirms the booking  
+- Each booking session has a duration of 10 minutes  
+- The remaining time is preserved so it is not lost when navigating between pages  
+- When less than one minute remains, the interface can highlight the warning  
+- If time runs out before payment, unpaid bookings are automatically cancelled  
+
+## 🛠 Technologies Used
 
 ### Backend
-- **Laravel 12** - PHP Framework
-- **MySQL** - Database
-- **SimpleSoftwareIO/QrCode** - QR code generation
+
+- **Laravel 12** as the main PHP framework  
+- **MySQL** as the relational database for movies, showtimes, rooms, tickets, and users  
+- A **QR code generation library** integrated into Laravel for ticket QR codes  
 
 ### Frontend
-- **Vite** - Build tool
-- **Blade Templates** - Laravel templating engine
-- **Vanilla JavaScript** - Interactive features
-- **CSS3** - Styling with gradients and animations
 
-## 📚 Documentation
+- **Vite** as the build tool and development server  
+- **Blade Templates** as the main templating engine  
+- **JavaScript** for interactive features such as seat selection, countdown timers, and dynamic UI  
+- **CSS3** for layout, styling, and visual effects  
 
-For detailed setup instructions, see [SETUP_GUIDE.md](SETUP_GUIDE.md)
+## 🐛 Troubleshooting
 
-## 🐛 Common Issues
+Common issues and how to approach them:
 
-### "APP_URL is undefined"
-```bash
-copy .env.example .env
-php artisan key:generate
-```
+- Environment configuration problems (for example, missing or incorrect `.env` values such as APP_URL or database settings)  
+- Frontend not built or dev server not running  
+- Database not created or SQL files not imported  
+- MySQL or XAMPP services not started  
 
-### "Vite manifest not found"
-```bash
-npm install
-npm run dev
-```
+When you encounter issues:
 
-### Database connection failed
-1. Start MySQL in XAMPP
-2. Check `.env` database credentials
-3. Ensure database `cinebook` exists
+1. Double‑check the `.env` file, especially database credentials and application URL  
+2. Verify that the MySQL service is running and that the `cinebook` database exists  
+3. Confirm that all PHP and Node.js dependencies are installed  
+4. Rebuild or restart the development servers as needed  
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome.  
+If you would like to add new features, improve performance, or fix bugs:
+
+1. Create a new feature branch  
+2. Make and test your changes  
+3. Submit a pull request to the repository  
 
 ## 📝 License
 
-This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open‑source software released under the **MIT License**.  
+You are free to use, modify, and distribute it within the terms of the license.
 
 ## 📧 Contact
 
-For questions or support, please open an issue on GitHub.
+For questions, feedback, or support:
+
+- Open an **issue** directly on the GitHub repository: `cadaik01/cinebook`  
+- Or use the contact information available on the author’s GitHub profile  
 
 ---
 
-**Built with ❤️ using Laravel**
+**Built with ❤️ using Laravel for CineBook**
