@@ -54,9 +54,9 @@ Video Demonstration: [https://youtu.be/eqw89cXJm-U?si=MSJvpBmaf4UA3a0_](https://
 
 ## 🏗 Project Components
 
-- **Backend**: Laravel 12 (RESTful, MVC, Eloquent ORM)  
-- **Frontend**: Blade templates with JavaScript  
-- **Database**: MySQL (schema and sample data stored in the `mySQL/` folder)  
+- **Backend**: Laravel 12 (RESTful, MVC, Eloquent ORM)
+- **Frontend**: Blade templates with JavaScript and CSS3
+- **Database**: MySQL (schema and sample data stored in the `mySQL/` folder)
 - **QR Code System**: Generates and manages QR codes for each ticket  
 
 ## 🚀 Installation & Usage Guide
@@ -65,24 +65,24 @@ Video Demonstration: [https://youtu.be/eqw89cXJm-U?si=MSJvpBmaf4UA3a0_](https://
 
 To run CineBook locally, you should have:
 
-- PHP version 8.2 or higher  
-- Composer for managing PHP dependencies  
-- MySQL 8.0 or higher for the database  
+- PHP version 8.2 or higher
+- Composer for managing PHP dependencies
+- MySQL 8.0 or higher for the database
 - XAMPP or a similar environment to run the web server and database  
 
 ### 2. Setup Overview
 
 The typical setup flow is:
 
-1. Clone the project repository to your local machine  
-2. Create an environment configuration file from the provided example and update your database and app settings  
-3. Install backend and frontend dependencies using Composer and npm  
+1. Clone the project repository to your local machine
+2. Create an environment configuration file from the provided example and update your database and app settings
+3. Install PHP dependencies using Composer
 4. Create a MySQL database named `cinebook` and import:
-   - The database schema file  
-   - The sample data file  
-5. Create the storage link so that uploaded files are accessible publicly  
-6. Start the Laravel development server and the Vite dev server  
-7. Access the application through your browser  
+   - The database schema file
+   - The sample data file
+5. Create the storage link so that uploaded files are accessible publicly
+6. Start the Laravel development server or use XAMPP
+7. Access the application through your browser
 
 (Concrete commands and configuration details are available inside the original project; this README keeps the instructions at a descriptive level and deliberately does not include code blocks.)
 
@@ -151,25 +151,24 @@ You can refer to additional documentation files inside the repository for more i
 
 ### Frontend
 
-- **Blade Templates** as the main templating engine  
-- **JavaScript** for interactive features such as seat selection, countdown timers, and dynamic UI  
+- **Blade Templates** as the main templating engine
+- **JavaScript** for interactive features such as seat selection, countdown timers, and dynamic UI
 - **CSS3** for layout, styling, and visual effects  
 
 ## 🐛 Troubleshooting
 
 Common issues and how to approach them:
 
-- Environment configuration problems (for example, missing or incorrect `.env` values such as APP_URL or database settings)  
-- Frontend not built or dev server not running  
-- Database not created or SQL files not imported  
-- MySQL or XAMPP services not started  
+- Environment configuration problems (for example, missing or incorrect `.env` values such as APP_URL or database settings)
+- Database not created or SQL files not imported
+- MySQL or XAMPP services not started
 
 When you encounter issues:
 
-1. Double‑check the `.env` file, especially database credentials and application URL  
-2. Verify that the MySQL service is running and that the `cinebook` database exists  
-3. Confirm that all PHP and Node.js dependencies are installed  
-4. Rebuild or restart the development servers as needed  
+1. Double‑check the `.env` file, especially database credentials and application URL
+2. Verify that the MySQL service is running and that the `cinebook` database exists
+3. Confirm that all PHP dependencies are installed via Composer
+4. Restart the web server as needed  
 
 ## 🤝 Contributing
 
