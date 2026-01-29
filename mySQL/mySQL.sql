@@ -1,7 +1,16 @@
--- CREATE DATABASE
+-- ============================================================
+-- CINEBOOK DATABASE SCHEMA
+-- Tables ordered by Foreign Key dependencies
+-- ============================================================
+
+-- Create database
 CREATE DATABASE IF NOT EXISTS cinebook;
 
--- USERS
+-- ============================================================
+-- TABLES WITHOUT FOREIGN KEYS (can be created first)
+-- ============================================================
+
+-- 1. USERS - Store user accounts (customers and admins)
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -17,7 +26,7 @@ CREATE TABLE users (
     INDEX idx_role (role)
 );
 
--- PASSWORD_RESET_TOKENS
+-- 2. PASSWORD_RESET_TOKENS - Store password reset tokens
 CREATE TABLE password_reset_tokens (
     email VARCHAR(150) PRIMARY KEY,
     token VARCHAR(255) NOT NULL,
@@ -25,7 +34,7 @@ CREATE TABLE password_reset_tokens (
     INDEX idx_email_token (email, token)
 );
 
--- MOVIES
+-- 3. MOVIES - Store movie information
 CREATE TABLE movies (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
@@ -48,7 +57,7 @@ CREATE TABLE movies (
     INDEX idx_rating_avg (rating_avg)
 );
 
--- Genres
+-- 4. GENRES - Store movie genres
 CREATE TABLE genres (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
@@ -56,7 +65,39 @@ CREATE TABLE genres (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Movie_Genres
+-- 5. SCREEN_TYPES - Store cinema screen types (2D, 3D, IMAX, etc.)
+CREATE TABLE screen_types (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    price INT NOT NULL
+);
+
+-- 6. SEAT_TYPES - Store seat categories (standard, VIP, couple)
+CREATE TABLE seat_types (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    base_price INT NOT NULL,
+    description VARCHAR(255)
+);
+
+-- 7. PROMOTIONS - Store promotional campaigns
+CREATE TABLE promotions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    image VARCHAR(255),
+    status ENUM('active', 'upcoming', 'ended') DEFAULT 'upcoming',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_status (status)
+);
+
+-- ============================================================
+-- TABLES WITH FOREIGN KEYS (must be created after parent tables)
+-- ============================================================
+
+-- 8. MOVIE_GENRES - Link movies with genres (many-to-many)
+-- Depends on: movies, genres
 CREATE TABLE movie_genres (
     id INT AUTO_INCREMENT PRIMARY KEY,
     movie_id INT NOT NULL,
@@ -65,14 +106,8 @@ CREATE TABLE movie_genres (
     FOREIGN KEY (genre_id) REFERENCES genres(id) ON DELETE CASCADE
 );
 
--- screen_types
-CREATE TABLE screen_types (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    price INT NOT NULL
-);
-
--- ROOMS
+-- 9. ROOMS - Store cinema rooms
+-- Depends on: screen_types
 CREATE TABLE rooms (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
@@ -85,15 +120,8 @@ CREATE TABLE rooms (
     FOREIGN KEY (screen_type_id) REFERENCES screen_types(id)
 );
 
--- SEAT_TYPES
-CREATE TABLE seat_types (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE,
-    base_price INT NOT NULL,
-    description VARCHAR(255)
-);
-
--- SEATS
+-- 10. SEATS - Store individual seats in rooms
+-- Depends on: rooms, seat_types
 CREATE TABLE seats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     room_id INT NOT NULL,
@@ -109,7 +137,8 @@ CREATE TABLE seats (
     FOREIGN KEY (seat_type_id) REFERENCES seat_types(id)
 );
 
--- SHOWTIMES
+-- 11. SHOWTIMES - Store movie screening schedules
+-- Depends on: movies, rooms
 CREATE TABLE showtimes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     movie_id INT NOT NULL,
@@ -124,7 +153,8 @@ CREATE TABLE showtimes (
     FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE
 );
 
--- SHOWTIMES_PRICES
+-- 12. SHOWTIME_PRICES - Store ticket prices per showtime and seat type
+-- Depends on: showtimes, seat_types
 CREATE TABLE showtime_prices (
     id INT AUTO_INCREMENT PRIMARY KEY,
     showtime_id INT NOT NULL,
@@ -135,7 +165,8 @@ CREATE TABLE showtime_prices (
     FOREIGN KEY (seat_type_id) REFERENCES seat_types(id)
 );
 
--- SHOWTIMES_SEATS
+-- 13. SHOWTIME_SEATS - Track seat availability for each showtime
+-- Depends on: showtimes, seats, users
 CREATE TABLE showtime_seats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     showtime_id INT NOT NULL,
@@ -151,7 +182,8 @@ CREATE TABLE showtime_seats (
     FOREIGN KEY (reserved_by_user_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
--- BOOKINGS
+-- 14. BOOKINGS - Store booking transactions
+-- Depends on: users, showtimes
 CREATE TABLE bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -171,47 +203,39 @@ CREATE TABLE bookings (
     FOREIGN KEY (showtime_id) REFERENCES showtimes(id)
 );
 
--- BOOKING_SEATS (Each row = 1 ticket = 1 seat + 1 showtime)
-
+-- 15. BOOKING_SEATS - Store individual tickets (each row = 1 ticket = 1 seat + 1 showtime)
+-- Depends on: bookings, showtimes, seats
 CREATE TABLE booking_seats (
     id INT AUTO_INCREMENT PRIMARY KEY,
-
     booking_id INT NOT NULL,
     showtime_id INT NOT NULL,
     seat_id INT NOT NULL,
-
     price INT NOT NULL,
-
     qr_code VARCHAR(255) NOT NULL,
     qr_status ENUM('active','checked','cancelled') DEFAULT 'active',
     checked_at TIMESTAMP NULL DEFAULT NULL,
-
     -- Prevent duplicate seat booking in the same showtime
     CONSTRAINT uq_booking_seat_showtime
         UNIQUE (booking_id, showtime_id, seat_id),
-
     -- Indexes for check-in and lookup
     INDEX idx_qr_code (qr_code),
     INDEX idx_qr_status (qr_status),
     INDEX idx_showtime (showtime_id),
-
     -- Foreign keys
     CONSTRAINT fk_booking_seats_booking
         FOREIGN KEY (booking_id)
         REFERENCES bookings(id)
         ON DELETE CASCADE,
-
     CONSTRAINT fk_booking_seats_showtime
         FOREIGN KEY (showtime_id)
         REFERENCES showtimes(id),
-
     CONSTRAINT fk_booking_seats_seat
         FOREIGN KEY (seat_id)
         REFERENCES seats(id)
 );
 
-
--- REVIEWS
+-- 16. REVIEWS - Store user reviews for movies
+-- Depends on: users, movies
 CREATE TABLE reviews (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -226,16 +250,6 @@ CREATE TABLE reviews (
     FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE
 );
 
---PROMOTIONS
-CREATE TABLE promotions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(200) NOT NULL,
-    description TEXT,
-    image VARCHAR(255),
-    status ENUM('active', 'upcoming', 'ended') DEFAULT 'upcoming',
-    
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    INDEX idx_status (status)
-);
+-- ============================================================
+-- END OF SCHEMA
+-- ============================================================
