@@ -24,3 +24,8 @@ Thumbs.db
 
 # Claude AI files
 .claude/
+
+# Documentation files
+*.md
+*.pdf
+DOCUMENT/*.pdf
