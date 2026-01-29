@@ -26,8 +26,8 @@ The system also provides a dedicated **Admin Panel** to manage the entire cinema
 The following resources are included in the DOCUMENT folder:
 - File Review
 - Installation Guide: Full instructions for setting up the project
-- Powerpoint File
-Video Demonstration: [https://youtu.be/eqw89cXJm-U?si=MSJvpBmaf4UA3a0_](https://www.youtube.com/watch?v=G6epcu_tSh4)
+- Powerpoint File for Presentation
+- Video Demonstration: [https://youtu.be/eqw89cXJm-U?si=MSJvpBmaf4UA3a0_](https://www.youtube.com/watch?v=G6epcu_tSh4)
 
 ### ✨ Key Features
 
