@@ -728,6 +728,40 @@ JOIN bookings b ON bs.booking_id = b.id
 SET ss.status = 'booked'
 WHERE b.status IN ('confirmed', 'pending');
 
+--===================== 16. PROMOTIONS ====================
+-- Depends on: none
+
+INSERT INTO promotions (category, icon, title, description, details_title, details_items, cta_text, cta_link, validity_text, status, display_order) VALUES
+
+-- CINEMA GIFTS
+('cinema-gifts', '🍿', 'Free Premium Popcorn Combo', 'Get a free premium popcorn combo with every ticket purchase!', 'What\'s Included:', '["Large Popcorn (Butter or Caramel)", "2 Medium Soft Drinks", "Movie Snack Coupon for next visit"]', 'Claim Now', '/now-showing', 'Valid until: March 31, 2026', 'active', 1),
+
+('cinema-gifts', '🎬', 'Exclusive Movie Merchandise', 'Buy 2 tickets and get 1 free collectible item from our exclusive merchandise collection!', 'Available Items:', '["Limited Edition Movie Posters", "Character Figurines", "Branded T-Shirts", "Movie Soundtrack CDs"]', 'Shop Now', '/now-showing', 'Limited stock available', 'active', 2),
+
+('cinema-gifts', '🎁', 'Weekend Combo Deal', 'Special combo packages for weekend movie marathons!', 'Package Includes:', '["2 Movie Tickets (Any showtime)", "Family Size Popcorn", "4 Soft Drinks", "Free Parking Pass"]', 'Get Deal', '/now-showing', 'Available: Friday - Sunday', 'active', 3),
+
+-- MEMBER REWARDS
+('member-rewards', '🎂', 'Birthday Special', 'Celebrate your birthday with us! Get a free movie ticket on your special day.', 'Birthday Benefits:', '["1 Free Movie Ticket (Any movie, any time)", "Free Medium Popcorn & Drink", "20% off on additional tickets", "Priority Seat Selection"]', 'Register Now', '/register', 'Valid for 7 days around your birthday', 'active', 4),
+
+('member-rewards', '⭐', 'VIP Membership', 'Join our VIP program and enjoy exclusive benefits year-round!', 'VIP Perks:', '["10% off all ticket purchases", "Free seat upgrades (subject to availability)", "Early access to new releases", "Exclusive member-only screenings", "Free snack vouchers monthly"]', 'Join VIP', '/register', 'Annual membership: 200.000d', 'active', 5),
+
+('member-rewards', '🎯', 'Loyalty Points', 'Earn points with every purchase and redeem for free tickets and snacks!', 'How It Works:', '["Earn 1 point per 10.000 spent", "100 points = Free movie ticket", "50 points = Free snack combo", "Double points on your birthday month"]', 'Start Earning', '/register', 'Points never expire', 'active', 6),
+
+-- STUDENT DEALS
+('student-deals', '🎓', 'Student Discount', 'Show your student ID and enjoy 20% off every Tuesday and Wednesday!', 'Eligibility:', '["Valid student ID required", "High school and college students", "Applies to all showtimes", "Can be combined with matinee pricing"]', 'Get Student Card', '/now-showing', 'Available: Every Tuesday & Wednesday', 'active', 7),
+
+('student-deals', '📚', 'Study Break Special', 'Take a break from studying! Special pricing for students during exam season.', 'Special Offer:', '["40.000d tickets for all movies before 5 PM", "Free study room rental (2 hours)", "Discounted coffee and snacks", "Valid during midterm and finals weeks"]', 'Book Now', '/now-showing', 'During academic exam periods', 'active', 8),
+
+('student-deals', '👥', 'Student Group Discount', 'Bring your friends! Groups of 5+ students get additional 15% off.', 'Group Benefits:', '["Minimum 5 students required", "15% off regular student price", "Reserved group seating", "Group snack packages available"]', 'Book Group', '/now-showing', 'Advance booking required', 'active', 9),
+
+-- SEASONAL OFFERS
+('seasonal', '🎃', 'Holiday Special', 'Celebrate holidays with special movie packages and themed events!', 'Holiday Perks:', '["Buy 1 Get 1 Free on major holidays", "Special themed movie marathons", "Holiday-themed snack combos", "Free photo booth access"]', 'View Events', '/upcoming-movies', 'Major holidays throughout the year', 'active', 10),
+
+('seasonal', '❄️', 'Winter Season Pass', 'Stay warm with unlimited movies during winter season!', 'Pass Includes:', '["Unlimited movie tickets (Dec - Feb)", "20% off all concessions", "Priority booking for blockbusters", "Exclusive winter-themed events"]', 'Buy Pass', '/register', 'Season pass: 700.000d', 'active', 11),
+
+('seasonal', '💝', 'Valentine\'s Special', 'Perfect date package for couples this Valentine\'s Day!', 'Romance Package:', '["2 Premium Couple Seats", "Champagne & Chocolate Box", "Complimentary roses", "Private theater experience available"]', 'Book Romance', '/now-showing', 'February 10-16, 2026', 'active', 12);
+
+
 -- ============================================================
 -- END OF DATA
 -- ============================================================
