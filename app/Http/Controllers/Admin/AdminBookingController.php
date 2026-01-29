@@ -109,13 +109,13 @@ class AdminBookingController extends Controller
     public function cancel(Request $request, Booking $booking)
     {
         if ($booking->status === 'cancelled' || $booking->status === 'expired') {
-            return back()->with('error', 'Booking is already cancelled or expired!');
+            return back()->with('error', 'Booking is already cancelled or expired');
         }
 
         // Check if showtime has ended - cannot cancel booking for ended showtimes
         $booking->load('showtime.movie');
         if ($booking->showtime->status === 'done') {
-            return back()->with('error', 'Cannot cancel booking - the showtime has already ended!');
+            return back()->with('error', 'Cannot cancel booking - the showtime has already ended');
         }
 
         DB::beginTransaction();
@@ -145,7 +145,7 @@ class AdminBookingController extends Controller
                 \Log::error('Failed to send cancellation email: ' . $e->getMessage());
             }
 
-            return back()->with('success', 'Booking cancelled successfully! Customer has been notified via email.');
+            return back()->with('success', 'Booking cancelled successfully! Customer has been notified via email');
 
         } catch (\Exception $e) {
             DB::rollBack();

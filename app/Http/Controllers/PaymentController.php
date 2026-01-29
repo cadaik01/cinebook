@@ -71,7 +71,7 @@ class PaymentController extends Controller
                 if ($seatStatus && $seatStatus->status === 'booked') {
                     DB::rollback();
                     return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                        ->with('error', 'Seat already booked. Please select different seats.');
+                        ->with('error', 'Seat already booked. Please select different seats');
                 }
                 
                 // Cannon book if reserved by another user or reservation expired
@@ -80,14 +80,14 @@ class PaymentController extends Controller
                     if ($seatStatus->reserved_by_user_id != $user_id) {
                         DB::rollback();
                         return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                            ->with('error', 'Seat reserved by another user. Please try again.');
+                            ->with('error', 'Seat reserved by another user. Please try again');
                     }
                     
                     // Check if reservation expired 
                     if ($seatStatus->reserved_until && now() > $seatStatus->reserved_until) {
                         DB::rollback();
                         return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                            ->with('error', 'Your reservation has expired. Please select seats again.');
+                            ->with('error', 'Your reservation has expired. Please select seats again');
                     }
                     
                     // If reserved by current user and still valid, proceed

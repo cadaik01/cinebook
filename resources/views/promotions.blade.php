@@ -216,236 +216,104 @@
     <!-- Cinema Gifts Tab -->
     <div id="cinema-gifts" class="tab-content active">
         <div class="promotion-grid">
-            <div class="promotion-card">
-                <h3><span class="icon">🍿</span> Free Premium Popcorn Combo</h3>
-                <p>Get a free premium popcorn combo with every ticket purchase!</p>
-                
-                <div class="promotion-details">
-                    <h4>What's Included:</h4>
-                    <ul>
-                        <li>Large Popcorn (Butter or Caramel)</li>
-                        <li>2 Medium Soft Drinks</li>
-                        <li>Movie Snack Coupon for next visit</li>
-                    </ul>
-                </div>
+            @if(isset($promotions['cinema-gifts']))
+                @foreach($promotions['cinema-gifts'] as $promotion)
+                    <div class="promotion-card">
+                        <h3><span class="icon">{{ $promotion->icon }}</span> {{ $promotion->title }}</h3>
+                        <p>{{ $promotion->description }}</p>
+                        
+                        <div class="promotion-details">
+                            <h4>{{ $promotion->details_title }}</h4>
+                            <ul>
+                                @foreach($promotion->details_items as $item)
+                                    <li>{{ $item }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
 
-                <a href="{{ route('now_showing') }}" class="promotion-cta">Claim Now</a>
-                <p class="validity">Valid until: March 31, 2026</p>
-            </div>
-
-            <div class="promotion-card">
-                <h3><span class="icon">🎬</span> Exclusive Movie Merchandise</h3>
-                <p>Buy 2 tickets and get 1 free collectible item from our exclusive merchandise collection!</p>
-                
-                <div class="promotion-details">
-                    <h4>Available Items:</h4>
-                    <ul>
-                        <li>Limited Edition Movie Posters</li>
-                        <li>Character Figurines</li>
-                        <li>Branded T-Shirts</li>
-                        <li>Movie Soundtrack CDs</li>
-                    </ul>
-                </div>
-
-                <a href="{{ route('now_showing') }}" class="promotion-cta">Shop Now</a>
-                <p class="validity">Limited stock available</p>
-            </div>
-
-            <div class="promotion-card">
-                <h3><span class="icon">🎁</span> Weekend Combo Deal</h3>
-                <p>Special combo packages for weekend movie marathons!</p>
-                
-                <div class="promotion-details">
-                    <h4>Package Includes:</h4>
-                    <ul>
-                        <li>2 Movie Tickets (Any showtime)</li>
-                        <li>Family Size Popcorn</li>
-                        <li>4 Soft Drinks</li>
-                        <li>Free Parking Pass</li>
-                    </ul>
-                </div>
-
-                <a href="{{ route('now_showing') }}" class="promotion-cta">Get Deal</a>
-                <p class="validity">Available: Friday - Sunday</p>
-            </div>
+                        <a href="{{ $promotion->cta_link }}" class="promotion-cta">{{ $promotion->cta_text }}</a>
+                        <p class="validity">{{ $promotion->validity_text }}</p>
+                    </div>
+                @endforeach
+            @endif
         </div>
     </div>
 
     <!-- Member Rewards Tab -->
     <div id="member-rewards" class="tab-content">
         <div class="promotion-grid">
-            <div class="promotion-card">
-                <h3><span class="icon">🎂</span> Birthday Special</h3>
-                <p>Celebrate your birthday with us! Get a free movie ticket on your special day.</p>
-                
-                <div class="promotion-details">
-                    <h4>Birthday Benefits:</h4>
-                    <ul>
-                        <li>1 Free Movie Ticket (Any movie, any time)</li>
-                        <li>Free Medium Popcorn & Drink</li>
-                        <li>20% off on additional tickets</li>
-                        <li>Priority Seat Selection</li>
-                    </ul>
-                </div>
+            @if(isset($promotions['member-rewards']))
+                @foreach($promotions['member-rewards'] as $promotion)
+                    <div class="promotion-card">
+                        <h3><span class="icon">{{ $promotion->icon }}</span> {{ $promotion->title }}</h3>
+                        <p>{{ $promotion->description }}</p>
+                        
+                        <div class="promotion-details">
+                            <h4>{{ $promotion->details_title }}</h4>
+                            <ul>
+                                @foreach($promotion->details_items as $item)
+                                    <li>{{ $item }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
 
-                <a href="{{ route('register') }}" class="promotion-cta">Register Now</a>
-                <p class="validity">Valid for 7 days around your birthday</p>
-            </div>
-
-            <div class="promotion-card">
-                <h3><span class="icon">⭐</span> VIP Membership</h3>
-                <p>Join our VIP program and enjoy exclusive benefits year-round!</p>
-                
-                <div class="promotion-details">
-                    <h4>VIP Perks:</h4>
-                    <ul>
-                        <li>10% off all ticket purchases</li>
-                        <li>Free seat upgrades (subject to availability)</li>
-                        <li>Early access to new releases</li>
-                        <li>Exclusive member-only screenings</li>
-                        <li>Free snack vouchers monthly</li>
-                    </ul>
-                </div>
-
-                <a href="{{ route('register') }}" class="promotion-cta">Join VIP</a>
-                <p class="validity">Annual membership: $49.99</p>
-            </div>
-
-            <div class="promotion-card">
-                <h3><span class="icon">🎯</span> Loyalty Points</h3>
-                <p>Earn points with every purchase and redeem for free tickets and snacks!</p>
-                
-                <div class="promotion-details">
-                    <h4>How It Works:</h4>
-                    <ul>
-                        <li>Earn 1 point per $1 spent</li>
-                        <li>100 points = Free movie ticket</li>
-                        <li>50 points = Free snack combo</li>
-                        <li>Double points on your birthday month</li>
-                    </ul>
-                </div>
-
-                <a href="{{ route('register') }}" class="promotion-cta">Start Earning</a>
-                <p class="validity">Points never expire</p>
-            </div>
+                        <a href="{{ $promotion->cta_link }}" class="promotion-cta">{{ $promotion->cta_text }}</a>
+                        <p class="validity">{{ $promotion->validity_text }}</p>
+                    </div>
+                @endforeach
+            @endif
         </div>
     </div>
 
     <!-- Student Deals Tab -->
     <div id="student-deals" class="tab-content">
         <div class="promotion-grid">
-            <div class="promotion-card">
-                <h3><span class="icon">🎓</span> Student Discount</h3>
-                <p>Show your student ID and enjoy 20% off every Tuesday and Wednesday!</p>
-                
-                <div class="promotion-details">
-                    <h4>Eligibility:</h4>
-                    <ul>
-                        <li>Valid student ID required</li>
-                        <li>High school and college students</li>
-                        <li>Applies to all showtimes</li>
-                        <li>Can be combined with matinee pricing</li>
-                    </ul>
-                </div>
+            @if(isset($promotions['student-deals']))
+                @foreach($promotions['student-deals'] as $promotion)
+                    <div class="promotion-card">
+                        <h3><span class="icon">{{ $promotion->icon }}</span> {{ $promotion->title }}</h3>
+                        <p>{{ $promotion->description }}</p>
+                        
+                        <div class="promotion-details">
+                            <h4>{{ $promotion->details_title }}</h4>
+                            <ul>
+                                @foreach($promotion->details_items as $item)
+                                    <li>{{ $item }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
 
-                <a href="{{ route('now_showing') }}" class="promotion-cta">Get Student Card</a>
-                <p class="validity">Available: Every Tuesday & Wednesday</p>
-            </div>
-
-            <div class="promotion-card">
-                <h3><span class="icon">📚</span> Study Break Special</h3>
-                <p>Take a break from studying! Special pricing for students during exam season.</p>
-                
-                <div class="promotion-details">
-                    <h4>Special Offer:</h4>
-                    <ul>
-                        <li>$5 tickets for all movies before 5 PM</li>
-                        <li>Free study room rental (2 hours)</li>
-                        <li>Discounted coffee and snacks</li>
-                        <li>Valid during midterm and finals weeks</li>
-                    </ul>
-                </div>
-
-                <a href="{{ route('now_showing') }}" class="promotion-cta">Book Now</a>
-                <p class="validity">During academic exam periods</p>
-            </div>
-
-            <div class="promotion-card">
-                <h3><span class="icon">👥</span> Student Group Discount</h3>
-                <p>Bring your friends! Groups of 5+ students get additional 15% off.</p>
-                
-                <div class="promotion-details">
-                    <h4>Group Benefits:</h4>
-                    <ul>
-                        <li>Minimum 5 students required</li>
-                        <li>15% off regular student price</li>
-                        <li>Reserved group seating</li>
-                        <li>Group snack packages available</li>
-                    </ul>
-                </div>
-
-                <a href="{{ route('now_showing') }}" class="promotion-cta">Book Group</a>
-                <p class="validity">Advance booking required</p>
-            </div>
+                        <a href="{{ $promotion->cta_link }}" class="promotion-cta">{{ $promotion->cta_text }}</a>
+                        <p class="validity">{{ $promotion->validity_text }}</p>
+                    </div>
+                @endforeach
+            @endif
         </div>
     </div>
 
     <!-- Seasonal Offers Tab -->
     <div id="seasonal" class="tab-content">
         <div class="promotion-grid">
-            <div class="promotion-card">
-                <h3><span class="icon">🎃</span> Holiday Special</h3>
-                <p>Celebrate holidays with special movie packages and themed events!</p>
-                
-                <div class="promotion-details">
-                    <h4>Holiday Perks:</h4>
-                    <ul>
-                        <li>Buy 1 Get 1 Free on major holidays</li>
-                        <li>Special themed movie marathons</li>
-                        <li>Holiday-themed snack combos</li>
-                        <li>Free photo booth access</li>
-                    </ul>
-                </div>
+            @if(isset($promotions['seasonal']))
+                @foreach($promotions['seasonal'] as $promotion)
+                    <div class="promotion-card">
+                        <h3><span class="icon">{{ $promotion->icon }}</span> {{ $promotion->title }}</h3>
+                        <p>{{ $promotion->description }}</p>
+                        
+                        <div class="promotion-details">
+                            <h4>{{ $promotion->details_title }}</h4>
+                            <ul>
+                                @foreach($promotion->details_items as $item)
+                                    <li>{{ $item }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
 
-                <a href="{{ route('upcoming_movies') }}" class="promotion-cta">View Events</a>
-                <p class="validity">Major holidays throughout the year</p>
-            </div>
-
-            <div class="promotion-card">
-                <h3><span class="icon">❄️</span> Winter Season Pass</h3>
-                <p>Stay warm with unlimited movies during winter season!</p>
-                
-                <div class="promotion-details">
-                    <h4>Pass Includes:</h4>
-                    <ul>
-                        <li>Unlimited movie tickets (Dec - Feb)</li>
-                        <li>20% off all concessions</li>
-                        <li>Priority booking for blockbusters</li>
-                        <li>Exclusive winter-themed events</li>
-                    </ul>
-                </div>
-
-                <a href="{{ route('register') }}" class="promotion-cta">Buy Pass</a>
-                <p class="validity">Season pass: $99.99</p>
-            </div>
-
-            <div class="promotion-card">
-                <h3><span class="icon">💝</span> Valentine's Special</h3>
-                <p>Perfect date package for couples this Valentine's Day!</p>
-                
-                <div class="promotion-details">
-                    <h4>Romance Package:</h4>
-                    <ul>
-                        <li>2 Premium Couple Seats</li>
-                        <li>Champagne & Chocolate Box</li>
-                        <li>Complimentary roses</li>
-                        <li>Private theater experience available</li>
-                    </ul>
-                </div>
-
-                <a href="{{ route('now_showing') }}" class="promotion-cta">Book Romance</a>
-                <p class="validity">February 10-16, 2026</p>
-            </div>
+                        <a href="{{ $promotion->cta_link }}" class="promotion-cta">{{ $promotion->cta_text }}</a>
+                        <p class="validity">{{ $promotion->validity_text }}</p>
+                    </div>
+                @endforeach
+            @endif
         </div>
     </div>
 </div>

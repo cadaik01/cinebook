@@ -26,7 +26,7 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         if (!Auth::check()) {
-            return redirect('/login')->with('error', 'You must be logged in to submit a review.');
+            return redirect('/login')->with('error', 'You must be logged in to submit a review');
         }
 
         $request->validate([
@@ -44,12 +44,12 @@ class ReviewController extends Controller
             ->first();
 
         if ($existingReview) {
-            return redirect()->back()->with('error', 'You have already reviewed this movie.');
+            return redirect()->back()->with('error', 'You have already reviewed this movie');
         }
 
         // Block admins from writing reviews
         if (Auth::user() && Auth::user()->role === 'admin') {
-            return redirect()->back()->with('error', 'Admins cannot write reviews.');
+            return redirect()->back()->with('error', 'Admins cannot write reviews');
         }
 
         // Check if user has a paid booking for this movie AND the showtime has ended
@@ -65,7 +65,7 @@ class ReviewController extends Controller
             ->exists();
 
         if (!$hasWatched) {
-            return redirect()->back()->with('error', 'You can only review movies after the showtime has ended.');
+            return redirect()->back()->with('error', 'You can only review movies after the showtime has ended');
         }
 
         // Create and save the review
@@ -80,7 +80,7 @@ class ReviewController extends Controller
         $movie = Movie::find($movieId);
         $movie->updateAverageRating();
 
-        return redirect()->back()->with('success', 'Review submitted successfully.');
+        return redirect()->back()->with('success', 'Review submitted successfully');
     }
 
     /**

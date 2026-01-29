@@ -78,7 +78,7 @@ class AdminUserController extends Controller
             'city' => 'nullable|string|max:100',
             'role' => 'required|in:user,admin',
         ], [
-            'name.regex' => 'Name cannot start or end with spaces, or contain consecutive spaces.',
+            'name.regex' => 'Name cannot start or end with spaces, or contain consecutive spaces',
         ]);
 
         // Trim inputs
@@ -90,19 +90,19 @@ class AdminUserController extends Controller
         $user->update($validated);
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'User updated successfully!');
+            ->with('success', 'User updated successfully');
     }
 
     public function toggleRole(User $user)
     {
         // Prevent changing your own role
         if ($user->id === (int) auth()->id()) {
-            return back()->with('error', 'You cannot change your own role.');
+            return back()->with('error', 'You cannot change your own role');
         }
 
         $newRole = $user->role === 'admin' ? 'user' : 'admin';
         $user->update(['role' => $newRole]);
 
-        return back()->with('success', "User role changed to {$newRole} successfully!");
+        return back()->with('success', "User role changed to {$newRole} successfully");
     }
 }

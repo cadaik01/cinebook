@@ -142,7 +142,7 @@ class AdminMovieController extends Controller
         }
 
         return redirect()->route('admin.movies.index')
-            ->with('success', 'Movie created successfully!');
+            ->with('success', 'Movie created successfully');
     }
 
     public function edit(Movie $movie)
@@ -236,6 +236,6 @@ class AdminMovieController extends Controller
         $movie->genres()->sync($genres);
 
         return redirect()->route('admin.movies.index')
-            ->with('success', 'Movie updated successfully!');
+            ->with('success', 'Movie updated successfully');
     }
 }

@@ -166,7 +166,7 @@ class AdminShowtimeController extends Controller
 
             DB::commit();
             return redirect()->route('admin.showtimes.index')
-                ->with('success', 'Showtime created successfully!');
+                ->with('success', 'Showtime created successfully');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -211,7 +211,7 @@ class AdminShowtimeController extends Controller
             
             DB::commit();
             return redirect()->route('admin.showtimes.index')
-                ->with('success', 'Peak hour pricing updated successfully!');
+                ->with('success', 'Peak hour pricing updated successfully');
                 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -225,7 +225,7 @@ class AdminShowtimeController extends Controller
         try {
             // Check if there are any confirmed bookings
             if ($showtime->bookings()->exists()) {
-                return back()->with('error', 'Cannot delete showtime - there are existing customer bookings!');
+                return back()->with('error', 'Cannot delete showtime - there are existing customer bookings');
             }
 
             // Check if there are any seats that are booked or reserved
@@ -234,7 +234,7 @@ class AdminShowtimeController extends Controller
                 ->exists();
                 
             if ($hasBookedSeats) {
-                return back()->with('error', 'Cannot delete showtime - there are booked or reserved seats!');
+                return back()->with('error', 'Cannot delete showtime - there are booked or reserved seats');
             }
 
             // Delete showtime seats (only available ones should remain at this point)
@@ -247,7 +247,7 @@ class AdminShowtimeController extends Controller
             $showtime->delete();
 
             DB::commit();
-            return back()->with('success', 'Showtime deleted successfully!');
+            return back()->with('success', 'Showtime deleted successfully');
 
         } catch (\Exception $e) {
             DB::rollBack();

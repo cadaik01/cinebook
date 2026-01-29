@@ -30,7 +30,7 @@ class BookingController extends Controller
         $showtime = Showtime::with('movie')->find($showtime_id);
         
         if (!$showtime) {
-            return redirect()->route('homepage')->with('error', 'Showtime not found.');
+            return redirect()->route('homepage')->with('error', 'Showtime not found');
         }
         
         // Get room with screen type and pricing using relationships
@@ -111,7 +111,7 @@ class BookingController extends Controller
         //4. Get showtime and room information for pricing
         $showtime = Showtime::find($showtime_id);
         if (!$showtime) {
-            return redirect()->route('homepage')->with('error', 'Invalid showtime.');
+            return redirect()->route('homepage')->with('error', 'Invalid showtime');
         }
         // Block booking for showtimes in the past
         if (
@@ -142,7 +142,7 @@ class BookingController extends Controller
             if ($lockedSeats->count() !== count($selectedSeats)) {
                 DB::rollBack();
                 return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                    ->with('error', 'Some selected seats are invalid.');
+                    ->with('error', 'Some selected seats are invalid');
             }
             
             // STEP 3: Check if any locked seats are already BOOKED (confirmed)
@@ -158,7 +158,7 @@ class BookingController extends Controller
                 DB::rollBack();
                 $bookedCodes = $lockedSeats->whereIn('id', $bookedSeatIds)->pluck('seat_code')->implode(', ');
                 return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                    ->with('error', "Seats {$bookedCodes} are already booked.");
+                    ->with('error', "Seats {$bookedCodes} are already booked");
             }
             
             // STEP 3.5: Check if any seats are RESERVED by OTHER users (have not expired)
@@ -177,7 +177,7 @@ class BookingController extends Controller
                         DB::rollBack();
                         $seatCode = $lockedSeats->get($seat_id)->seat_code ?? $seat_id;
                         return redirect()->route('booking.seatmap', ['showtime_id' => $showtime_id])
-                            ->with('error', "Seat {$seatCode} is temporarily reserved by another user. Please select different seats.");
+                            ->with('error', "Seat {$seatCode} is temporarily reserved by another user. Please select different seats");
                     }
                     // IF reserved by SAME user → OK, proceed
                 }
@@ -348,7 +348,7 @@ class BookingController extends Controller
             ->first();
         //check if booking exists
         if (!$booking) {
-            return redirect()->route('homepage')->with('error', 'Booking not found.');
+            return redirect()->route('homepage')->with('error', 'Booking not found');
         }
         //get booked seats details using relationships
         $seats = $booking->bookingSeats()->with(['seat.seatType'])->get();
@@ -363,7 +363,7 @@ class BookingController extends Controller
         //Check logged in
         $user_id = Session::get('user_id');
         if (!$user_id) {
-            return redirect('/login')->with('error', 'Please log in to view booking details.');
+            return redirect('/login')->with('error', 'Please log in to view booking details');
         }
 
         //Get booking details using relationships
@@ -374,7 +374,7 @@ class BookingController extends Controller
 
         //check if booking exists
         if (!$booking) {
-            return redirect()->route('homepage')->with('error', 'Booking not found.');
+            return redirect()->route('homepage')->with('error', 'Booking not found');
         }
 
         //Get booked seats details using relationships

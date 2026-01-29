@@ -31,6 +31,6 @@ class SeatTypeController extends Controller
         foreach ($validated['prices'] as $id => $price) {
             SeatType::where('id', $id)->update(['base_price' => $price]);
         }
-        return redirect()->route('admin.rooms.index')->with('success', 'Seat type prices updated successfully!');
+        return redirect()->route('admin.rooms.index')->with('success', 'Seat type prices updated successfully');
     }
 }

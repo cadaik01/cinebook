@@ -34,8 +34,8 @@ class PasswordResetController extends Controller
         $request->validate([
             'email' => 'required|email|exists:users,email',
         ], [
-            'email.required' => 'Please enter your email address.',
-            'email.email' => 'Please enter a valid email address.',
+            'email.required' => 'Please enter your email address',
+            'email.email' => 'Please enter a valid email address',
             'email.exists' => 'The email address does not exist.',
         ]);
 
@@ -64,7 +64,7 @@ class PasswordResetController extends Controller
         Mail::to($email)->send(new PasswordResetMail($token, $email));
 
         // Redirect back with success message
-        return back()->with('success', 'Password reset link has been sent to your email!');
+        return back()->with('success', 'Password reset link has been sent to your email');
     }
 
     //3. Show reset password form
@@ -81,7 +81,7 @@ class PasswordResetController extends Controller
         // If token not found or expired
         if (!$resetRecord) {
             return redirect('/password/forgot')
-                ->withErrors(['token' => 'Password reset link is invalid or expired. Please request again.']);
+                ->withErrors(['token' => 'Password reset link is invalid or expired. Please request again']);
         }
         
         // Check if token is expired (configurable in config/auth.php)
@@ -92,7 +92,7 @@ class PasswordResetController extends Controller
         if (Carbon::now()->isAfter($expiresAt)) {
             DB::table('password_reset_tokens')->where('email', $email)->delete();
             return redirect('/password/forgot')
-                ->withErrors(['token' => 'Password reset link has expired. Please request again.']);
+                ->withErrors(['token' => 'Password reset link has expired. Please request again']);
         }
         
         return view('password.reset', [
@@ -110,7 +110,7 @@ class PasswordResetController extends Controller
             'email' => 'required|email|exists:users,email',
             'password' => 'required|confirmed|min:8|regex:/^\S+$/',
         ], [
-            'password.regex' => 'Password cannot contain spaces.',
+            'password.regex' => 'Password cannot contain spaces',
         ]);
 
         $email = trim($request->email);
@@ -123,7 +123,7 @@ class PasswordResetController extends Controller
             ->first();
 
         if (!$resetRecord) {
-            return back()->withErrors(['token' => 'Invalid token!']);
+            return back()->withErrors(['token' => 'Invalid token']);
         }
 
         // Check if token is expired (configurable in config/auth.php)
@@ -132,7 +132,7 @@ class PasswordResetController extends Controller
         $expiresAt = $createdAt->addMinutes($expireMinutes);
         
         if (Carbon::now()->isAfter($expiresAt)) {
-            return back()->withErrors(['token' => 'Token has expired. Please request a new password reset.']);
+            return back()->withErrors(['token' => 'Token has expired. Please request a new password reset']);
         }
 
         // Update password
@@ -143,6 +143,6 @@ class PasswordResetController extends Controller
         DB::table('password_reset_tokens')->where('email', $email)->delete();
 
         // Redirect to login with success message
-        return redirect('/login')->with('success', 'Password has been reset successfully! Please login.');
+        return redirect('/login')->with('success', 'Password has been reset successfully! Please login');
     }
 }
