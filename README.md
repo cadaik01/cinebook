@@ -2,7 +2,7 @@
 
 ### FPT Aptech
 
-**Tech Stack**: Laravel 12, PHP 8.2, MySQL 8, Vite, Blade, JavaScript, CSS3
+**Tech Stack**: Laravel 12, PHP 8.2, MySQL 8, Blade, JavaScript, CSS3
 
 ## 👥 Team Members
 
@@ -151,7 +151,6 @@ You can refer to additional documentation files inside the repository for more i
 
 ### Frontend
 
-- **Vite** as the build tool and development server  
 - **Blade Templates** as the main templating engine  
 - **JavaScript** for interactive features such as seat selection, countdown timers, and dynamic UI  
 - **CSS3** for layout, styling, and visual effects  
