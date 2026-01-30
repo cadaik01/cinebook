@@ -101,7 +101,7 @@ class AdminUserController extends Controller
         }
 
         // Prevent deleting yourself
-        if ($user->id === auth()->id()) {
+        if ($user->id === (int) auth()->id()) {
             return back()->with('error', 'You cannot delete your own account.');
         }
 
@@ -113,7 +113,7 @@ class AdminUserController extends Controller
     public function toggleRole(User $user)
     {
         // Prevent changing your own role
-        if ($user->id === auth()->id()) {
+        if ($user->id === (int) auth()->id()) {
             return back()->with('error', 'You cannot change your own role.');
         }
 

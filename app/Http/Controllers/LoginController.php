@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Mail\WelcomeMail;
 
@@ -125,7 +126,7 @@ class LoginController extends Controller
             Mail::to($user->email)->send(new WelcomeMail($user));
         } catch (\Exception $e) {
             // Log error but don't stop registration
-            \Log::error('Failed to send welcome email: ' . $e->getMessage());
+            Log::error('Failed to send welcome email: ' . $e->getMessage());
         }
 
         //6. log the user in using Laravel Auth

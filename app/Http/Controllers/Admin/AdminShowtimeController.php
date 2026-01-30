@@ -110,7 +110,7 @@ class AdminShowtimeController extends Controller
             // Check for overlapping showtimes in the same room
             if (Showtime::hasOverlap($request->room_id, $startDatetime, $endDatetime)) {
                 $overlapping = Showtime::getOverlappingShowtimes($request->room_id, $startDatetime, $endDatetime);
-                $conflictInfo = $overlapping->map(function ($s) {
+                $conflictInfo = $overlapping->map(function (\App\Models\Showtime $s) {
                     return $s->movie->title . ' (' . $s->start_datetime->format('H:i') . ' - ' . $s->end_datetime->format('H:i') . ')';
                 })->join(', ');
 

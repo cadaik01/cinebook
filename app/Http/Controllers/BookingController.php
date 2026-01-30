@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Showtime;
 use App\Models\Room;
 use App\Models\Seat;
@@ -84,6 +85,11 @@ class BookingController extends Controller
     {
         // User authentication is handled by middleware now
         $user_id = Session::get('user_id');
+        
+        // Block admins from booking tickets
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            return redirect()->back()->with('error', 'Admins cannot book tickets.');
+        }
         
         //2. Get selected seats from request (support both array and JSON string)
         $seatsInput = $request->input('seats', '[]');
