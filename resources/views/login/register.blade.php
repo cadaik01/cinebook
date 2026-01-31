@@ -32,6 +32,7 @@
                 <div class="form-group">
                     <label for="name">Full Name <span class="text-danger">*</span></label>
                     <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                    <span id="nameError" class="validation-error" style="display: none;"></span>
                 </div>
 
                 <div class="form-group">
@@ -57,6 +58,7 @@
                 <div class="form-group">
                     <label for="password">Password (min 8 characters) <span class="text-danger">*</span></label>
                     <input type="password" id="password" name="password" required placeholder="Enter password (min 8 characters)">
+                    <span id="passwordLengthError" class="validation-error" style="display: none;"></span>
                 </div>
 
                 <div class="form-group">

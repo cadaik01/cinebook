@@ -71,8 +71,8 @@ class ProfileController extends Controller
         $user = Auth::user();//Authenticated user who is logged in (1: admin, 2: regular user, 3: guest)
         $validated = $request->validate([
             'name' => 'required|string|max:255|regex:/^[^\s].*[^\s]$/|regex:/^(?!.*\s{2}).*$/',
-            'phone' => 'nullable|string|max:20|unique:users,phone,' . $user->id,
-            'city' => 'nullable|string|max:100',
+            'phone' => 'required|string|max:20|unique:users,phone,' . $user->id,
+            'city' => 'required|string|max:100',
             'avatar' => 'nullable|image|max:2048',
         ], [
             'name.regex' => 'Name cannot start or end with spaces, or contain consecutive spaces',

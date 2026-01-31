@@ -72,16 +72,16 @@
                         </div>
                         
                         <div class="mb-3">
-                            <label for="phone" class="form-label">Phone</label>
-                            <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone', $user->phone) }}">
+                            <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone', $user->phone) }}" required>
                             @error('phone')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         
                         <div class="mb-3">
-                            <label for="city" class="form-label">City</label>
-                            <select name="city" id="city" class="form-select">
+                            <label for="city" class="form-label">City <span class="text-danger">*</span></label>
+                            <select name="city" id="city" class="form-select" required>
                                 <option value="">-- Select City --</option>
                                 <option value="tphcm" {{ old('city', $user->city) == 'tphcm' ? 'selected' : '' }}>Ho Chi Minh</option>
                                 <option value="hanoi" {{ old('city', $user->city) == 'hanoi' ? 'selected' : '' }}>Hanoi</option>

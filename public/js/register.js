@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const emailInput = document.getElementById('email');
     const phoneInput = document.getElementById('phone');
     const nameInput = document.getElementById('name');
+    const nameError = document.getElementById('nameError');
+    const passwordLengthError = document.getElementById('passwordLengthError');
 
     /**
      * Validate password length (minimum 8 characters)
@@ -17,10 +19,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function validatePasswordLength() {
         if (password.value && password.value.length < 8) {
             password.classList.add('error');
+            passwordLengthError.textContent = `Password must be at least 8 characters (currently ${password.value.length})`;
+            passwordLengthError.style.display = 'inline';
             password.setCustomValidity('Password must be at least 8 characters long');
             return false;
         } else {
             password.classList.remove('error');
+            passwordLengthError.style.display = 'none';
             password.setCustomValidity('');
             return true;
         }
@@ -43,20 +48,51 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Validate name - no leading/trailing spaces, no consecutive spaces
+     * Validate name - only letters and single spaces allowed
      */
     function validateName() {
         const nameValue = nameInput.value;
-        // Check for leading/trailing spaces or consecutive spaces
-        if (nameValue && (nameValue !== nameValue.trim() || /\s{2,}/.test(nameValue))) {
-            nameInput.classList.add('error');
-            nameInput.setCustomValidity('Name cannot have leading/trailing spaces or consecutive spaces');
-            return false;
-        } else {
+        
+        if (!nameValue) {
             nameInput.classList.remove('error');
+            nameError.style.display = 'none';
             nameInput.setCustomValidity('');
             return true;
         }
+        
+        // Check for special characters (only letters and spaces allowed)
+        const specialCharRegex = /[^a-zA-Z\s\u00C0-\u024F\u1E00-\u1EFF]/;
+        if (specialCharRegex.test(nameValue)) {
+            nameInput.classList.add('error');
+            nameError.textContent = 'Name cannot contain special characters or numbers';
+            nameError.style.display = 'inline';
+            nameInput.setCustomValidity('Name cannot contain special characters or numbers');
+            return false;
+        }
+        
+        // Check for leading/trailing spaces
+        if (nameValue !== nameValue.trim()) {
+            nameInput.classList.add('error');
+            nameError.textContent = 'Name cannot start or end with spaces';
+            nameError.style.display = 'inline';
+            nameInput.setCustomValidity('Name cannot start or end with spaces');
+            return false;
+        }
+        
+        // Check for consecutive spaces
+        if (/\s{2,}/.test(nameValue)) {
+            nameInput.classList.add('error');
+            nameError.textContent = 'Name cannot have consecutive spaces';
+            nameError.style.display = 'inline';
+            nameInput.setCustomValidity('Name cannot have consecutive spaces');
+            return false;
+        }
+        
+        // All validations passed
+        nameInput.classList.remove('error');
+        nameError.style.display = 'none';
+        nameInput.setCustomValidity('');
+        return true;
     }
 
     /**
