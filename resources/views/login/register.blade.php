@@ -30,22 +30,22 @@
             <form method="POST" action="/register" id="registerForm">
                 @csrf
                 <div class="form-group">
-                    <label for="name">Full Name</label>
+                    <label for="name">Full Name <span class="text-danger">*</span></label>
                     <input type="text" id="name" name="name" required placeholder="Enter your full name">
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="email">Email <span class="text-danger">*</span></label>
                     <input type="email" id="email" name="email" required placeholder="Enter your email">
                 </div>
 
                 <div class="form-group">
-                    <label for="phone">Phone Number</label>
+                    <label for="phone">Phone Number <span class="text-danger">*</span></label>
                     <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
                 </div>
 
                 <div class="form-group">
-                    <label for="city">City</label>
+                    <label for="city">City <span class="text-danger">*</span></label>
                     <select name="city" id="city" required>
                         <option value="">Choose your city</option>
                         <option value="TPHCM">Ho Chi Minh City</option>
@@ -55,12 +55,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required placeholder="Enter password">
+                    <label for="password">Password (min 8 characters) <span class="text-danger">*</span></label>
+                    <input type="password" id="password" name="password" required placeholder="Enter password (min 8 characters)">
                 </div>
 
                 <div class="form-group">
-                    <label for="password_confirmation">Confirm Password</label>
+                    <label for="password_confirmation">Confirm Password <span class="text-danger">*</span></label>
                     <input type="password" id="password_confirmation" name="password_confirmation" required placeholder="Confirm password">
                     <span id="passwordError" class="validation-error" style="display: none;">Passwords do not match!</span>
                 </div>

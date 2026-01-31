@@ -31,14 +31,12 @@ class AdminDashboardController extends Controller
         // ROW 1: BUSINESS PULSE
         // ========================================
 
-        // Tickets Sold Today - tickets sold for showtimes that have ended today
+        // Tickets Sold Today - tickets from bookings created today
         $ticketsSoldToday = DB::table('booking_seats')
             ->join('bookings', 'booking_seats.booking_id', '=', 'bookings.id')
-            ->join('showtimes', 'bookings.showtime_id', '=', 'showtimes.id')
-            ->join('movies', 'showtimes.movie_id', '=', 'movies.id')
-            ->whereDate('showtimes.show_date', $today)
-            ->whereRaw("DATE_ADD(CONCAT(showtimes.show_date, ' ', showtimes.show_time), INTERVAL movies.duration MINUTE) <= ?", [$now])
+            ->whereDate('bookings.created_at', $today)
             ->where('bookings.payment_status', 'paid')
+            ->where('bookings.status', '!=', 'cancelled')
             ->count();
 
         // Revenue Today - revenue from showtimes that have ENDED today (100% confirmed)
